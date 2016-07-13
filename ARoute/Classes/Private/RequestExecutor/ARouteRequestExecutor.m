@@ -47,6 +47,7 @@
     
     // preparing params
     Class destinationViewControllerClass;
+    void (^callbackBlock)(ARouteResponse *);
     BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : NO;
     response.parameters = routeRequest.configuration.parametersBlock ? routeRequest.configuration.parametersBlock() : nil;
     
@@ -57,6 +58,7 @@
         case ARouteRequestTypeRoute: {
             ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForRoute:routeRequest.route router:router];
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
+            callbackBlock = result.routeRegistrationItem.destinationCallback;
             response.routeParameters = result.routeParameters;
             
             break;
@@ -64,6 +66,7 @@
         case  ARouteRequestTypeRouteName: {
             ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForRouteName:routeRequest.routeName router:router];
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
+            callbackBlock = result.routeRegistrationItem.destinationCallback;
             response.routeParameters = result.routeParameters;
             
             break;
@@ -79,6 +82,12 @@
         }
         default:
             return;
+    }
+    
+    // check if callback
+    if (callbackBlock) {
+        callbackBlock(response);
+        return;
     }
     
     if (!destinationViewController && destinationViewControllerClass) {

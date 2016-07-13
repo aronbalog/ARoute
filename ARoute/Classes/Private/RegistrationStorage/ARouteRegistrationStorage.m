@@ -49,14 +49,15 @@
 
 - (ARouteRegistrationStorageResult *)routeRegistrationResultForRouteName:(NSString *)routeName router:(ARoute *)router
 {
-    NSDictionary *parameters;
+    NSDictionary *routeParameters;
     
-    ARouteRegistrationItem *item = [self routeRegistrationItemForCalledRoute:nil routerName:router.name routeName:routeName routeParameters:&parameters];
+    ARouteRegistrationItem *item = [self routeRegistrationItemForCalledRoute:nil routerName:router.name routeName:routeName routeParameters:&routeParameters];
     
     ARouteRegistrationStorageResult *result = [ARouteRegistrationStorageResult new];
     
     result.routeRegistrationItem = item;
-    
+    result.routeParameters = routeParameters.count ? routeParameters : nil;
+
     return result;
 }
 

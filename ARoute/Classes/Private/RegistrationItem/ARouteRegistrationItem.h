@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, ARouteRegistrationItemType) {
 @property (strong, nonatomic, nonnull) NSString *route;
 @property (strong, nonatomic, nonnull) NSString *routeName;
 @property (strong, nonatomic, nonnull) Class destinationViewControllerClass;
+@property (strong, nonatomic, nonnull) void (^destinationCallback)(ARouteResponse * _Nonnull routeResponse);
 @property (strong, nonatomic, nonnull) NSString *separator;
 @property (assign, nonatomic) ARouteRegistrationItemType type;
 

@@ -7,7 +7,7 @@
 //
 
 #import "ARouteRegistration.h"
-
+#import <objc/runtime.h>
 @interface ARouteRegistration ()
 
 @property (strong, nonatomic, nonnull) ARoute *router;
@@ -20,7 +20,7 @@
 
 @implementation ARouteRegistration
 
-+ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(nonnull NSDictionary<NSString *,Class> *)routes routeName:(nullable NSString *)routeName
++ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(nonnull NSDictionary<NSString *,id> *)routes routeName:(nullable NSString *)routeName
 {
     ARouteRegistration *routeRegistration = [ARouteRegistration new];
     routeRegistration.router = router;
@@ -28,12 +28,17 @@
     ARouteRegistrationItem *item = [ARouteRegistrationItem new];
     
     NSString *route = routes.allKeys.firstObject;
-    Class destinationViewControllerClass = routes.allValues.firstObject;
+    id value = routes.allValues.firstObject;
+    
+    if (object_isClass(value)) {
+        item.destinationViewControllerClass = value;
+    } else {
+        item.destinationCallback = value;
+    }
     
     item.router = router;
     item.routeName = routeName;
     item.route = route;
-    item.destinationViewControllerClass = destinationViewControllerClass;
     item.type = ARouteRegistrationItemTypeNamedRoute;
     item.separator = routeRegistration.separator;
     
@@ -42,20 +47,25 @@
     return routeRegistration;
 }
 
-+ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(NSDictionary<NSString *,Class> *)routes routesGroupName:(NSString *)routesGroupName
++ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(NSDictionary<NSString *,id> *)routes routesGroupName:(NSString *)routesGroupName
 {
     ARouteRegistration *routeRegistration = [ARouteRegistration new];
     routeRegistration.router = router;
 
     NSMutableArray *items = [NSMutableArray new];
     
-    [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull route, Class  _Nonnull destinationViewControllerClass, BOOL * _Nonnull stop) {
+    [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull route, id  _Nonnull value, BOOL * _Nonnull stop) {
         
         ARouteRegistrationItem *item = [ARouteRegistrationItem new];
         
+        if (object_isClass(value)) {
+            item.destinationViewControllerClass = value;
+        } else {
+            item.destinationCallback = value;
+        }
+        
         item.router = router;
         item.route = route;
-        item.destinationViewControllerClass = destinationViewControllerClass;
         item.type = ARouteRegistrationItemTypeNamedRoute;
         item.separator = routeRegistration.separator;
         

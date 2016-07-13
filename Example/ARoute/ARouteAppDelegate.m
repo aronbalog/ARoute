@@ -17,10 +17,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSDictionary *routes = @{
-                             @"home":[HomeViewController class],
-                             @"user-profile/{userId}": [UserViewController class]
-                             };
+    NSDictionary *routes =
+    @{
+      @"home":[HomeViewController class],
+      @"user-profile/{userId}": [UserViewController class],
+      @"friends/{userId}/delete":^(ARouteResponse *routeResponse){
+          NSLog(@"Deleting user with ID %@", routeResponse.routeParameters[@"userId"]);
+      }
+      };
     
     [[[ARoute sharedRouter] registerRoutes:routes] execute];
     

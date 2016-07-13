@@ -39,8 +39,8 @@
 - (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)viewController:(nonnull __kindof UIViewController *)viewController;
 - (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)URL:(nonnull NSURL *)URL;
 
-- (nonnull id <ARouteRegistrationExecutable>)registerRoutes:(nonnull NSDictionary <NSString*, Class> *)routes;
-- (nonnull id <ARouteRegistrationExecutable>)registerRoute:(nonnull NSDictionary <NSString*, Class> *)route withName:(nonnull NSString *)routeName;
-- (nonnull id <ARouteRegistrationExecutable>)registerRoutes:(nonnull NSDictionary <NSString*, Class> *)routes withGroupName:(nonnull NSString *)groupName;
+- (nonnull id <ARouteRegistrationExecutable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes;
+- (nonnull id <ARouteRegistrationExecutable>)registerRoute:(nonnull NSDictionary <NSString*, id> *)route withName:(nonnull NSString *)routeName;
+- (nonnull id <ARouteRegistrationExecutable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes withGroupName:(nonnull NSString *)groupName;
 
 @end

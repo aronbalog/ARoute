@@ -8,21 +8,22 @@
 ## Table of contents
 
 1. [Example](#example)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Simple usage](#simple-usage)
+1. [Requirements](#requirements)
+1. [Installation](#installation)
+1. [Simple usage](#simple-usage)
 	1. [Route registration](#route-registration)
-	2. [Route execution](#route-execution)
-	2. [Animations](#animations)
-5. [Advanced usage](#advanced-usage)
+	1. [Route execution](#route-execution)
+	1. [Animations](#animations)
+1. [Advanced usage](#advanced-usage)
+	1. 	[Callbacks](#callbacks)
 	1. [Custom animations](#custom-animations)
-	2. [Embedding](#embedding)
-	3. [Custom initiation](#custom-initiation)
-	4. [Catching completion & failure](#catching-completion-failure) 
-	5. [ACL](#acl)
-6. [`ARouteResponse`](#ARouteResponse)
-7. [Author](#author)
-8. [License](#license)
+	1. [Embedding](#embedding)
+	1. [Custom initiation](#custom-initiation)
+	1. [Catching completion & failure](#catching-completion-failure) 
+	1. [ACL](#acl)
+1. [`ARouteResponse`](#ARouteResponse)
+1. [Author](#author)
+1. [License](#license)
 
 <br><br>
 
@@ -108,6 +109,39 @@ Simple and easy:
 
 <br><br>
 ## <a name="advanced-usage"></a> Advanced usage
+
+### <a name="callbacks"></a> Callbacks
+
+You can link a callback to a route:
+
+```
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    NSDictionary *routes =
+    	@{
+				@"home":[HomeViewController class],
+				@"user-profile/{userId}": [UserViewController class],
+				@"friends/{userId}/delete":^(ARouteResponse *routeResponse){
+					NSLog(@"Deleting user with ID %@", routeResponse.routeParameters[@"userId"]);
+					// e.g. call your deletion method here   
+				}
+		};
+    
+    [[[ARoute sharedRouter] registerRoutes:routes] execute];
+    
+    return YES;
+}
+```
+... then call (execute) the route:
+
+```
+- (void)deleteFriendWithId:(NSString *)userId
+{ 
+	NSString *route = [NSString stringWithFormat:@"friends/%@/delete", userId];
+	[[[ARoute sharedRouter] route:route] execute];
+}
+```
+
 ### <a name="custom-animations"></a> Custom animations
 
 It is possible to forward `<UIViewControllerTransitioningDelegate>` to destination view controller. Just call `transitioningDelegate` block and return an object conformed to `<UIViewControllerTransitioningDelegate>` protocol.

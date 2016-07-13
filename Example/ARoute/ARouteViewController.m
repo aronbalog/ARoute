@@ -24,8 +24,8 @@
 {
     [super viewDidAppear:animated];
     
-    [[[[ARoute sharedRouter] route:@"user-profile/{aron}"] animated:^BOOL{
-        return NO;
+    [[[[ARoute sharedRouter] route:@"friends/123123/delete"] parameters:^NSDictionary<id,id> * _Nullable{
+        return @{@"Test":@"Test"};
     }] execute];
 }
 
