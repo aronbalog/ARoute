@@ -1,0 +1,12 @@
+use_frameworks!
+
+target 'ARoute_Example' do
+  pod 'ARoute', :path => '../'
+
+  target 'ARoute_Tests' do
+    inherit! :search_paths
+
+    pod 'Specta'
+  pod 'Expecta'
+  end
+end
