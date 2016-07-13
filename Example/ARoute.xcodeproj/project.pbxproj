@@ -11,6 +11,7 @@
 		2DFA6679F6A1DA14D0357995 /* Pods_ARoute_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF4DC6A72D9BD891899541A9 /* Pods_ARoute_Example.framework */; };
 		3817A32C1D3698AF003A7DC6 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32B1D3698AF003A7DC6 /* HomeViewController.m */; };
 		3817A32F1D369977003A7DC6 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32E1D369977003A7DC6 /* UserViewController.m */; };
+		3817A3321D36BA38003A7DC6 /* EmbeddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -45,6 +46,8 @@
 		3817A32B1D3698AF003A7DC6 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		3817A32D1D369977003A7DC6 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		3817A32E1D369977003A7DC6 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
+		3817A3301D36BA38003A7DC6 /* EmbeddingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmbeddingViewController.h; sourceTree = "<group>"; };
+		3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbeddingViewController.m; sourceTree = "<group>"; };
 		4865EC9D2ACD2880CF227DE1 /* Pods_ARoute_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARoute_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50B4062A6CC10442C65FF8A7 /* ARoute.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ARoute.podspec; path = ../ARoute.podspec; sourceTree = "<group>"; };
 		56B1C0154BBC08D93C489BF0 /* Pods-ARoute_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Tests/Pods-ARoute_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -106,6 +109,8 @@
 				3817A32B1D3698AF003A7DC6 /* HomeViewController.m */,
 				3817A32D1D369977003A7DC6 /* UserViewController.h */,
 				3817A32E1D369977003A7DC6 /* UserViewController.m */,
+				3817A3301D36BA38003A7DC6 /* EmbeddingViewController.h */,
+				3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -408,6 +413,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3817A3321D36BA38003A7DC6 /* EmbeddingViewController.m in Sources */,
 				6003F59E195388D20070C39A /* ARouteAppDelegate.m in Sources */,
 				3817A32F1D369977003A7DC6 /* UserViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* ARouteViewController.m in Sources */,
