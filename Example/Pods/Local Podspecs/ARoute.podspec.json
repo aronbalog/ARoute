@@ -1,0 +1,22 @@
+{
+  "name": "ARoute",
+  "version": "0.1.0",
+  "summary": "A short description of ARoute.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/ARoute",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Aron Balog": "aronbalog@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/ARoute.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "ARoute/Classes/**/*"
+}

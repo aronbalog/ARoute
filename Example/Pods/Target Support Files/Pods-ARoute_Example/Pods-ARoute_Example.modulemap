@@ -1,0 +1,6 @@
+framework module Pods_ARoute_Example {
+  umbrella header "Pods-ARoute_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}
