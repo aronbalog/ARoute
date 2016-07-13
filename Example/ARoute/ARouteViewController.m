@@ -7,6 +7,7 @@
 //
 
 #import "ARouteViewController.h"
+#import <ARoute/ARoute.h>
 
 @interface ARouteViewController ()
 
@@ -17,7 +18,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [[[[ARoute sharedRouter] route:@"user-profile/{aron}"] animated:^BOOL{
+        return NO;
+    }] execute];
 }
 
 - (void)didReceiveMemoryWarning

@@ -42,7 +42,7 @@
     ARouteRegistrationStorageResult *result = [ARouteRegistrationStorageResult new];
     
     result.routeRegistrationItem = item;
-    result.routeParameters = routeParameters;
+    result.routeParameters = routeParameters.count ? routeParameters : nil;
     
     return result;
 }
@@ -76,16 +76,16 @@
         NSDictionary *routeParametersObject;
         BOOL routersAreEqual = [obj.router.name isEqualToString:routerName];
         
-        BOOL routesAreEqual = [self definedRoute:definedRoute isEqualToRoute:calledRoute placeholder:obj.separator routeParameters:&routeParametersObject] && routersAreEqual;
+        BOOL proceed = [self definedRoute:definedRoute isEqualToRoute:calledRoute placeholder:obj.separator routeParameters:&routeParametersObject] && routersAreEqual;
         
-        if (routesAreEqual) {
+        if (proceed) {
             routeRegistrationItem = obj;
             if (routeParameters) {
                 routeParametersGlobalObject = routeParametersObject;
             }
         }
         
-        *stop = routesAreEqual;
+        *stop = proceed;
     }];
     
     if (routeParameters) {
@@ -104,13 +104,19 @@
     NSString *routeCandidateRegexPattern = [definedRoute copy];
     NSString *allCharactersRegexPattern = @"([^/]*)";
     
-    for (NSString *paramName in routeParameterNames) {
-        NSString *wrappedParam = [NSString stringWithFormat:@"%@%@%@", placeholderComponents.firstObject, paramName, placeholderComponents.lastObject];
-        routeCandidateRegexPattern = [routeCandidateRegexPattern stringByReplacingOccurrencesOfString:wrappedParam withString:allCharactersRegexPattern];
-    }
+    BOOL matches = NO;
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", routeCandidateRegexPattern];
-    BOOL matches = [predicate evaluateWithObject:route];
+    if (routeParameterNames.count) {
+        for (NSString *paramName in routeParameterNames) {
+            NSString *wrappedParam = [NSString stringWithFormat:@"%@%@%@", placeholderComponents.firstObject, paramName, placeholderComponents.lastObject];
+            routeCandidateRegexPattern = [routeCandidateRegexPattern stringByReplacingOccurrencesOfString:wrappedParam withString:allCharactersRegexPattern];
+        }
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", routeCandidateRegexPattern];
+        matches = [predicate evaluateWithObject:route];
+    } else {
+        matches = [route.lowercaseString isEqualToString:definedRoute.lowercaseString];
+    }
     
     if (!matches) {
         return matches;

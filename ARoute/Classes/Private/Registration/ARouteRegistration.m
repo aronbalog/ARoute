@@ -62,7 +62,7 @@
         [items addObject:item];
     }];
     
-    routeRegistration.items = @[items];
+    routeRegistration.items = items;
     
     return routeRegistration;
 }

@@ -32,7 +32,7 @@
     static dispatch_once_t onceToken;
     static id instance;
     dispatch_once(&onceToken, ^{
-        instance = [self new];
+        instance = [self createRouterWithName:[NSUUID UUID].UUIDString];
     });
     
     return instance;

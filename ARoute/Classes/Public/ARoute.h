@@ -19,7 +19,6 @@
 
 #import "ARouteRegistrationExecutable.h"
 
-#import "ARouteConfiguration.h"
 #import "ARouteResponse.h"
 
 @class ARouteConfiguration;

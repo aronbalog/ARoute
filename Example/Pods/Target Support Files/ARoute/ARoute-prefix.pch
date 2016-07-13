@@ -2,3 +2,42 @@
 #import <UIKit/UIKit.h>
 #endif
 
+//
+//  ARoutePrefixHeader.pch
+//  ARoute
+//
+//  Created by Aron Balog on 12/07/16.
+//  Copyright © 2016 Aron Balog. All rights reserved.
+//
+
+#ifndef ARoutePrefixHeader_pch
+#define ARoutePrefixHeader_pch
+
+#import <UIKit/UIKit.h>
+
+#import "ARoutable.h"
+#import "AEmbeddable.h"
+
+#import "ARouteRequestInitiable.h"
+#import "ARouteRequestExecutable.h"
+#import "ARouteRequestProtectable.h"
+#import "ARouteRequestEmbeddable.h"
+#import "ARouteRequestConfigurable.h"
+
+#import "ARouteRegistrationExecutable.h"
+
+#import "ARouteConfiguration.h"
+#import "ARouteRegistrationItem.h"
+#import "ARouteRegistrationConfiguration.h"
+#import "ARouteRegistration.h"
+#import "ARouteRequestConfiguration.h"
+#import "ARouteRequest.h"
+#import "ARouteResponse.h"
+#import "ARouteRequestExecutor.h"
+#import "ARouteRegistrationStorageResult.h"
+#import "ARouteRegistrationStorage.h"
+
+//  extensions
+#import "UIViewController+VisibleViewController.h"
+
+#endif /* ARoutePrefixHeader_pch */

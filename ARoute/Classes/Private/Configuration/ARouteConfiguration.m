@@ -10,4 +10,13 @@
 
 @implementation ARouteConfiguration
 
+- (NSString *)separator
+{
+    if (!_separator) {
+        _separator = @"{}";
+    }
+    
+    return _separator;
+}
+
 @end
