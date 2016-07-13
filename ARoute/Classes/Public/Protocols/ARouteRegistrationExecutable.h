@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ARouteRegistrationConfigurable;
+@protocol ARouteRegistrationProtectable;
+@protocol ARouteRegistrationInitiable;
+
 @protocol ARouteRegistrationExecutable <NSObject>
 
 - (void)execute;

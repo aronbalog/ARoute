@@ -50,6 +50,7 @@
     void (^callbackBlock)(ARouteResponse *);
     BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : NO;
     response.parameters = routeRequest.configuration.parametersBlock ? routeRequest.configuration.parametersBlock() : nil;
+    BOOL (^protectBlock)(ARouteResponse *);
     
     ARoute *router = routeRequest.router;
     
@@ -60,7 +61,8 @@
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
             callbackBlock = result.routeRegistrationItem.destinationCallback;
             response.routeParameters = result.routeParameters;
-            
+            protectBlock = result.routeRegistrationItem.protectBlock;
+
             break;
         }
         case  ARouteRequestTypeRouteName: {
@@ -68,7 +70,8 @@
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
             callbackBlock = result.routeRegistrationItem.destinationCallback;
             response.routeParameters = result.routeParameters;
-            
+            protectBlock = result.routeRegistrationItem.protectBlock;
+
             break;
         }
         case ARouteRequestTypeViewController: {
@@ -82,6 +85,21 @@
         }
         default:
             return;
+    }
+    
+    BOOL proceed = YES;
+    
+    // check if protected
+    if (routeRequest.configuration.protectBlock) {
+        protectBlock = routeRequest.configuration.protectBlock;
+    }
+    
+    if (protectBlock) {
+        proceed = !protectBlock(response);
+    }
+    
+    if (!proceed) {
+        return;
     }
     
     // check if callback

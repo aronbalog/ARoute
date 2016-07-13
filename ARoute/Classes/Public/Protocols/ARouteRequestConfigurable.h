@@ -17,8 +17,8 @@
 
 @protocol ARouteRequestConfigurable <NSObject>
 
-- (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestConfigurable>)animated:(BOOL(^ _Nonnull)())animated;
-- (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestConfigurable>)completion:(void(^ _Nonnull)(ARouteResponse * _Nonnull routeResonse))completion;
-- (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestConfigurable>)transitioningDelegate:(id <UIViewControllerTransitioningDelegate>_Nullable(^ _Nonnull)())transitioningDelegate;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestConfigurable>)animated:(BOOL(^ _Nonnull)())animated;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestConfigurable>)completion:(void(^ _Nonnull)(ARouteResponse * _Nonnull routeResonse))completion;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestConfigurable>)transitioningDelegate:(id <UIViewControllerTransitioningDelegate>_Nullable(^ _Nonnull)())transitioningDelegate;
 
 @end

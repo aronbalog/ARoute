@@ -77,6 +77,36 @@
     return routeRegistration;
 }
 
+#pragma mark - ARouteRegistrationInitiable
+
+- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)separator:(NSString * _Nonnull (^)())separator
+{
+    if (separator) {
+        self.separator = separator();
+        [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            obj.separator = self.separator;
+        }];
+    }
+    
+    return self;
+}
+
+#pragma mark - ARouteRegistrationProtectable
+
+- (id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull))protect
+{
+    if (protect) {
+        self.registrationConfiguration.protectBlock = protect;
+        [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            obj.protectBlock = self.registrationConfiguration.protectBlock;
+        }];
+    }
+    
+    return self;
+}
+
+#pragma mark - ARouteRegistrationExecutable
+
 - (void)execute
 {
     [self.routeRegistrationStorage storeRouteRegistration:self];
@@ -96,6 +126,15 @@
     }
     
     return _separator;
+}
+
+- (ARouteRegistrationConfiguration *)registrationConfiguration
+{
+    if (!_registrationConfiguration) {
+        _registrationConfiguration = [ARouteRegistrationConfiguration new];
+    }
+    
+    return _registrationConfiguration;
 }
 
 @end

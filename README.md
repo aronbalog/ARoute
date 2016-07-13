@@ -7,7 +7,7 @@
 
 ## Table of contents
 
-1. [Example](#example)
+1. [Demo](#demo)
 1. [Requirements](#requirements)
 1. [Installation](#installation)
 1. [Simple usage](#simple-usage)
@@ -15,19 +15,19 @@
 	1. [Route execution](#route-execution)
 	1. [Animations](#animations)
 1. [Advanced usage](#advanced-usage)
-	1. 	[Callbacks](#callbacks)
+	1. [Custom separator](#custom-separator)
+	1. [Callbacks](#callbacks)
 	1. [Custom animations](#custom-animations)
 	1. [Embedding](#embedding)
 	1. [Custom initiation](#custom-initiation)
 	1. [Catching completion & failure](#catching-completion-failure) 
-	1. [ACL](#acl)
+1. [ACL](#acl)
 1. [`ARouteResponse`](#ARouteResponse)
-1. [Author](#author)
-1. [License](#license)
+1. [Routes separation](#routes-separation)
 
 <br><br>
 
-## <a name="example"></a> Example
+## <a name="demo"></a> Demo
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
@@ -47,7 +47,7 @@ pod "ARoute"
 --
 
 <br><br>
-## <a name="simple-usage"></a> Simple usage
+## <a name="simple-usage"></a> 🍼 Simple usage
 
 ### <a name="route-registration"></a> Route registration
 
@@ -108,7 +108,38 @@ Simple and easy:
 --
 
 <br><br>
-## <a name="advanced-usage"></a> Advanced usage
+## <a name="advanced-usage"></a> 🚀 Advanced usage
+
+### <a name="custom-separator"></a> Custom separator
+If you have different route parameter separator in mind, you can customise it:
+
+```
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    NSDictionary *routes =
+        @{
+                @"home":[HomeViewController class],
+                @"user-profile/:userId:": [UserViewController class]
+        };
+	[[[[ARoute sharedRouter] registerRoutes:routes] separator:^NSString *{
+        return @":";
+	}] execute];
+
+}    
+```
+
+That means that route parameters should be wrapped in chosen separator.
+
+If you would like to wrap route parameters in opening and closing characters, return such string in callback.
+
+Examples:
+
+Registration pattern           | Separator         | Execution pattern               | Parameter object
+:----------------------------- | :---------------- | :------------------------------ | :------------------------------
+`user/id-{userId}`             | `{}` (default)    | `user/id-123456`                | `@{@"userId": @"123456"}`
+`user/id-!userId/profile`      | `!` or `!!`       | `user/id-123456/profile`        | `@{@"userId": @"123456"}`
+`user/name-!userName/profile`  | `!` or `!!`       | `user/name-my-name/profile`     | `@{@"userName": @"my-name"}`
+`user/:first:-:last:/profile`  | `:` or `::`       | `user/aron-balog/profile`       | `@{@"first": @"aron", @"last": @"balog"}`
 
 ### <a name="callbacks"></a> Callbacks
 
@@ -219,10 +250,34 @@ When destination view controller is presented, completion block will be executed
 	Work in progress!
 	```
 
-### <a name="acl"></a> ACL
+--
+
+<br><br>
+## <a name="acl"></a> 👮 ACL (route protector)
+You can protect your route.
+
+You can globally protect your route upon registration:
+
 ```
-Work in progress!
+[[[[ARoute sharedRouter] registerRoutes:routes] protect:^BOOL(ARouteResponse *routeResponse) {
+ 	// return YES if you don't want to handle the route       
+
+	return YES;
+}] execute];
 ```
+
+... or you can  provide protection callback on route execution:
+
+```  
+[[[[ARoute sharedRouter] route:route] protect:^BOOL(ARouteResponse *routeResponse) {
+   // return YES if you don't want to handle the route       
+    
+	return YES;
+}] execute];
+```
+
+**BE AWARE!**<br>
+**Protection callback on execution will override the callback called upon registration**
 
 --
 
@@ -230,6 +285,44 @@ Work in progress!
 ## <a name="ARouteResponse"></a> `ARouteResponse`
 
 `ARouteResponse` object wraps various data you pass through route registrations and route executions.
+
+
+--
+
+<br><br>
+## <a name="routes-separation"></a> ✂️ Routes separation
+
+You are now already familiar with `[ARoute sharedRouter]`. This is `ARoute` global instance and in most cases it will be enough.
+
+***But, sometimes you need to separate things!*** 😎
+
+For example, your app has an admin and frontend parts. Ideally, you would separate routers:
+
+```
+[[[ARoute createRouterWithName:@"front"] registerRoutes:frontRoutes] execute];
+```
+
+or
+
+```
+[[[ARoute createRouterWithName:@"admin"] registerRoutes:adminRoutes] execute];
+
+```
+
+... then you would call a route:
+
+```
+[[[ARoute routerNamed:@"admin"] route:@"user-profile/12345"] execute];
+```
+
+or
+
+```
+[[[ARoute routerNamed:@"front"] route:@"user-profile/12345"] execute];
+```
+
+***Note:***
+These routes maybe look the same, but they are in different namespaces so separation is satisfied.
 
 --
 

@@ -85,17 +85,17 @@
 
 #pragma mark - Route registration
 
-- (id<ARouteRegistrationExecutable>)registerRoutes:(NSDictionary<NSString *,Class> *)routes
+- (id<ARouteRegistrationInitiable,ARouteRegistrationExecutable,ARouteRegistrationProtectable,ARouteRegistrationConfigurable>)registerRoutes:(NSDictionary<NSString *,id> *)routes
 {
     return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:nil];
 }
 
-- (id<ARouteRegistrationExecutable>)registerRoute:(NSDictionary<NSString *,Class> *)route withName:(NSString *)routeName
+- (id<ARouteRegistrationInitiable,ARouteRegistrationExecutable,ARouteRegistrationProtectable,ARouteRegistrationConfigurable>)registerRoute:(NSDictionary<NSString *,id> *)route withName:(NSString *)routeName
 {
     return [ARouteRegistration routeRegistrationWithRouter:self routes:route routeName:routeName];
 }
 
-- (id<ARouteRegistrationExecutable>)registerRoutes:(NSDictionary<NSString *,Class> *)routes withGroupName:(NSString *)groupName
+- (id<ARouteRegistrationInitiable,ARouteRegistrationExecutable,ARouteRegistrationProtectable,ARouteRegistrationConfigurable>)registerRoutes:(NSDictionary<NSString *,id> *)routes withGroupName:(nonnull NSString *)groupName
 {
     return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:groupName];
 }

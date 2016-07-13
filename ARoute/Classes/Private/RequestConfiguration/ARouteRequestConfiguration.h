@@ -15,6 +15,7 @@
 @property (strong, nonatomic, nullable) UIViewController * _Nullable (^embeddingViewControllerBlock)();
 @property (strong, nonatomic, nullable) void (^completionBlock)(ARouteResponse * _Nonnull);
 @property (strong, nonatomic, nullable) BOOL (^animatedBlock)();
+@property (strong, nonatomic, nullable) BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse);
 @property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)();
 @property (strong, nonatomic, nullable) id <UIViewControllerTransitioningDelegate> _Nullable(^transitioningDelegateBlock)();
 

@@ -17,7 +17,10 @@
 #import "ARouteRequestEmbeddable.h"
 #import "ARouteRequestConfigurable.h"
 
+#import "ARouteRegistrationInitiable.h"
+#import "ARouteRegistrationProtectable.h"
 #import "ARouteRegistrationExecutable.h"
+#import "ARouteRegistrationConfigurable.h"
 
 #import "ARouteResponse.h"
 
@@ -39,8 +42,8 @@
 - (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)viewController:(nonnull __kindof UIViewController *)viewController;
 - (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)URL:(nonnull NSURL *)URL;
 
-- (nonnull id <ARouteRegistrationExecutable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes;
-- (nonnull id <ARouteRegistrationExecutable>)registerRoute:(nonnull NSDictionary <NSString*, id> *)route withName:(nonnull NSString *)routeName;
-- (nonnull id <ARouteRegistrationExecutable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes withGroupName:(nonnull NSString *)groupName;
+- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes;
+- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoute:(nonnull NSDictionary <NSString*, id> *)route withName:(nonnull NSString *)routeName;
+- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes withGroupName:(nonnull NSString *)groupName;
 
 @end

@@ -13,7 +13,7 @@
 @class ARouteRegistrationConfiguration;
 @class ARouteRegistrationItem;
 
-@interface ARouteRegistration : NSObject <ARouteRegistrationExecutable>
+@interface ARouteRegistration : NSObject <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationConfigurable, ARouteRegistrationProtectable>
 
 @property (strong, nonatomic, nonnull) ARouteRegistrationConfiguration *registrationConfiguration;
 @property (strong, nonatomic, nonnull, readonly) NSArray <ARouteRegistrationItem *> *items;

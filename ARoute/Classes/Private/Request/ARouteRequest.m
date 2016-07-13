@@ -92,6 +92,17 @@
     return self;
 }
 
+#pragma mark - ARouteRequestProtectable
+
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)protect:(BOOL (^)(ARouteResponse *))protect
+{
+    if (protect) {
+        self.configuration.protectBlock = protect;
+    }
+    
+    return self;
+}
+
 #pragma mark - ARouteRequestConfigurable
 
 - (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)animated:(BOOL (^)())animated

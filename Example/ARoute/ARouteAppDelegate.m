@@ -26,7 +26,9 @@
       }
       };
     
-    [[[ARoute sharedRouter] registerRoutes:routes] execute];
+    [[[[ARoute sharedRouter] registerRoutes:routes] separator:^NSString * _Nonnull{
+        return @":";
+    }] execute];
     
     return YES;
 }

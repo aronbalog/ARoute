@@ -10,4 +10,6 @@
 
 @interface ARouteRegistrationConfiguration : NSObject
 
+@property (strong, nonatomic, nullable) BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse);
+
 @end
