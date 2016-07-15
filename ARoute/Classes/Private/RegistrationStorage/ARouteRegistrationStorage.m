@@ -8,6 +8,11 @@
 
 #import "ARouteRegistrationStorage.h"
 
+typedef NS_ENUM(NSInteger, ARouteCastingType) {
+    ARouteCastingTypeString = 0,
+    ARouteCastingTypeNumber
+};
+
 @interface ARouteRegistrationStorage ()
 
 @property (strong, nonatomic, nonnull) NSMutableArray <ARouteRegistrationItem *> *routeRegistrationItems;

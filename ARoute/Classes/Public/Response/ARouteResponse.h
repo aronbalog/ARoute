@@ -10,7 +10,8 @@
 
 @interface ARouteResponse : NSObject
 
-@property (strong, nonatomic, nullable, readonly) NSDictionary <NSString *, NSString *> *routeParameters;
+@property (strong, nonatomic, nullable, readonly) NSDictionary <NSString *, id> *routeParameters;
+@property (strong, nonatomic, nullable, readonly) NSDictionary <NSString *, NSString *> *rawRouteParameters;
 @property (strong, nonatomic, nullable, readonly) NSDictionary <id, id> *parameters;
 @property (strong, nonatomic, nullable, readonly) __kindof UIViewController *destinationViewController;
 @property (strong, nonatomic, nullable, readonly) __kindof UIViewController *embeddingViewController;

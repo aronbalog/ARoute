@@ -13,6 +13,7 @@
 @property (strong, nonatomic, nonnull) ARoute *router;
 @property (strong, nonatomic, nonnull, readwrite) NSArray <ARouteRegistrationItem *> *items;
 @property (strong, nonatomic, nonnull) NSString *separator;
+@property (strong, nonatomic, nonnull) NSString *castingSeparator;
 
 @property (strong, nonatomic, nonnull) ARouteRegistrationStorage *routeRegistrationStorage;
 
@@ -85,6 +86,18 @@
         self.separator = separator();
         [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             obj.separator = self.separator;
+        }];
+    }
+    
+    return self;
+}
+
+- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)castingSeparator:(NSString * _Nonnull (^)())castingSeparator
+{
+    if (castingSeparator) {
+        self.castingSeparator = castingSeparator();
+        [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            obj.castingSeparator = self.castingSeparator;
         }];
     }
     

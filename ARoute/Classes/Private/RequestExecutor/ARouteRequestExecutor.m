@@ -50,6 +50,10 @@
     void (^callbackBlock)(ARouteResponse *);
     BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : NO;
     response.parameters = routeRequest.configuration.parametersBlock ? routeRequest.configuration.parametersBlock() : nil;
+    
+    NSString *castingSeparator;
+    NSDictionary *routeParameters;
+    
     BOOL (^protectBlock)(ARouteResponse *);
     
     ARoute *router = routeRequest.router;
@@ -60,18 +64,20 @@
             ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForRoute:routeRequest.route router:router];
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
             callbackBlock = result.routeRegistrationItem.destinationCallback;
-            response.routeParameters = result.routeParameters;
+            routeParameters = result.routeParameters;
             protectBlock = result.routeRegistrationItem.protectBlock;
-
+            castingSeparator = result.routeRegistrationItem.castingSeparator;
+            
             break;
         }
         case  ARouteRequestTypeRouteName: {
             ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForRouteName:routeRequest.routeName router:router];
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
             callbackBlock = result.routeRegistrationItem.destinationCallback;
-            response.routeParameters = result.routeParameters;
+            routeParameters = result.routeParameters;
             protectBlock = result.routeRegistrationItem.protectBlock;
-
+            castingSeparator = result.routeRegistrationItem.castingSeparator;
+            
             break;
         }
         case ARouteRequestTypeViewController: {
@@ -86,6 +92,10 @@
         default:
             return;
     }
+    
+    // set casting separator
+    [response setValue:castingSeparator forKey:@"castingSeparator"];
+    response.routeParameters = routeParameters;
     
     BOOL proceed = YES;
     

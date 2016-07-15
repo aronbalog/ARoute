@@ -10,6 +10,7 @@
 
 #import "ARoutable.h"
 #import "AEmbeddable.h"
+#import "ACastable.h"
 
 #import "ARouteRequestInitiable.h"
 #import "ARouteRequestExecutable.h"

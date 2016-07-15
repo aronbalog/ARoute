@@ -23,10 +23,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    [[[[ARoute sharedRouter] route:@"user-profile/123"] protect:^BOOL(ARouteResponse *routeResponse) {
-        return YES;
-    }] execute];
+        
+    [[[ARoute sharedRouter] route:@"user-profile/1234"] execute];
 }
 
 - (void)didReceiveMemoryWarning

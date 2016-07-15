@@ -20,14 +20,11 @@
     NSDictionary *routes =
     @{
       @"home":[HomeViewController class],
-      @"user-profile/{userId}": [UserViewController class],
-      @"friends/{userId}/delete":^(ARouteResponse *routeResponse){
-          NSLog(@"Deleting user with ID %@", routeResponse.routeParameters[@"userId"]);
-      }
+      @"user-profile/{userId=number}": [UserViewController class]
       };
     
-    [[[[ARoute sharedRouter] registerRoutes:routes] separator:^NSString * _Nonnull{
-        return @":";
+    [[[[ARoute sharedRouter] registerRoutes:routes] castingSeparator:^NSString*{
+        return @"=";
     }] execute];
     
     return YES;

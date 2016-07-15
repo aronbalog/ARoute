@@ -16,6 +16,7 @@
 	1. [Animations](#animations)
 1. [Advanced usage](#advanced-usage)
 	1. [Custom separator](#custom-separator)
+	1. [Parameter casting](#parameter-casting)
 	1. [Callbacks](#callbacks)
 	1. [Custom animations](#custom-animations)
 	1. [Embedding](#embedding)
@@ -140,6 +141,64 @@ Registration pattern           | Separator         | Execution pattern          
 `user/id-!userId/profile`      | `!` or `!!`       | `user/id-123456/profile`        | `@{@"userId": @"123456"}`
 `user/name-!userName/profile`  | `!` or `!!`       | `user/name-my-name/profile`     | `@{@"userName": @"my-name"}`
 `user/:first:-:last:/profile`  | `:` or `::`       | `user/aron-balog/profile`       | `@{@"first": @"aron", @"last": @"balog"}`
+
+### <a name="parameter-casting"></a> Parameter casting
+
+ARoute supports parameter casting. Examples:
+
+```
+NSDictionary *routes = @{
+  @"user-profile/{userId|number}": [UserViewController class]
+};
+    
+[[[ARoute sharedRouter] registerRoutes:routes] execute];
+```
+
+You can also define a specific casting class:
+
+```
+NSDictionary *routes = @{
+  @"user-profile/{userId|NSDecimalNumber}": [UserViewController class]
+};
+    
+[[[ARoute sharedRouter] registerRoutes:routes] execute];
+```
+
+It works with your custom objects.
+
+```
+NSDictionary *routes = @{
+  @"user-profile/{userId|MyObject}": [UserViewController class]
+};
+    
+[[[ARoute sharedRouter] registerRoutes:routes] execute];
+```
+On your object you must implement method:
+`+ (instancetype)objectWithRouteParameterValue:(NSString *)value;`
+from `<ACastable>` protocol.
+
+Casting pattern                 | Resolving class             | Route example
+:------------------------------ | :-------------------------- | :-----------
+| `undefined`                   | `NSString`                  | `@"user-profile/{userId}"`|
+| `string` or `NSString`        | `NSString`                  | `@"user-profile/{userId|string}"`|
+| `number` or `NSNumber`        | `NSNumber`                  | `@"user-profile/{userId|number}"`|
+| `decimal` or `NSDecimalNumber`| `NSDecimalNumber`           | `@"user-profile/{userId|decimal}"`|
+| `MyCustomClass`               | `MyCustomClass`             | `@"user-profile/{userId|MyCustomClass}"`|
+
+#####There is more!
+
+If parameters casting separator needs to be changed, you can do it this way:
+
+```
+NSDictionary *routes =
+@{
+  @"user-profile/{userId=number}": [UserViewController class]
+};
+    
+[[[[ARoute sharedRouter] registerRoutes:routes] castingSeparator:^NSString*{
+    return @"=";
+}] execute];
+```
 
 ### <a name="callbacks"></a> Callbacks
 
