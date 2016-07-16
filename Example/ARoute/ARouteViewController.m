@@ -25,9 +25,23 @@
 {
     [super viewDidAppear:animated];
         
-    [[[[ARoute sharedRouter] route:@"home"] parameters:^NSDictionary<id,id> * _Nullable{
-        return @{@"message": @"hello"};
+    [[[[[[[[ARoute sharedRouter] route:@"user/12345"] protect:^BOOL(ARouteResponse * _Nonnull routeResponse) {
+        // return YES if you don't want to handle the route
+        return NO;
+    }] parameters:^NSDictionary<id,id> * _Nullable{
+        return @{
+                 @"Key1": @"Value1",
+                 @"Key2": @"Value2"
+                 };
+    }] transitioningDelegate:^id<UIViewControllerTransitioningDelegate> _Nullable{
+        // return object conforming <UIViewControllerTransitioningDelegate>
+        return nil;
+    }] animated:^BOOL{
+        return YES;
+    }] completion:^(ARouteResponse * _Nonnull routeResonse) {
+        
     }] execute];
+    
 }
 
 - (void)didReceiveMemoryWarning

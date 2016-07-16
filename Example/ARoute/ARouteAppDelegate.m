@@ -19,12 +19,16 @@
 {
     NSDictionary *routes =
     @{
-      @"home":[HomeViewController class],
-      @"user-profile/{userId=number}": [UserViewController class]
+      @"user/{userId=number}": [UserViewController class]
       };
     
-    [[[[ARoute sharedRouter] registerRoutes:routes] parameters:^NSDictionary<id,id> * _Nullable{
-        return @{@"message":@"hello123"};
+    [[[[[[ARoute sharedRouter]
+        registerRoutes:routes] separator:^NSString * _Nonnull{
+        return @"{}";
+    }] parameters:^NSDictionary<id,id> * _Nullable{
+        return @{@"Key3":@"Value3"};
+    }] castingSeparator:^NSString * _Nonnull{
+        return @"=";
     }] execute];
     
     return YES;

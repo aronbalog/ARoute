@@ -10,23 +10,12 @@
 1. [Demo](#demo)
 1. [Requirements](#requirements)
 1. [Installation](#installation)
-1. [Usage](#usage)
-1. [Simple usage](#simple-usage)
-	1. [Route registration](#route-registration)
-	1. [Route execution](#route-execution)
-	1. [Animations](#animations)
-1. [Advanced usage](#advanced-usage)
-	1. [Parameters](#parameters)
-	1. [Custom separator](#custom-separator)
-	1. [Parameter casting](#parameter-casting)
-	1. [Callbacks](#callbacks)
-	1. [Custom animations](#custom-animations)
-	1. [Embedding](#embedding)
-	1. [Custom initiation](#custom-initiation)
-	1. [Catching completion & failure](#catching-completion-failure) 
-1. [ACL](#acl)
-1. [`ARouteResponse`](#ARouteResponse)
-1. [Routes separation](#routes-separation)
+1.	[Swift](#swift)
+	1. [Example](#swift-example)
+	1. [Documentation](#swift-docs)
+1.	[Objective-C](#objective-c)
+	1. [Example](#objective-c-example)
+	1. [Documentation](#objective-c-docs)
 
 <br><br>
 
@@ -49,7 +38,26 @@ pod "ARoute"
 
 --
 
-## Swift
+## <a name="swift"></a> Swift
+
+### <a name="swift-example"></a> Swift example
+
+Full route registration example:
+
+```swift
+ARoute.sharedRouter()
+	.registerRoutes(["user/{userId=number}" : UserViewController.self as AnyObject])
+	.separator({ () -> String in
+	    return "{}"
+	})
+	.parameters({ () -> [NSObject : AnyObject]? in
+	    return ["Key3":"Value3"]
+	})
+	.castingSeparator({ () -> String in
+	    return "="
+	})
+	.execute()
+```
 
 Full route execution example:
 
@@ -79,11 +87,52 @@ ARoute.sharedRouter()
 	.execute()
 ```
 
-### [Swift docs](SWIFT.md)
+### <a name="swift-docs"></a> [Swift documentation](SWIFT.md)
 
-## Objective-C
+## <a name="objective-c"></a> Objective-C
 
-### [Objective-C docs](OBJECTIVE-C.md)
+### <a name="objective-c-example"></a> Objective-C example
+
+Full route registration example:
+
+```objective-c
+NSDictionary *routes = @{
+	@"user/{userId=number}": [UserViewController class]
+};
+    
+[[[[[[ARoute sharedRouter]
+    registerRoutes:routes] separator:^NSString *{
+    return @"{}";
+}] parameters:^NSDictionary*{
+    return @{@"Key3":@"Value3"};
+}] castingSeparator:^NSString*{
+    return @"=";
+}] execute];
+```
+
+Full route execution example:
+
+```objective-c
+[[[[[[[[ARoute sharedRouter] route:@"user/12345"] protect:^BOOL(ARouteResponse *routeResponse) {
+    // return YES if you don't want to handle the route
+    return NO;
+}] parameters:^NSDictionary{
+    return @{
+             @"Key1": @"Value1",
+             @"Key2": @"Value2"
+             };
+}] transitioningDelegate:^id<UIViewControllerTransitioningDelegate>{
+    // return object conforming <UIViewControllerTransitioningDelegate>
+    return nil;
+}] animated:^BOOL{
+    return YES;
+}] completion:^(ARouteResponse *routeResponse) {
+    
+}] execute];
+
+```
+
+### <a name="objective-c-docs"></a> [Objective-C documentation](OBJECTIVE-C.md)
 
 <br><br>
 ## <a name="author"></a> Author
