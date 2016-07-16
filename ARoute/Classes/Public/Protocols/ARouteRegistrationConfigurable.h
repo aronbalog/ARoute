@@ -15,5 +15,6 @@
 @protocol ARouteRegistrationConfigurable <NSObject>
 
 - (nonnull id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable, ARouteRegistrationProtectable>)castingSeparator:(NSString * _Nonnull(^ _Nullable)())castingSeparator;
+- (nonnull id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable, ARouteRegistrationProtectable>)parameters:(NSDictionary <id, id> * _Nullable(^ _Nonnull)())parameters;
 
 @end

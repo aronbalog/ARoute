@@ -51,7 +51,7 @@ pod "ARoute"
 
 ## Swift
 
-Full route configuration example:
+Full route execution example:
 
 ```swift
 ARoute.sharedRouter()
