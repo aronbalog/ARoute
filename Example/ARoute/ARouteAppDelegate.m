@@ -23,8 +23,8 @@
       @"user-profile/{userId=number}": [UserViewController class]
       };
     
-    [[[[ARoute sharedRouter] registerRoutes:routes] castingSeparator:^NSString*{
-        return @"=";
+    [[[[ARoute sharedRouter] registerRoutes:routes] parameters:^NSDictionary<id,id> * _Nullable{
+        return @{@"message":@"hello123"};
     }] execute];
     
     return YES;

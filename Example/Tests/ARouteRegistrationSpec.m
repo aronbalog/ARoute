@@ -64,5 +64,42 @@ describe(@"when registering route with class parameters", ^{
     });
 });
 
+describe(@"when registering route with parameters", ^{
+    ARoute *sut = [ARoute sharedRouter];
+    
+    NSDictionary *parameters = @{@"key1": @"value1"};
+    
+    NSDictionary *routes = @{
+                             @"test":[RoutableViewController class]
+                             };
+    
+    [[[sut registerRoutes:routes] parameters:^NSDictionary<id,id> * _Nullable{
+        return parameters;
+    }] execute];
+    
+    context(@"and executing route", ^{
+        __block ARouteResponse *completeRouteResponseObject;
+        
+        NSDictionary *parameters2 = @{@"key2": @"value2",
+                                      @"key1": @"value3"
+                                      };
+        
+        waitUntil(^(DoneCallback done) {
+            [[[[sut route:@"test"] parameters:^NSDictionary<id,id> * _Nullable{
+                return parameters2;
+            }] completion:^(ARouteResponse *routeResponse){
+                completeRouteResponseObject = routeResponse;
+                done();
+            }] execute];
+        });
+        
+        it(@"routeResponse object in completon is not nil", ^{
+            NSDictionary *expected = @{@"key1":@"value3",
+                                       @"key2":@"value2"};
+            expect(completeRouteResponseObject.parameters).to.equal(expected);
+        });
+    });
+});
+
 
 SpecEnd
