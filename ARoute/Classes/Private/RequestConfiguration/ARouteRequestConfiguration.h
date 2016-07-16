@@ -10,8 +10,9 @@
 
 @interface ARouteRequestConfiguration : NSObject
 
-@property (assign, nonatomic) SEL _Nullable instantiationSelector;
-@property (strong, nonatomic, nullable) NSArray *instantiationArguments;
+@property (assign, nonatomic) SEL (^constructorBlock)(ARouteResponse * _Nonnull routeResponse);
+;
+@property (strong, nonatomic, nullable) NSArray *(^ instantiationArgumentsBlock)(ARouteResponse * _Nonnull);
 @property (strong, nonatomic, nullable) UIViewController * _Nullable (^embeddingViewControllerBlock)();
 @property (strong, nonatomic, nullable) void (^completionBlock)(ARouteResponse * _Nonnull);
 @property (strong, nonatomic, nullable) BOOL (^animatedBlock)();

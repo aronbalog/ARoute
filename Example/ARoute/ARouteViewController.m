@@ -28,10 +28,10 @@
     [[[[[[[[[ARoute sharedRouter] route:@"user/12345"] protect:^BOOL(ARouteResponse * _Nonnull routeResponse) {
         // return YES if you don't want to handle the route
         return NO;
-    }] constructor:^SEL _Nonnull{
+    }] constructor:^SEL _Nonnull(ARouteResponse * _Nonnull routeResponse) {
         return @selector(initCustomMethod:anotherString:);
-    } objects:^NSArray * _Nullable{
-        return @[@"hello", @"hello 2"];
+    } objects:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
+        return @[@"Title", @"Name"];
     }] parameters:^NSDictionary<id,id> * _Nullable{
         return @{
                  @"Key1": @"Value1",

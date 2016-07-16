@@ -73,11 +73,11 @@
 
 #pragma mark - ARouteRequestInitiable
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)constructor:(SEL  _Nonnull (^)())constructor objects:(NSArray * _Nullable (^)())objects
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)constructor:(SEL  _Nonnull (^)(ARouteResponse * _Nonnull))constructor objects:(NSArray * _Nullable (^)())objects
 {
-    self.configuration.instantiationSelector = constructor();
+    self.configuration.constructorBlock = constructor;
     if (objects) {
-        self.configuration.instantiationArguments = objects();
+        self.configuration.instantiationArgumentsBlock = objects;
     }
     
     return self;

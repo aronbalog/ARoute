@@ -188,7 +188,7 @@
 {
     UIViewController *viewController;
     
-    SEL initSelector = routeRequest.configuration.instantiationSelector;
+    SEL initSelector = routeRequest.configuration.constructorBlock(routeResponse);
     if (initSelector) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
@@ -200,7 +200,7 @@
             self.classPointer = [aClass alloc];
             [invocation setTarget:self.classPointer];
             [invocation setSelector:initSelector];
-            NSArray *arguments = routeRequest.configuration.instantiationArguments;
+            NSArray *arguments = routeRequest.configuration.instantiationArgumentsBlock(routeResponse);
 
             for (NSInteger i = 0; i < arguments.count; i++)
             {
