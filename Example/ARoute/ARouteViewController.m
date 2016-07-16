@@ -25,7 +25,7 @@
 {
     [super viewDidAppear:animated];
         
-    [[[[ARoute sharedRouter] route:@"user-profile/1234"] parameters:^NSDictionary<id,id> * _Nullable{
+    [[[[ARoute sharedRouter] route:@"home"] parameters:^NSDictionary<id,id> * _Nullable{
         return @{@"message": @"hello"};
     }] execute];
 }
