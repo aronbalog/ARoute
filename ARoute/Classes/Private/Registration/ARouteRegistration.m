@@ -104,6 +104,20 @@
     return self;
 }
 
+#pragma mark - ARouteRegistrationConfigurable
+
+- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)parameters:(NSDictionary<id,id> * _Nullable (^)())parameters
+{
+    if (parameters) {
+        self.registrationConfiguration.parametersBlock = parameters;
+        [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            obj.parametersBlock = self.registrationConfiguration.parametersBlock;
+        }];
+    }
+    
+    return self;
+}
+
 #pragma mark - ARouteRegistrationProtectable
 
 - (id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull))protect

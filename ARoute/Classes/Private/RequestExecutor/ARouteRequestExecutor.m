@@ -54,6 +54,7 @@
     
     NSString *castingSeparator;
     NSDictionary *routeParameters;
+    NSDictionary *registrationParameters;
     
     BOOL (^protectBlock)(ARouteResponse *);
     
@@ -68,6 +69,7 @@
             routeParameters = result.routeParameters;
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
+            registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
             
             break;
         }
@@ -78,7 +80,8 @@
             routeParameters = result.routeParameters;
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
-            
+            registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
+
             break;
         }
         case ARouteRequestTypeViewController: {
@@ -93,6 +96,9 @@
         default:
             return;
     }
+    
+    // combine parameters
+    response.parameters = [self combineRequestParameters:response.parameters withRegistrationParameters:registrationParameters];
     
     // set casting separator
     [response setValue:castingSeparator forKey:@"castingSeparator"];
@@ -161,6 +167,9 @@
     }];
 }
 
+#pragma mark - Private
+
+
 - (__kindof UIViewController *)viewControllerWithClass:(Class)aClass routeRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse *)routeResponse
 {
     UIViewController *viewController;
@@ -211,7 +220,19 @@
     return viewController;
 }
 
-#pragma mark - Private
+- (NSDictionary *)combineRequestParameters:(NSDictionary *)requestParameters withRegistrationParameters:(NSDictionary *)registrationParameters
+{
+    NSMutableDictionary *combined = [NSMutableDictionary new];
+    
+    [combined addEntriesFromDictionary:registrationParameters];
+    [requestParameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        combined[key] = obj;
+    }];
+    
+    return combined;
+}
+
+#pragma mark - Properties
 
 - (ARouteRegistrationStorage *)routeRegistrationStorage
 {

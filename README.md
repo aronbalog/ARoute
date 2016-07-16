@@ -15,6 +15,7 @@
 	1. [Route execution](#route-execution)
 	1. [Animations](#animations)
 1. [Advanced usage](#advanced-usage)
+	1. [Parameters](#parameters)
 	1. [Custom separator](#custom-separator)
 	1. [Parameter casting](#parameter-casting)
 	1. [Callbacks](#callbacks)
@@ -141,6 +142,34 @@ Registration pattern           | Separator         | Execution pattern          
 `user/id-!userId/profile`      | `!` or `!!`       | `user/id-123456/profile`        | `@{@"userId": @"123456"}`
 `user/name-!userName/profile`  | `!` or `!!`       | `user/name-my-name/profile`     | `@{@"userName": @"my-name"}`
 `user/:first:-:last:/profile`  | `:` or `::`       | `user/aron-balog/profile`       | `@{@"first": @"aron", @"last": @"balog"}`
+
+### <a name="parameters"></a> Parameters
+
+Passing parameters is possible using both registration end executing the route.
+
+Route registration:
+
+```
+[[[[ARoute sharedRouter] registerRoutes:routes] parameters:^NSDictionary<id,id> *{
+    return @{@"message":@"some default message"};
+}] execute];
+```
+Route execution:
+
+```
+[[[[ARoute sharedRouter] route:route] parameters:^NSDictionary<id,id> *{
+	return @{@"message2": @"Another message"};
+}] execute];
+```
+Note: If you use same parameter keys in registration and execution, priority will be on execution parameter.<br>`ARouteResponse` will receive combined values of both parameters.
+E.g. this example will return following dictionary (`routeResponse.parameters`):
+
+```
+@{
+	@"message":@"some default message"
+	@"message2": @"Another message"
+}
+```
 
 ### <a name="parameter-casting"></a> Parameter casting
 
