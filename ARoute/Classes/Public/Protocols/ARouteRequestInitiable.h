@@ -17,6 +17,6 @@
 
 @protocol ARouteRequestInitiable <NSObject>
 
-- (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)initSelector:(SEL _Nonnull(^ _Nonnull)())initSelector objects:(NSArray * _Nullable(^ _Nullable)())objects;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)constructor:(SEL _Nonnull(^ _Nonnull)())constructor objects:(NSArray * _Nullable(^ _Nullable)())objects;
 
 @end

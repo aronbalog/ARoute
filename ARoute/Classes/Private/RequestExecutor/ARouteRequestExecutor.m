@@ -57,6 +57,7 @@
     NSDictionary *registrationParameters;
     
     BOOL (^protectBlock)(ARouteResponse *);
+    ARouteEmbeddingType embeddingType = 0;
     
     ARoute *router = routeRequest.router;
     
@@ -70,6 +71,7 @@
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
+            embeddingType = result.routeRegistrationItem.embeddingType;
             
             break;
         }
@@ -81,6 +83,7 @@
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
+            embeddingType = result.routeRegistrationItem.embeddingType;
 
             break;
         }
@@ -155,7 +158,18 @@
         }
         presentingViewController = embeddingViewController;
     } else {
-        presentingViewController = destinationViewController;
+        if (embeddingType == ARouteEmbeddingTypeNavigationController) {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinationViewController];
+            presentingViewController = navigationController;
+            embeddingViewController = navigationController;
+        } else if (embeddingType == ARouteEmbeddingTypeTabBarController) {
+            UITabBarController *tabBarController = [UITabBarController new];
+            [tabBarController setViewControllers:@[destinationViewController] animated:NO];
+            presentingViewController = tabBarController;
+            embeddingViewController = tabBarController;
+        } else {
+            presentingViewController = destinationViewController;
+        }
     }
     
     destinationViewController.transitioningDelegate = routeRequest.configuration.transitioningDelegateBlock ? routeRequest.configuration.transitioningDelegateBlock() : nil;
@@ -180,11 +194,7 @@
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         BOOL respondsToInitSelector = [aClass instancesRespondToSelector:initSelector];
         if (respondsToInitSelector) {
-            @try {
-                
-            } @catch (NSException *exception) {
-                
-            }
+        
             NSMethodSignature *signature = [aClass instanceMethodSignatureForSelector:initSelector];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
             self.classPointer = [aClass alloc];

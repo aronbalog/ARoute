@@ -22,8 +22,8 @@
       @"user/{userId=number}": [UserViewController class]
       };
     
-    [[[[[[ARoute sharedRouter]
-        registerRoutes:routes] separator:^NSString * _Nonnull{
+    [[[[[[[ARoute sharedRouter]
+        registerRoutes:routes] embedInTabBarController] separator:^NSString * _Nonnull{
         return @"{}";
     }] parameters:^NSDictionary<id,id> * _Nullable{
         return @{@"Key3":@"Value3"};

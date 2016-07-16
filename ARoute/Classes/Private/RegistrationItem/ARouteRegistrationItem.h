@@ -15,6 +15,12 @@ typedef NS_ENUM(NSInteger, ARouteRegistrationItemType) {
     ARouteRegistrationItemTypeNamedRoute
 };
 
+typedef NS_ENUM(NSInteger, ARouteEmbeddingType) {
+    ARouteItemEmbeddingTypeDoNotEmbed,
+    ARouteEmbeddingTypeNavigationController,
+    ARouteEmbeddingTypeTabBarController
+};
+
 @interface ARouteRegistrationItem : NSObject
 
 @property (strong, nonatomic, nonnull) ARoute *router;
@@ -27,5 +33,6 @@ typedef NS_ENUM(NSInteger, ARouteRegistrationItemType) {
 @property (strong, nonatomic, nonnull) NSString *separator;
 @property (strong, nonatomic, nonnull) NSString *castingSeparator;
 @property (assign, nonatomic) ARouteRegistrationItemType type;
+@property (assign, nonatomic) ARouteEmbeddingType embeddingType;
 
 @end

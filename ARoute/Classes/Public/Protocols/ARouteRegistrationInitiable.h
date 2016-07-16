@@ -14,6 +14,7 @@
 
 @protocol ARouteRegistrationInitiable <NSObject>
 
-- (nonnull id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable, ARouteRegistrationProtectable>)separator:(NSString * _Nonnull(^ _Nonnull)())separator;
+- (nonnull instancetype)embedInNavigationController;
+- (nonnull instancetype)embedInTabBarController;
 
 @end

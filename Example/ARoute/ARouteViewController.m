@@ -25,9 +25,13 @@
 {
     [super viewDidAppear:animated];
         
-    [[[[[[[[ARoute sharedRouter] route:@"user/12345"] protect:^BOOL(ARouteResponse * _Nonnull routeResponse) {
+    [[[[[[[[[ARoute sharedRouter] route:@"user/12345"] protect:^BOOL(ARouteResponse * _Nonnull routeResponse) {
         // return YES if you don't want to handle the route
         return NO;
+    }] constructor:^SEL _Nonnull{
+        return @selector(initCustomMethod:anotherString:);
+    } objects:^NSArray * _Nullable{
+        return @[@"hello", @"hello 2"];
     }] parameters:^NSDictionary<id,id> * _Nullable{
         return @{
                  @"Key1": @"Value1",

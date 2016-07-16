@@ -18,15 +18,6 @@
 
 @implementation ARoute
 
-- (void)test
-{
-    [[[ARoute sharedRouter] registerRoute:@{@"":[NSString class]} withName:@""] execute];
-    
-    [[[[ARoute sharedRouter] route:@""] initSelector:^SEL _Nonnull{
-        return @selector(init);
-    } objects:nil] execute];
-}
-
 + (instancetype)sharedRouter
 {
     static dispatch_once_t onceToken;

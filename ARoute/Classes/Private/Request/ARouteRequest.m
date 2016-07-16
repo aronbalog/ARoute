@@ -73,9 +73,9 @@
 
 #pragma mark - ARouteRequestInitiable
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)initSelector:(SEL  _Nonnull (^)())initSelector objects:(NSArray * _Nullable (^)())objects
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)constructor:(SEL  _Nonnull (^)())constructor objects:(NSArray * _Nullable (^)())objects
 {
-    self.configuration.instantiationSelector = initSelector();
+    self.configuration.instantiationSelector = constructor();
     if (objects) {
         self.configuration.instantiationArguments = objects();
     }
