@@ -9,7 +9,7 @@
 // https://github.com/Specta/Specta
 
 SpecBegin(InitialSpecs)
-
+/*
 describe(@"these will fail", ^{
 
     it(@"can do maths", ^{
@@ -43,6 +43,7 @@ describe(@"these will pass", ^{
         });
     });
 });
+*/
 
 SpecEnd
 

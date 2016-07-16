@@ -84,10 +84,12 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/ARoute/ARoute.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Expecta/Expecta.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Specta/Specta.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/ARoute/ARoute.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Expecta/Expecta.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Specta/Specta.framework"
 fi

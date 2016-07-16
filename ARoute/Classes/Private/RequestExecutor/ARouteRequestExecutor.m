@@ -23,6 +23,7 @@
 @interface ARouteRequestExecutor ()
 
 @property (strong, nonatomic, nonnull) ARouteRegistrationStorage *routeRegistrationStorage;
+@property (strong, nonatomic, nullable) id classPointer;
 
 @end
 
@@ -109,11 +110,13 @@
     }
     
     if (!proceed) {
+        self.classPointer = nil;
         return;
     }
     
     // check if callback
     if (callbackBlock) {
+        self.classPointer = nil;
         callbackBlock(response);
         return;
     }
@@ -123,6 +126,7 @@
     }
     
     if (!destinationViewController) {
+        self.classPointer = nil;
         return;
     }
     
@@ -167,13 +171,32 @@
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         BOOL respondsToInitSelector = [aClass instancesRespondToSelector:initSelector];
         if (respondsToInitSelector) {
-            NSDictionary *arguments = routeRequest.configuration.instantiationArguments;
-            
-            if (arguments.count > 0) {
-                viewController = [[aClass alloc] performSelector:initSelector withObject:arguments];
-            } else {
-                viewController = [[aClass alloc] performSelector:initSelector];
+            @try {
+                
+            } @catch (NSException *exception) {
+                
             }
+            NSMethodSignature *signature = [aClass instanceMethodSignatureForSelector:initSelector];
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+            self.classPointer = [aClass alloc];
+            [invocation setTarget:self.classPointer];
+            [invocation setSelector:initSelector];
+            NSArray *arguments = routeRequest.configuration.instantiationArguments;
+
+            for (NSInteger i = 0; i < arguments.count; i++)
+            {
+                id __unsafe_unretained argument = arguments[i];
+                [invocation setArgument:&argument atIndex:(i+2)];
+            }
+            [invocation retainArguments];
+
+            id __unsafe_unretained result = nil;
+            [invocation invoke];
+            [invocation getReturnValue:&result];
+
+            NSLog(@"The result is: %@", result);
+            
+            viewController = result;
         }
         
 #pragma clang diagnostic pop

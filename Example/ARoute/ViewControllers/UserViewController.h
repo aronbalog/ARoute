@@ -11,4 +11,7 @@
 
 @interface UserViewController : UIViewController <ARoutable>
 
+- (instancetype)initCustomMethod:(NSString *)string anotherString:(NSString *)another;
+- (instancetype)anotherMethod:(NSString *)string;
+
 @end

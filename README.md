@@ -1,6 +1,6 @@
 # ARoute
 
-[![CI Status](http://img.shields.io/travis/Aron Balog/ARoute.svg?style=flat)](https://travis-ci.org/Aron Balog/ARoute)
+[![Build Status](https://travis-ci.org/aronbalog/ARoute.svg?branch=master)](https://travis-ci.org/aronbalog/ARoute)
 [![Version](https://img.shields.io/cocoapods/v/ARoute.svg?style=flat)](http://cocoapods.org/pods/ARoute)
 [![License](https://img.shields.io/cocoapods/l/ARoute.svg?style=flat)](http://cocoapods.org/pods/ARoute)
 [![Platform](https://img.shields.io/cocoapods/p/ARoute.svg?style=flat)](http://cocoapods.org/pods/ARoute)
@@ -274,15 +274,11 @@ Custom initiation is a cool feature and pretty easy to accomplish:
 - (void)openUserProfileViewControllerWithUserId:(NSString *)userId
 {
     NSString *title = @"User profile";
-
-    NSString *userProfileRoute = [NSString stringWithFormat:@"user-profile/%@", userId];
-    
-    SEL initSelector = @selector(myCustomInitMethod:);
-    
-    [[[[ARoute sharedRouter] route:userProfileRoute] initSelector:^SEL{
-        return initSelector;
-    } objects:^NSDictionary *{
-        return @{@"firstArgument":title};
+        
+    [[[[ARoute sharedRouter] route:route] initSelector:^SEL{
+        return @selector(initWithTitle:);
+    } objects:^NSArray *{
+        return @[title];
     }] execute];
 }
 ```

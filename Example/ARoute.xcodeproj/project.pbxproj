@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2062714B37E5B324B64E6AC9 /* Pods_ARoute_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4865EC9D2ACD2880CF227DE1 /* Pods_ARoute_Tests.framework */; };
-		2DFA6679F6A1DA14D0357995 /* Pods_ARoute_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF4DC6A72D9BD891899541A9 /* Pods_ARoute_Example.framework */; };
+		01E2612E3C6D82C497BBE0EF /* Pods_ARoute_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A3250A1EF745292AAD6A94 /* Pods_ARoute_Tests.framework */; };
 		3817A32C1D3698AF003A7DC6 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32B1D3698AF003A7DC6 /* HomeViewController.m */; };
 		3817A32F1D369977003A7DC6 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32E1D369977003A7DC6 /* UserViewController.m */; };
 		3817A3321D36BA38003A7DC6 /* EmbeddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */; };
 		385050D61D39A2CE0035246D /* MyObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 385050D51D39A2CE0035246D /* MyObject.m */; };
+		385050D91D39BE6D0035246D /* ARouteRegistrationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 385050D71D39BC760035246D /* ARouteRegistrationSpec.m */; };
+		385050DF1D39C0310035246D /* RoutableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 385050DD1D39C0210035246D /* RoutableViewController.m */; };
+		4E9A0169EC97652C9D429562 /* Pods_ARoute_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD12EBB573BC35F1BD89B2B /* Pods_ARoute_Example.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -40,9 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0F3B15F7E32F80B72E3721A1 /* Pods-ARoute_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Example/Pods-ARoute_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		21B6BC13A7D790ACD92B08D0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		2C32D59C5AADD62FC4BB8DAC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		37C6CF05F11573C8C8AEEBB6 /* Pods-ARoute_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Tests/Pods-ARoute_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		3817A32A1D3698AF003A7DC6 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		3817A32B1D3698AF003A7DC6 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		3817A32D1D369977003A7DC6 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
@@ -51,9 +53,11 @@
 		3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbeddingViewController.m; sourceTree = "<group>"; };
 		385050D41D39A2CE0035246D /* MyObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyObject.h; sourceTree = "<group>"; };
 		385050D51D39A2CE0035246D /* MyObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyObject.m; sourceTree = "<group>"; };
-		4865EC9D2ACD2880CF227DE1 /* Pods_ARoute_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARoute_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		385050D71D39BC760035246D /* ARouteRegistrationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARouteRegistrationSpec.m; sourceTree = "<group>"; };
+		385050DC1D39C0210035246D /* RoutableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutableViewController.h; sourceTree = "<group>"; };
+		385050DD1D39C0210035246D /* RoutableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoutableViewController.m; sourceTree = "<group>"; };
+		3F767236CAD9B9FAF47C7E8B /* Pods-ARoute_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Example/Pods-ARoute_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		50B4062A6CC10442C65FF8A7 /* ARoute.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ARoute.podspec; path = ../ARoute.podspec; sourceTree = "<group>"; };
-		56B1C0154BBC08D93C489BF0 /* Pods-ARoute_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Tests/Pods-ARoute_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* ARoute_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARoute_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -73,10 +77,11 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		6CD12EBB573BC35F1BD89B2B /* Pods_ARoute_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARoute_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85A3250A1EF745292AAD6A94 /* Pods_ARoute_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARoute_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		F9C4CBA3AD3F291778580759 /* Pods-ARoute_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Tests/Pods-ARoute_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		FEAD8490C16A78EA5A6A4ABA /* Pods-ARoute_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Example/Pods-ARoute_Example.release.xcconfig"; sourceTree = "<group>"; };
-		FF4DC6A72D9BD891899541A9 /* Pods_ARoute_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARoute_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		93FCDDBCCE3D30BE864C9E95 /* Pods-ARoute_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Example/Pods-ARoute_Example.release.xcconfig"; sourceTree = "<group>"; };
+		D44617E280415705BA2D0BF9 /* Pods-ARoute_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Tests/Pods-ARoute_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +92,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				2DFA6679F6A1DA14D0357995 /* Pods_ARoute_Example.framework in Frameworks */,
+				4E9A0169EC97652C9D429562 /* Pods_ARoute_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +103,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				2062714B37E5B324B64E6AC9 /* Pods_ARoute_Tests.framework in Frameworks */,
+				01E2612E3C6D82C497BBE0EF /* Pods_ARoute_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +132,34 @@
 			path = Casting;
 			sourceTree = "<group>";
 		};
+		385050DA1D39BFEE0035246D /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				385050DB1D39BFF30035246D /* ViewControllers */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		385050DB1D39BFF30035246D /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				385050DC1D39C0210035246D /* RoutableViewController.h */,
+				385050DD1D39C0210035246D /* RoutableViewController.m */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		561E0E7713B6101774E3AE52 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3F767236CAD9B9FAF47C7E8B /* Pods-ARoute_Example.debug.xcconfig */,
+				93FCDDBCCE3D30BE864C9E95 /* Pods-ARoute_Example.release.xcconfig */,
+				37C6CF05F11573C8C8AEEBB6 /* Pods-ARoute_Tests.debug.xcconfig */,
+				D44617E280415705BA2D0BF9 /* Pods-ARoute_Tests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -135,7 +168,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				81500B867F33948A210D9866 /* Pods */,
+				561E0E7713B6101774E3AE52 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -155,8 +188,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				FF4DC6A72D9BD891899541A9 /* Pods_ARoute_Example.framework */,
-				4865EC9D2ACD2880CF227DE1 /* Pods_ARoute_Tests.framework */,
+				6CD12EBB573BC35F1BD89B2B /* Pods_ARoute_Example.framework */,
+				85A3250A1EF745292AAD6A94 /* Pods_ARoute_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -192,6 +225,8 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				385050DA1D39BFEE0035246D /* Classes */,
+				385050D71D39BC760035246D /* ARouteRegistrationSpec.m */,
 				6003F5BB195388D20070C39A /* Tests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
@@ -216,17 +251,6 @@
 				2C32D59C5AADD62FC4BB8DAC /* LICENSE */,
 			);
 			name = "Podspec Metadata";
-			sourceTree = "<group>";
-		};
-		81500B867F33948A210D9866 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				0F3B15F7E32F80B72E3721A1 /* Pods-ARoute_Example.debug.xcconfig */,
-				FEAD8490C16A78EA5A6A4ABA /* Pods-ARoute_Example.release.xcconfig */,
-				56B1C0154BBC08D93C489BF0 /* Pods-ARoute_Tests.debug.xcconfig */,
-				F9C4CBA3AD3F291778580759 /* Pods-ARoute_Tests.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -440,7 +464,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				385050DF1D39C0310035246D /* RoutableViewController.m in Sources */,
 				6003F5BC195388D20070C39A /* Tests.m in Sources */,
+				385050D91D39BE6D0035246D /* ARouteRegistrationSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,7 +575,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0F3B15F7E32F80B72E3721A1 /* Pods-ARoute_Example.debug.xcconfig */;
+			baseConfigurationReference = 3F767236CAD9B9FAF47C7E8B /* Pods-ARoute_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -565,7 +591,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FEAD8490C16A78EA5A6A4ABA /* Pods-ARoute_Example.release.xcconfig */;
+			baseConfigurationReference = 93FCDDBCCE3D30BE864C9E95 /* Pods-ARoute_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -581,11 +607,10 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 56B1C0154BBC08D93C489BF0 /* Pods-ARoute_Tests.debug.xcconfig */;
+			baseConfigurationReference = 37C6CF05F11573C8C8AEEBB6 /* Pods-ARoute_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
@@ -595,6 +620,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -605,16 +631,16 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F9C4CBA3AD3F291778580759 /* Pods-ARoute_Tests.release.xcconfig */;
+			baseConfigurationReference = D44617E280415705BA2D0BF9 /* Pods-ARoute_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";

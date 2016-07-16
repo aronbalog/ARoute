@@ -73,7 +73,7 @@
 
 #pragma mark - ARouteRequestInitiable
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)initSelector:(SEL  _Nonnull (^)())initSelector objects:(NSDictionary * _Nullable (^)())objects
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)initSelector:(SEL  _Nonnull (^)())initSelector objects:(NSArray * _Nullable (^)())objects
 {
     self.configuration.instantiationSelector = initSelector();
     if (objects) {
