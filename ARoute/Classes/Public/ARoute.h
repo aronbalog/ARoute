@@ -46,5 +46,6 @@
 - (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes;
 - (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoute:(nonnull NSDictionary <NSString*, id> *)route withName:(nonnull NSString *)routeName;
 - (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes withGroupName:(nonnull NSString *)groupName;
+- (void)clearAllRouteRegistrations;
 
 @end

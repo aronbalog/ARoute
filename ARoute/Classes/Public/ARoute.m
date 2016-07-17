@@ -13,6 +13,7 @@
 @interface ARoute ()
 
 @property (strong, nonatomic, nonnull, readwrite) ARouteConfiguration *configuration;
+@property (strong, nonatomic, nonnull) ARouteRegistrationStorage *storage;
 
 @end
 
@@ -91,6 +92,11 @@
     return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:groupName];
 }
 
+- (void)clearAllRouteRegistrations
+{
+    [self.storage purgeRouteRegistrations];
+}
+
 #pragma mark - Properties
 
 - (ARouteConfiguration *)configuration
@@ -100,6 +106,11 @@
     }
     
     return _configuration;
+}
+
+- (ARouteRegistrationStorage *)storage
+{
+    return [ARouteRegistrationStorage sharedInstance];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ARouteRequestExecutor.h"
+#import <objc/runtime.h>
 
 @class ARouteRegistrationStorage;
 @protocol ARoutable;
@@ -183,7 +184,6 @@
     
     UIViewController *presentingViewController;
     if (embeddingViewController) {
-        response.embeddingViewController = embeddingViewController;
         if ([embeddingViewController respondsToSelector:@selector(embedDestinationViewController:withRouteResponse:)]) {
             [embeddingViewController performSelector:@selector(embedDestinationViewController:withRouteResponse:) withObject:destinationViewController withObject:response];
         }
@@ -197,7 +197,12 @@
                 [viewControllers addObject:destinationViewController];
                 
                 [aheadViewControllers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj isKindOfClass:[NSString class]]) {
+                    if (object_isClass(obj)) {
+                        id classPointer = [obj alloc];
+                        if ([classPointer respondsToSelector:@selector(initWithRouteResponse:)]) {
+                            [viewControllers addObject:[classPointer initWithRouteResponse:response]];
+                        }
+                    } else if ([obj isKindOfClass:[NSString class]]) {
                         UIViewController *viewController = [[router route:obj] viewController];
                         [viewControllers addObject:viewController];
                     } else if ([obj isKindOfClass:[UIViewController class]]) {
@@ -219,6 +224,8 @@
             presentingViewController = destinationViewController;
         }
     }
+    
+    response.embeddingViewController = embeddingViewController;
     
     destinationViewController.transitioningDelegate = routeRequest.configuration.transitioningDelegateBlock ? routeRequest.configuration.transitioningDelegateBlock() : nil;
     

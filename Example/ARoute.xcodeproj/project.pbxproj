@@ -10,9 +10,20 @@
 		01E2612E3C6D82C497BBE0EF /* Pods_ARoute_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A3250A1EF745292AAD6A94 /* Pods_ARoute_Tests.framework */; };
 		380D85D81D3B00E400413C44 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85D71D3B00E400413C44 /* FirstViewController.m */; };
 		380D85DB1D3B00EB00413C44 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85DA1D3B00EB00413C44 /* SecondViewController.m */; };
+		380D85E41D3C38D000413C44 /* BlueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85E31D3C38D000413C44 /* BlueViewController.m */; };
+		380D85E71D3C38E300413C44 /* YellowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85E61D3C38E300413C44 /* YellowViewController.m */; };
+		380D85EA1D3C38E800413C44 /* RedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85E91D3C38E800413C44 /* RedViewController.m */; };
+		380D85EB1D3C395D00413C44 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32B1D3698AF003A7DC6 /* HomeViewController.m */; };
+		380D85EC1D3C395D00413C44 /* BlueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85E31D3C38D000413C44 /* BlueViewController.m */; };
+		380D85ED1D3C395D00413C44 /* YellowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85E61D3C38E300413C44 /* YellowViewController.m */; };
+		380D85EE1D3C395D00413C44 /* RedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85E91D3C38E800413C44 /* RedViewController.m */; };
+		380D85F11D3C3D6F00413C44 /* ARouteTestAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85F01D3C3D6F00413C44 /* ARouteTestAppDelegate.m */; };
 		3817A32C1D3698AF003A7DC6 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32B1D3698AF003A7DC6 /* HomeViewController.m */; };
 		3817A32F1D369977003A7DC6 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32E1D369977003A7DC6 /* UserViewController.m */; };
 		3817A3321D36BA38003A7DC6 /* EmbeddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */; };
+		381C479F1D3C3E5B00CDC701 /* ARouteTestAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85F01D3C3D6F00413C44 /* ARouteTestAppDelegate.m */; };
+		381C47A21D3C425800CDC701 /* GrayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 381C47A11D3C425800CDC701 /* GrayViewController.m */; };
+		381C47A31D3C425800CDC701 /* GrayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 381C47A11D3C425800CDC701 /* GrayViewController.m */; };
 		385050D61D39A2CE0035246D /* MyObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 385050D51D39A2CE0035246D /* MyObject.m */; };
 		385050D91D39BE6D0035246D /* ARouteRegistrationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 385050D71D39BC760035246D /* ARouteRegistrationSpec.m */; };
 		385050DF1D39C0310035246D /* RoutableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 385050DD1D39C0210035246D /* RoutableViewController.m */; };
@@ -50,12 +61,22 @@
 		380D85D71D3B00E400413C44 /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		380D85D91D3B00EB00413C44 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		380D85DA1D3B00EB00413C44 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		380D85E21D3C38D000413C44 /* BlueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueViewController.h; sourceTree = "<group>"; };
+		380D85E31D3C38D000413C44 /* BlueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueViewController.m; sourceTree = "<group>"; };
+		380D85E51D3C38E300413C44 /* YellowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YellowViewController.h; sourceTree = "<group>"; };
+		380D85E61D3C38E300413C44 /* YellowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YellowViewController.m; sourceTree = "<group>"; };
+		380D85E81D3C38E800413C44 /* RedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedViewController.h; sourceTree = "<group>"; };
+		380D85E91D3C38E800413C44 /* RedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedViewController.m; sourceTree = "<group>"; };
+		380D85EF1D3C3D6F00413C44 /* ARouteTestAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARouteTestAppDelegate.h; sourceTree = "<group>"; };
+		380D85F01D3C3D6F00413C44 /* ARouteTestAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARouteTestAppDelegate.m; sourceTree = "<group>"; };
 		3817A32A1D3698AF003A7DC6 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		3817A32B1D3698AF003A7DC6 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		3817A32D1D369977003A7DC6 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		3817A32E1D369977003A7DC6 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		3817A3301D36BA38003A7DC6 /* EmbeddingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmbeddingViewController.h; sourceTree = "<group>"; };
 		3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbeddingViewController.m; sourceTree = "<group>"; };
+		381C47A01D3C425800CDC701 /* GrayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrayViewController.h; sourceTree = "<group>"; };
+		381C47A11D3C425800CDC701 /* GrayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GrayViewController.m; sourceTree = "<group>"; };
 		385050D41D39A2CE0035246D /* MyObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyObject.h; sourceTree = "<group>"; };
 		385050D51D39A2CE0035246D /* MyObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyObject.m; sourceTree = "<group>"; };
 		385050D71D39BC760035246D /* ARouteRegistrationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARouteRegistrationSpec.m; sourceTree = "<group>"; };
@@ -127,6 +148,14 @@
 				380D85D71D3B00E400413C44 /* FirstViewController.m */,
 				380D85D91D3B00EB00413C44 /* SecondViewController.h */,
 				380D85DA1D3B00EB00413C44 /* SecondViewController.m */,
+				380D85E21D3C38D000413C44 /* BlueViewController.h */,
+				380D85E31D3C38D000413C44 /* BlueViewController.m */,
+				380D85E51D3C38E300413C44 /* YellowViewController.h */,
+				380D85E61D3C38E300413C44 /* YellowViewController.m */,
+				380D85E81D3C38E800413C44 /* RedViewController.h */,
+				380D85E91D3C38E800413C44 /* RedViewController.m */,
+				381C47A01D3C425800CDC701 /* GrayViewController.h */,
+				381C47A11D3C425800CDC701 /* GrayViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -236,6 +265,8 @@
 				385050DA1D39BFEE0035246D /* Classes */,
 				385050D71D39BC760035246D /* ARouteRegistrationSpec.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
+				380D85EF1D3C3D6F00413C44 /* ARouteTestAppDelegate.h */,
+				380D85F01D3C3D6F00413C44 /* ARouteTestAppDelegate.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -461,11 +492,16 @@
 				3817A3321D36BA38003A7DC6 /* EmbeddingViewController.m in Sources */,
 				6003F59E195388D20070C39A /* ARouteAppDelegate.m in Sources */,
 				385050D61D39A2CE0035246D /* MyObject.m in Sources */,
+				380D85EA1D3C38E800413C44 /* RedViewController.m in Sources */,
 				3817A32F1D369977003A7DC6 /* UserViewController.m in Sources */,
+				381C479F1D3C3E5B00CDC701 /* ARouteTestAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* ARouteViewController.m in Sources */,
+				380D85E41D3C38D000413C44 /* BlueViewController.m in Sources */,
+				380D85E71D3C38E300413C44 /* YellowViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				3817A32C1D3698AF003A7DC6 /* HomeViewController.m in Sources */,
 				380D85D81D3B00E400413C44 /* FirstViewController.m in Sources */,
+				381C47A21D3C425800CDC701 /* GrayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,8 +509,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				380D85F11D3C3D6F00413C44 /* ARouteTestAppDelegate.m in Sources */,
+				381C47A31D3C425800CDC701 /* GrayViewController.m in Sources */,
 				385050DF1D39C0310035246D /* RoutableViewController.m in Sources */,
+				380D85ED1D3C395D00413C44 /* YellowViewController.m in Sources */,
 				385050D91D39BE6D0035246D /* ARouteRegistrationSpec.m in Sources */,
+				380D85EC1D3C395D00413C44 /* BlueViewController.m in Sources */,
+				380D85EE1D3C395D00413C44 /* RedViewController.m in Sources */,
+				380D85EB1D3C395D00413C44 /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
