@@ -15,6 +15,7 @@
 @protocol ARouteRegistrationInitiable <NSObject>
 
 - (nonnull instancetype)embedInNavigationController;
+- (nonnull instancetype)embedInNavigationController:(NSArray * _Nullable(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))aheadViewControllers;
 - (nonnull instancetype)embedInTabBarController;
 
 @end

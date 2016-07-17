@@ -19,5 +19,6 @@
 @property (strong, nonatomic, nullable) BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse);
 @property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)();
 @property (strong, nonatomic, nullable) id <UIViewControllerTransitioningDelegate> _Nullable(^transitioningDelegateBlock)();
-
+@property (assign, nonatomic) ARouteEmbeddingType embeddingType;
+@property (strong, nonatomic, nonnull) NSArray *_Nullable(^ aheadViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
 @end

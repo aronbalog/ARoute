@@ -15,7 +15,8 @@
     self = [[UserViewController alloc] init];
     
     NSLog(@"Route response: %@", string);
-
+    self.view.backgroundColor = [UIColor yellowColor];
+    
     
     return self;
 }

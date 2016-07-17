@@ -10,10 +10,18 @@
 
 @implementation HomeViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    return self;
+}
+
 - (instancetype)initWithRouteResponse:(ARouteResponse *)routeResponse
 {
     self = [self init];
-    
     
     
     return self;

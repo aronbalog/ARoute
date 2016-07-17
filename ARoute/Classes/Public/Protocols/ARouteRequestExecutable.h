@@ -11,5 +11,6 @@
 @protocol ARouteRequestExecutable <NSObject>
 
 - (void)execute;
+- (nullable __kindof UIViewController *)viewController;
 
 @end

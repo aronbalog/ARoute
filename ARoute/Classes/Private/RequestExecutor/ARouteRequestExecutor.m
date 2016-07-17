@@ -42,6 +42,29 @@
 
 - (void)executeRouteRequest:(ARouteRequest *)routeRequest
 {
+    ARouteResponse *routeResponse;
+    BOOL animated;
+    UIViewController *presentingViewController = [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated];
+    
+    [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
+        if (routeRequest.configuration.completionBlock) {
+            routeRequest.configuration.completionBlock(routeResponse);
+        }
+    }];
+}
+
+- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest
+{
+    ARouteResponse *routeResponse;
+    BOOL animated;
+    
+    return [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated];
+}
+
+#pragma mark - Private
+
+- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse * __autoreleasing *)routeResponsePtr animated:(BOOL __autoreleasing *)animatedPtr
+{
     ARouteResponse *response = [ARouteResponse new];
     __kindof UIViewController *destinationViewController;
     __kindof UIViewController *embeddingViewController;
@@ -58,6 +81,7 @@
     
     BOOL (^protectBlock)(ARouteResponse *);
     ARouteEmbeddingType embeddingType = 0;
+    NSArray *aheadViewControllers;
     
     ARoute *router = routeRequest.router;
     
@@ -72,7 +96,7 @@
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
             embeddingType = result.routeRegistrationItem.embeddingType;
-            
+            aheadViewControllers = result.routeRegistrationItem.aheadViewControllersBlock ? result.routeRegistrationItem.aheadViewControllersBlock(response) : nil;
             break;
         }
         case  ARouteRequestTypeRouteName: {
@@ -84,7 +108,8 @@
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
             embeddingType = result.routeRegistrationItem.embeddingType;
-
+            aheadViewControllers = result.routeRegistrationItem.aheadViewControllersBlock ? result.routeRegistrationItem.aheadViewControllersBlock(response) : nil;
+            
             break;
         }
         case ARouteRequestTypeViewController: {
@@ -97,7 +122,8 @@
             break;
         }
         default:
-            return;
+            return nil;
+            break;
     }
     
     // combine parameters
@@ -120,14 +146,14 @@
     
     if (!proceed) {
         self.classPointer = nil;
-        return;
+        return nil;
     }
     
     // check if callback
     if (callbackBlock) {
         self.classPointer = nil;
         callbackBlock(response);
-        return;
+        return nil;
     }
     
     if (!destinationViewController && destinationViewControllerClass) {
@@ -136,7 +162,7 @@
     
     if (!destinationViewController) {
         self.classPointer = nil;
-        return;
+        return nil;
     }
     
     response.destinationViewController = destinationViewController;
@@ -144,6 +170,11 @@
     // embed if neccessary
     if (routeRequest.configuration.embeddingViewControllerBlock) {
         embeddingViewController = routeRequest.configuration.embeddingViewControllerBlock();
+    } else {
+        embeddingType = routeRequest.configuration.embeddingType;
+        if (routeRequest.configuration.aheadViewControllersBlock) {
+            aheadViewControllers = routeRequest.configuration.aheadViewControllersBlock(response);
+        }
     }
     
     // populate data on created view controller
@@ -160,6 +191,23 @@
     } else {
         if (embeddingType == ARouteEmbeddingTypeNavigationController) {
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinationViewController];
+            
+            if (aheadViewControllers.count) {
+                __block NSMutableArray *viewControllers = [NSMutableArray new];
+                [viewControllers addObject:destinationViewController];
+                
+                [aheadViewControllers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj isKindOfClass:[NSString class]]) {
+                        UIViewController *viewController = [[router route:obj] viewController];
+                        [viewControllers addObject:viewController];
+                    } else if ([obj isKindOfClass:[UIViewController class]]) {
+                        [viewControllers addObject:obj];
+                    }
+                }];
+                
+                [navigationController setViewControllers:viewControllers animated:NO];
+            }
+            
             presentingViewController = navigationController;
             embeddingViewController = navigationController;
         } else if (embeddingType == ARouteEmbeddingTypeTabBarController) {
@@ -174,21 +222,17 @@
     
     destinationViewController.transitioningDelegate = routeRequest.configuration.transitioningDelegateBlock ? routeRequest.configuration.transitioningDelegateBlock() : nil;
     
-    [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
-        if (routeRequest.configuration.completionBlock) {
-            routeRequest.configuration.completionBlock(response);
-        }
-    }];
+    *routeResponsePtr = response;
+    *animatedPtr = animated;
+    
+    return presentingViewController;
 }
-
-#pragma mark - Private
-
 
 - (__kindof UIViewController *)viewControllerWithClass:(Class)aClass routeRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse *)routeResponse
 {
     UIViewController *viewController;
     
-    SEL initSelector = routeRequest.configuration.constructorBlock(routeResponse);
+    SEL initSelector = routeRequest.configuration.constructorBlock ? routeRequest.configuration.constructorBlock(routeResponse) : nil;
     if (initSelector) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"

@@ -83,6 +83,23 @@
     return self;
 }
 
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationController
+{
+    self.configuration.embeddingType = ARouteEmbeddingTypeNavigationController;
+    
+    return self;
+}
+
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationController:(NSArray * _Nullable (^)(ARouteResponse * _Nonnull))aheadViewControllers
+{
+    self.configuration.embeddingType = ARouteEmbeddingTypeNavigationController;
+    if (aheadViewControllers) {
+        self.configuration.aheadViewControllersBlock = aheadViewControllers;
+    }
+    
+    return self;
+}
+
 - (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)parameters:(NSDictionary <id, id> * _Nullable (^)())parameters
 {
     if (parameters) {
@@ -148,6 +165,11 @@
 - (void)execute
 {
     [self.executor executeRouteRequest:self];
+}
+
+- (UIViewController *)viewController
+{
+    return [self.executor viewControllerForRouteRequest:self];
 }
 
 #pragma mark - Private

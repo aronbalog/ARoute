@@ -9,7 +9,7 @@
 #import "ARouteViewController.h"
 #import <ARoute/ARoute.h>
 #import "UserViewController.h"
-
+#import "HomeViewController.h"
 @interface ARouteViewController ()
 
 @end
@@ -25,7 +25,9 @@
 {
     [super viewDidAppear:animated];
         
-    [[[[[[[[[ARoute sharedRouter] route:@"user/12345"] protect:^BOOL(ARouteResponse * _Nonnull routeResponse) {
+    [[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
+        return @[[HomeViewController new], @"second"];
+    }] protect:^BOOL(ARouteResponse * _Nonnull routeResponse) {
         // return YES if you don't want to handle the route
         return NO;
     }] constructor:^SEL _Nonnull(ARouteResponse * _Nonnull routeResponse) {

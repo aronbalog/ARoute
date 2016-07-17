@@ -34,5 +34,6 @@ typedef NS_ENUM(NSInteger, ARouteEmbeddingType) {
 @property (strong, nonatomic, nonnull) NSString *castingSeparator;
 @property (assign, nonatomic) ARouteRegistrationItemType type;
 @property (assign, nonatomic) ARouteEmbeddingType embeddingType;
+@property (assign, nonatomic) NSArray *(^aheadViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
 
 @end

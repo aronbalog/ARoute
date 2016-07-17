@@ -86,6 +86,15 @@
     return self;
 }
 
+- (instancetype)embedInNavigationController:(NSArray *(^)(ARouteResponse *))aheadViewControllers
+{
+    [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.aheadViewControllersBlock = aheadViewControllers;
+        obj.embeddingType = ARouteEmbeddingTypeNavigationController;
+    }];
+    return self;
+}
+
 - (instancetype)embedInTabBarController
 {
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

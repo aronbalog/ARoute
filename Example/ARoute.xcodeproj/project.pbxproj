@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		01E2612E3C6D82C497BBE0EF /* Pods_ARoute_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A3250A1EF745292AAD6A94 /* Pods_ARoute_Tests.framework */; };
+		380D85D81D3B00E400413C44 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85D71D3B00E400413C44 /* FirstViewController.m */; };
+		380D85DB1D3B00EB00413C44 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 380D85DA1D3B00EB00413C44 /* SecondViewController.m */; };
 		3817A32C1D3698AF003A7DC6 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32B1D3698AF003A7DC6 /* HomeViewController.m */; };
 		3817A32F1D369977003A7DC6 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A32E1D369977003A7DC6 /* UserViewController.m */; };
 		3817A3321D36BA38003A7DC6 /* EmbeddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */; };
@@ -44,6 +46,10 @@
 		21B6BC13A7D790ACD92B08D0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		2C32D59C5AADD62FC4BB8DAC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		37C6CF05F11573C8C8AEEBB6 /* Pods-ARoute_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARoute_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARoute_Tests/Pods-ARoute_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		380D85D61D3B00E400413C44 /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
+		380D85D71D3B00E400413C44 /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		380D85D91D3B00EB00413C44 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
+		380D85DA1D3B00EB00413C44 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		3817A32A1D3698AF003A7DC6 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		3817A32B1D3698AF003A7DC6 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		3817A32D1D369977003A7DC6 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
@@ -117,6 +123,10 @@
 				3817A32E1D369977003A7DC6 /* UserViewController.m */,
 				3817A3301D36BA38003A7DC6 /* EmbeddingViewController.h */,
 				3817A3311D36BA38003A7DC6 /* EmbeddingViewController.m */,
+				380D85D61D3B00E400413C44 /* FirstViewController.h */,
+				380D85D71D3B00E400413C44 /* FirstViewController.m */,
+				380D85D91D3B00EB00413C44 /* SecondViewController.h */,
+				380D85DA1D3B00EB00413C44 /* SecondViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -447,6 +457,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				380D85DB1D3B00EB00413C44 /* SecondViewController.m in Sources */,
 				3817A3321D36BA38003A7DC6 /* EmbeddingViewController.m in Sources */,
 				6003F59E195388D20070C39A /* ARouteAppDelegate.m in Sources */,
 				385050D61D39A2CE0035246D /* MyObject.m in Sources */,
@@ -454,6 +465,7 @@
 				6003F5A7195388D20070C39A /* ARouteViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				3817A32C1D3698AF003A7DC6 /* HomeViewController.m in Sources */,
+				380D85D81D3B00E400413C44 /* FirstViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
