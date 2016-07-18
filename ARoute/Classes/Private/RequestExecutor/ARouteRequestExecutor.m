@@ -194,7 +194,6 @@
             
             if (aheadViewControllers.count) {
                 __block NSMutableArray *viewControllers = [NSMutableArray new];
-                [viewControllers addObject:destinationViewController];
                 
                 [aheadViewControllers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if (object_isClass(obj)) {
@@ -209,7 +208,8 @@
                         [viewControllers addObject:obj];
                     }
                 }];
-                
+                [viewControllers addObject:destinationViewController];
+
                 [navigationController setViewControllers:viewControllers animated:NO];
             }
             
