@@ -13,19 +13,11 @@
 @interface ARoute ()
 
 @property (strong, nonatomic, nonnull, readwrite) ARouteConfiguration *configuration;
+@property (strong, nonatomic, nonnull) ARouteRegistrationStorage *storage;
 
 @end
 
 @implementation ARoute
-
-- (void)test
-{
-    [[[ARoute sharedRouter] registerRoute:@{@"":[NSString class]} withName:@""] execute];
-    
-    [[[[ARoute sharedRouter] route:@""] initSelector:^SEL _Nonnull{
-        return @selector(init);
-    } objects:nil] execute];
-}
 
 + (instancetype)sharedRouter
 {
@@ -100,6 +92,11 @@
     return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:groupName];
 }
 
+- (void)clearAllRouteRegistrations
+{
+    [self.storage purgeRouteRegistrations];
+}
+
 #pragma mark - Properties
 
 - (ARouteConfiguration *)configuration
@@ -109,6 +106,11 @@
     }
     
     return _configuration;
+}
+
+- (ARouteRegistrationStorage *)storage
+{
+    return [ARouteRegistrationStorage sharedInstance];
 }
 
 @end

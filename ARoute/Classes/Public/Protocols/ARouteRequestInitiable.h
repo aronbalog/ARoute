@@ -17,6 +17,8 @@
 
 @protocol ARouteRequestInitiable <NSObject>
 
-- (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)initSelector:(SEL _Nonnull(^ _Nonnull)())initSelector objects:(NSArray * _Nullable(^ _Nullable)())objects;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)constructor:(SEL _Nonnull(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))constructor objects:(NSArray * _Nullable(^ _Nullable)(ARouteResponse * _Nonnull routeResponse))objects;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)embedInNavigationController;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)embedInNavigationController:(NSArray * _Nullable(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))previousViewControllers;
 
 @end

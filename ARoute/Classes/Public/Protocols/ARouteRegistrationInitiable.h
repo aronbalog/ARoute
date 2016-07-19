@@ -14,7 +14,8 @@
 
 @protocol ARouteRegistrationInitiable <NSObject>
 
-- (nonnull id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable, ARouteRegistrationProtectable>)separator:(NSString * _Nonnull(^ _Nonnull)())separator;
-- (nonnull id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable, ARouteRegistrationProtectable>)parameters:(NSDictionary <id, id> * _Nullable(^ _Nonnull)())parameters;
+- (nonnull instancetype)embedInNavigationController;
+- (nonnull instancetype)embedInNavigationController:(NSArray * _Nullable(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))previousViewControllers;
+- (nonnull instancetype)embedInTabBarController;
 
 @end

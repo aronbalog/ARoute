@@ -66,6 +66,11 @@ typedef NS_ENUM(NSInteger, ARouteCastingType) {
     return result;
 }
 
+- (void)purgeRouteRegistrations
+{
+    [self.routeRegistrationItems removeAllObjects];
+}
+
 #pragma mark - Private
 
 - (nullable ARouteRegistrationItem *)routeRegistrationItemForCalledRoute:(NSString *)calledRoute routerName:(NSString *)routerName routeName:(NSString *)routeName routeParameters:(NSDictionary * __autoreleasing *)routeParameters

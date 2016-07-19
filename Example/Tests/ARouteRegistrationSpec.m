@@ -9,7 +9,17 @@
 #import "RoutableViewController.h"
 #import <ARoute/ARoute.h>
 
+#import "HomeViewController.h"
+#import "BlueViewController.h"
+#import "YellowViewController.h"
+#import "RedViewController.h"
+#import "GrayViewController.h"
+
 SpecBegin(ARoute)
+
+beforeEach(^{
+    [[ARoute sharedRouter] clearAllRouteRegistrations];
+});
 
 describe(@"when registering route with class parameters", ^{
     ARoute *sut = [ARoute sharedRouter];
@@ -93,11 +103,64 @@ describe(@"when registering route with parameters", ^{
             }] execute];
         });
         
-        it(@"routeResponse object in completon is not nil", ^{
+        it(@"routeResponse object in completon is overriden", ^{
             NSDictionary *expected = @{@"key1":@"value3",
                                        @"key2":@"value2"};
             expect(completeRouteResponseObject.parameters).to.equal(expected);
         });
+    });
+});
+
+fdescribe(@"when registering route with embedding in navigation controller with stack", ^{
+    ARoute *sut = [ARoute sharedRouter];
+    
+    NSDictionary *routes = @{
+                             @"home":[HomeViewController class],
+                             @"blue":[BlueViewController class],
+                             @"yellow":[YellowViewController class],
+                             @"red":[RedViewController class]
+                             };
+    
+    [[sut registerRoutes:routes] execute];
+    
+    context(@"and executing route", ^{
+        __block ARouteResponse *completeRouteResponseObject;
+        
+        waitUntil(^(DoneCallback done) {
+            [[[[sut route:@"home"] embedInNavigationController:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
+                return @[@"red", @"yellow", [BlueViewController class], [GrayViewController new]];
+            }] completion:^(ARouteResponse *routeResponse){
+                completeRouteResponseObject = routeResponse;
+                done();
+            }] execute];
+        });
+        
+        UINavigationController *navigationController = completeRouteResponseObject.embeddingViewController;
+        
+        it(@"embedding view controller is navigation controller", ^{
+            expect(completeRouteResponseObject.embeddingViewController).to.beInstanceOf([UINavigationController class]);
+        });
+        
+        it(@"navigation controller has red vc 1", ^{
+            expect(navigationController.viewControllers[0]).to.beInstanceOf([RedViewController class]);
+            
+        });
+        
+        it(@"navigation controller has yellow vc 2", ^{
+            expect(navigationController.viewControllers[1]).to.beInstanceOf([YellowViewController class]);
+            
+        });
+        
+        it(@"navigation controller has blue vc 3", ^{
+            expect(navigationController.viewControllers[2]).to.beInstanceOf([BlueViewController class]);
+            
+        });
+        
+        it(@"navigation controller has gray vc 4", ^{
+            expect(navigationController.viewControllers[3]).to.beInstanceOf([GrayViewController class]);
+            
+        });
+
     });
 });
 

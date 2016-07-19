@@ -7,6 +7,7 @@
 //
 
 #import "ARouteRequestExecutor.h"
+#import <objc/runtime.h>
 
 @class ARouteRegistrationStorage;
 @protocol ARoutable;
@@ -40,7 +41,33 @@
     return instance;
 }
 
-- (void)executeRouteRequest:(ARouteRequest *)routeRequest
+- (void)executeRouteRequest:(ARouteRequest *)routeRequest routeResponse:(void (^ _Nullable)(ARouteResponse * _Nonnull))routeResponseCallback
+{
+    ARouteResponse *routeResponse;
+    BOOL animated;
+    UIViewController *presentingViewController = [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated];
+    
+    [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
+        if (routeRequest.configuration.completionBlock) {
+            routeRequest.configuration.completionBlock(routeResponse);
+        }
+    }];
+    if (routeResponseCallback) {
+        routeResponseCallback(routeResponse);
+    }
+}
+
+- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest
+{
+    ARouteResponse *routeResponse;
+    BOOL animated;
+    
+    return [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated];
+}
+
+#pragma mark - Private
+
+- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse * __autoreleasing *)routeResponsePtr animated:(BOOL*)animatedPtr
 {
     ARouteResponse *response = [ARouteResponse new];
     __kindof UIViewController *destinationViewController;
@@ -57,6 +84,8 @@
     NSDictionary *registrationParameters;
     
     BOOL (^protectBlock)(ARouteResponse *);
+    ARouteEmbeddingType embeddingType = 0;
+    NSArray *previousViewControllers;
     
     ARoute *router = routeRequest.router;
     
@@ -70,7 +99,8 @@
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-            
+            embeddingType = result.routeRegistrationItem.embeddingType;
+            previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             break;
         }
         case  ARouteRequestTypeRouteName: {
@@ -81,7 +111,9 @@
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-
+            embeddingType = result.routeRegistrationItem.embeddingType;
+            previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
+            
             break;
         }
         case ARouteRequestTypeViewController: {
@@ -94,7 +126,8 @@
             break;
         }
         default:
-            return;
+            return nil;
+            break;
     }
     
     // combine parameters
@@ -117,14 +150,14 @@
     
     if (!proceed) {
         self.classPointer = nil;
-        return;
+        return nil;
     }
     
     // check if callback
     if (callbackBlock) {
         self.classPointer = nil;
         callbackBlock(response);
-        return;
+        return nil;
     }
     
     if (!destinationViewController && destinationViewControllerClass) {
@@ -133,7 +166,7 @@
     
     if (!destinationViewController) {
         self.classPointer = nil;
-        return;
+        return nil;
     }
     
     response.destinationViewController = destinationViewController;
@@ -141,6 +174,11 @@
     // embed if neccessary
     if (routeRequest.configuration.embeddingViewControllerBlock) {
         embeddingViewController = routeRequest.configuration.embeddingViewControllerBlock();
+    } else {
+        embeddingType = routeRequest.configuration.embeddingType;
+        if (routeRequest.configuration.previousViewControllersBlock) {
+            previousViewControllers = routeRequest.configuration.previousViewControllersBlock(response);
+        }
     }
     
     // populate data on created view controller
@@ -149,48 +187,74 @@
     
     UIViewController *presentingViewController;
     if (embeddingViewController) {
-        response.embeddingViewController = embeddingViewController;
         if ([embeddingViewController respondsToSelector:@selector(embedDestinationViewController:withRouteResponse:)]) {
             [embeddingViewController performSelector:@selector(embedDestinationViewController:withRouteResponse:) withObject:destinationViewController withObject:response];
         }
         presentingViewController = embeddingViewController;
     } else {
-        presentingViewController = destinationViewController;
+        if (embeddingType == ARouteEmbeddingTypeNavigationController) {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinationViewController];
+            
+            if (previousViewControllers.count) {
+                __block NSMutableArray *viewControllers = [NSMutableArray new];
+                
+                [previousViewControllers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (object_isClass(obj)) {
+                        id classPointer = [obj alloc];
+                        if ([classPointer respondsToSelector:@selector(initWithRouteResponse:)]) {
+                            [viewControllers addObject:[classPointer initWithRouteResponse:response]];
+                        }
+                    } else if ([obj isKindOfClass:[NSString class]]) {
+                        UIViewController *viewController = [[router route:obj] viewController];
+                        [viewControllers addObject:viewController];
+                    } else if ([obj isKindOfClass:[UIViewController class]]) {
+                        [viewControllers addObject:obj];
+                    }
+                }];
+                [viewControllers addObject:destinationViewController];
+                
+                [navigationController setViewControllers:viewControllers animated:NO];
+            }
+            
+            presentingViewController = navigationController;
+            embeddingViewController = navigationController;
+        } else if (embeddingType == ARouteEmbeddingTypeTabBarController) {
+            UITabBarController *tabBarController = [UITabBarController new];
+            [tabBarController setViewControllers:@[destinationViewController] animated:NO];
+            presentingViewController = tabBarController;
+            embeddingViewController = tabBarController;
+        } else {
+            presentingViewController = destinationViewController;
+        }
     }
+    
+    response.embeddingViewController = embeddingViewController;
     
     destinationViewController.transitioningDelegate = routeRequest.configuration.transitioningDelegateBlock ? routeRequest.configuration.transitioningDelegateBlock() : nil;
     
-    [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
-        if (routeRequest.configuration.completionBlock) {
-            routeRequest.configuration.completionBlock(response);
-        }
-    }];
+    *routeResponsePtr = response;
+    *animatedPtr = animated;
+    
+    return presentingViewController;
 }
-
-#pragma mark - Private
-
 
 - (__kindof UIViewController *)viewControllerWithClass:(Class)aClass routeRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse *)routeResponse
 {
     UIViewController *viewController;
     
-    SEL initSelector = routeRequest.configuration.instantiationSelector;
+    SEL initSelector = routeRequest.configuration.constructorBlock ? routeRequest.configuration.constructorBlock(routeResponse) : nil;
     if (initSelector) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         BOOL respondsToInitSelector = [aClass instancesRespondToSelector:initSelector];
         if (respondsToInitSelector) {
-            @try {
-                
-            } @catch (NSException *exception) {
-                
-            }
+        
             NSMethodSignature *signature = [aClass instanceMethodSignatureForSelector:initSelector];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
             self.classPointer = [aClass alloc];
             [invocation setTarget:self.classPointer];
             [invocation setSelector:initSelector];
-            NSArray *arguments = routeRequest.configuration.instantiationArguments;
+            NSArray *arguments = routeRequest.configuration.instantiationArgumentsBlock(routeResponse);
 
             for (NSInteger i = 0; i < arguments.count; i++)
             {
@@ -202,8 +266,6 @@
             id __unsafe_unretained result = nil;
             [invocation invoke];
             [invocation getReturnValue:&result];
-
-            NSLog(@"The result is: %@", result);
             
             viewController = result;
         }

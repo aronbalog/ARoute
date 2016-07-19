@@ -78,7 +78,30 @@
     return routeRegistration;
 }
 
-#pragma mark - ARouteRegistrationInitiable
+- (instancetype)embedInNavigationController
+{
+    [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.embeddingType = ARouteEmbeddingTypeNavigationController;
+    }];
+    return self;
+}
+
+- (instancetype)embedInNavigationController:(NSArray *(^)(ARouteResponse *))previousViewControllers
+{
+    [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.previousViewControllersBlock = previousViewControllers;
+        obj.embeddingType = ARouteEmbeddingTypeNavigationController;
+    }];
+    return self;
+}
+
+- (instancetype)embedInTabBarController
+{
+    [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.embeddingType = ARouteEmbeddingTypeTabBarController;
+    }];
+    return self;
+}
 
 - (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)separator:(NSString * _Nonnull (^)())separator
 {
@@ -104,8 +127,6 @@
     return self;
 }
 
-#pragma mark - ARouteRegistrationConfigurable
-
 - (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)parameters:(NSDictionary<id,id> * _Nullable (^)())parameters
 {
     if (parameters) {
@@ -118,8 +139,6 @@
     return self;
 }
 
-#pragma mark - ARouteRegistrationProtectable
-
 - (id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull))protect
 {
     if (protect) {
@@ -131,8 +150,6 @@
     
     return self;
 }
-
-#pragma mark - ARouteRegistrationExecutable
 
 - (void)execute
 {

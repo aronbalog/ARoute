@@ -8,10 +8,12 @@
 
 @import UIKit;
 #import "ARouteAppDelegate.h"
+#import "ARouteTestAppDelegate.h"
 
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([ARouteAppDelegate class]));
+        Class appDelegate = (NSClassFromString(@"XCTestCase")) ? [ARouteTestAppDelegate class] : [ARouteAppDelegate class];
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass(appDelegate));
     }
 }

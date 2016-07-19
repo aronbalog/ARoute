@@ -73,11 +73,29 @@
 
 #pragma mark - ARouteRequestInitiable
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)initSelector:(SEL  _Nonnull (^)())initSelector objects:(NSArray * _Nullable (^)())objects
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)constructor:(SEL  _Nonnull (^)(ARouteResponse * _Nonnull))constructor objects:(NSArray * _Nullable (^)(ARouteResponse * _Nonnull))objects
 {
-    self.configuration.instantiationSelector = initSelector();
+    self.configuration.constructorBlock = constructor;
+    
     if (objects) {
-        self.configuration.instantiationArguments = objects();
+        self.configuration.instantiationArgumentsBlock = objects;
+    }
+    
+    return self;
+}
+
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationController
+{
+    self.configuration.embeddingType = ARouteEmbeddingTypeNavigationController;
+    
+    return self;
+}
+
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationController:(NSArray * _Nullable (^)(ARouteResponse * _Nonnull))previousViewControllers
+{
+    self.configuration.embeddingType = ARouteEmbeddingTypeNavigationController;
+    if (previousViewControllers) {
+        self.configuration.previousViewControllersBlock = previousViewControllers;
     }
     
     return self;
@@ -147,7 +165,17 @@
 
 - (void)execute
 {
-    [self.executor executeRouteRequest:self];
+    [self.executor executeRouteRequest:self routeResponse:nil];
+}
+
+- (void)execute:(void (^)(ARouteResponse * _Nonnull))routeResponse
+{
+    [self.executor executeRouteRequest:self routeResponse:routeResponse];
+}
+
+- (UIViewController *)viewController
+{
+    return [self.executor viewControllerForRouteRequest:self];
 }
 
 #pragma mark - Private
