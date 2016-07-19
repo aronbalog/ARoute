@@ -73,9 +73,10 @@
 
 #pragma mark - ARouteRequestInitiable
 
-- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)constructor:(SEL  _Nonnull (^)(ARouteResponse * _Nonnull))constructor objects:(NSArray * _Nullable (^)())objects
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)constructor:(SEL  _Nonnull (^)(ARouteResponse * _Nonnull))constructor objects:(NSArray * _Nullable (^)(ARouteResponse * _Nonnull))objects
 {
     self.configuration.constructorBlock = constructor;
+    
     if (objects) {
         self.configuration.instantiationArgumentsBlock = objects;
     }
@@ -90,11 +91,11 @@
     return self;
 }
 
-- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationController:(NSArray * _Nullable (^)(ARouteResponse * _Nonnull))aheadViewControllers
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationController:(NSArray * _Nullable (^)(ARouteResponse * _Nonnull))previousViewControllers
 {
     self.configuration.embeddingType = ARouteEmbeddingTypeNavigationController;
-    if (aheadViewControllers) {
-        self.configuration.aheadViewControllersBlock = aheadViewControllers;
+    if (previousViewControllers) {
+        self.configuration.previousViewControllersBlock = previousViewControllers;
     }
     
     return self;
@@ -144,6 +145,15 @@
 {
     if (transitioningDelegate) {
         self.configuration.transitioningDelegateBlock = transitioningDelegate;
+    }
+    
+    return self;
+}
+
+- (id<ARouteRequestExecutable,ARouteRequestConfigurable>)links:(NSDictionary * _Nonnull (^)(ARouteResponse * _Nonnull))links
+{
+    if (links) {
+        
     }
     
     return self;

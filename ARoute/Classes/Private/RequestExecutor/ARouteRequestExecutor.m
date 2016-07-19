@@ -64,7 +64,7 @@
 
 #pragma mark - Private
 
-- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse * __autoreleasing *)routeResponsePtr animated:(BOOL __autoreleasing *)animatedPtr
+- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse * __autoreleasing *)routeResponsePtr animated:(BOOL*)animatedPtr
 {
     ARouteResponse *response = [ARouteResponse new];
     __kindof UIViewController *destinationViewController;
@@ -82,7 +82,7 @@
     
     BOOL (^protectBlock)(ARouteResponse *);
     ARouteEmbeddingType embeddingType = 0;
-    NSArray *aheadViewControllers;
+    NSArray *previousViewControllers;
     
     ARoute *router = routeRequest.router;
     
@@ -97,7 +97,7 @@
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
             embeddingType = result.routeRegistrationItem.embeddingType;
-            aheadViewControllers = result.routeRegistrationItem.aheadViewControllersBlock ? result.routeRegistrationItem.aheadViewControllersBlock(response) : nil;
+            previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             break;
         }
         case  ARouteRequestTypeRouteName: {
@@ -109,7 +109,7 @@
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
             embeddingType = result.routeRegistrationItem.embeddingType;
-            aheadViewControllers = result.routeRegistrationItem.aheadViewControllersBlock ? result.routeRegistrationItem.aheadViewControllersBlock(response) : nil;
+            previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             
             break;
         }
@@ -173,8 +173,8 @@
         embeddingViewController = routeRequest.configuration.embeddingViewControllerBlock();
     } else {
         embeddingType = routeRequest.configuration.embeddingType;
-        if (routeRequest.configuration.aheadViewControllersBlock) {
-            aheadViewControllers = routeRequest.configuration.aheadViewControllersBlock(response);
+        if (routeRequest.configuration.previousViewControllersBlock) {
+            previousViewControllers = routeRequest.configuration.previousViewControllersBlock(response);
         }
     }
     
@@ -192,10 +192,10 @@
         if (embeddingType == ARouteEmbeddingTypeNavigationController) {
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinationViewController];
             
-            if (aheadViewControllers.count) {
+            if (previousViewControllers.count) {
                 __block NSMutableArray *viewControllers = [NSMutableArray new];
                 
-                [aheadViewControllers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [previousViewControllers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if (object_isClass(obj)) {
                         id classPointer = [obj alloc];
                         if ([classPointer respondsToSelector:@selector(initWithRouteResponse:)]) {
@@ -209,7 +209,7 @@
                     }
                 }];
                 [viewControllers addObject:destinationViewController];
-
+                
                 [navigationController setViewControllers:viewControllers animated:NO];
             }
             
@@ -263,8 +263,6 @@
             id __unsafe_unretained result = nil;
             [invocation invoke];
             [invocation getReturnValue:&result];
-
-            NSLog(@"The result is: %@", result);
             
             viewController = result;
         }

@@ -141,31 +141,26 @@ fdescribe(@"when registering route with embedding in navigation controller with 
             expect(completeRouteResponseObject.embeddingViewController).to.beInstanceOf([UINavigationController class]);
         });
         
-        it(@"navigation controller has home vc first", ^{
-            
-            expect(navigationController.viewControllers[0]).to.beInstanceOf([HomeViewController class]);
-            
-        });
-        
-        it(@"navigation controller has red vc second", ^{
-            expect(navigationController.viewControllers[1]).to.beInstanceOf([RedViewController class]);
+        it(@"navigation controller has red vc 1", ^{
+            expect(navigationController.viewControllers[0]).to.beInstanceOf([RedViewController class]);
             
         });
         
-        it(@"navigation controller has yellow vc third", ^{
-            expect(navigationController.viewControllers[2]).to.beInstanceOf([YellowViewController class]);
+        it(@"navigation controller has yellow vc 2", ^{
+            expect(navigationController.viewControllers[1]).to.beInstanceOf([YellowViewController class]);
             
         });
         
-        it(@"navigation controller has blue vc fourth", ^{
-            expect(navigationController.viewControllers[3]).to.beInstanceOf([BlueViewController class]);
+        it(@"navigation controller has blue vc 3", ^{
+            expect(navigationController.viewControllers[2]).to.beInstanceOf([BlueViewController class]);
             
         });
         
-        it(@"navigation controller has gray vc fifth", ^{
-            expect(navigationController.viewControllers[4]).to.beInstanceOf([GrayViewController class]);
+        it(@"navigation controller has gray vc 4", ^{
+            expect(navigationController.viewControllers[3]).to.beInstanceOf([GrayViewController class]);
             
         });
+
     });
 });
 

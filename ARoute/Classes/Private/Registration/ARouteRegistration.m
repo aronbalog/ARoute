@@ -86,10 +86,10 @@
     return self;
 }
 
-- (instancetype)embedInNavigationController:(NSArray *(^)(ARouteResponse *))aheadViewControllers
+- (instancetype)embedInNavigationController:(NSArray *(^)(ARouteResponse *))previousViewControllers
 {
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.aheadViewControllersBlock = aheadViewControllers;
+        obj.previousViewControllersBlock = previousViewControllers;
         obj.embeddingType = ARouteEmbeddingTypeNavigationController;
     }];
     return self;

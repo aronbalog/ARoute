@@ -10,9 +10,9 @@
 
 @interface ARouteRequestConfiguration : NSObject
 
-@property (assign, nonatomic) SEL (^constructorBlock)(ARouteResponse * _Nonnull routeResponse);
+@property (assign, nonatomic) SEL _Nonnull(^ _Nonnull constructorBlock)(ARouteResponse * _Nonnull routeResponse);
 ;
-@property (strong, nonatomic, nullable) NSArray *(^ instantiationArgumentsBlock)(ARouteResponse * _Nonnull);
+@property (strong, nonatomic, nullable) NSArray * _Nonnull(^ instantiationArgumentsBlock)(ARouteResponse * _Nonnull);
 @property (strong, nonatomic, nullable) UIViewController * _Nullable (^embeddingViewControllerBlock)();
 @property (strong, nonatomic, nullable) void (^completionBlock)(ARouteResponse * _Nonnull);
 @property (strong, nonatomic, nullable) BOOL (^animatedBlock)();
@@ -20,5 +20,5 @@
 @property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)();
 @property (strong, nonatomic, nullable) id <UIViewControllerTransitioningDelegate> _Nullable(^transitioningDelegateBlock)();
 @property (assign, nonatomic) ARouteEmbeddingType embeddingType;
-@property (strong, nonatomic, nonnull) NSArray *_Nullable(^ aheadViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
+@property (strong, nonatomic, nonnull) NSArray *_Nullable(^ previousViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
 @end
