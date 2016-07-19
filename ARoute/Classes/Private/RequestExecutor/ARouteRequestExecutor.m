@@ -41,7 +41,7 @@
     return instance;
 }
 
-- (void)executeRouteRequest:(ARouteRequest *)routeRequest
+- (void)executeRouteRequest:(ARouteRequest *)routeRequest routeResponse:(void (^ _Nullable)(ARouteResponse * _Nonnull))routeResponseCallback
 {
     ARouteResponse *routeResponse;
     BOOL animated;
@@ -52,6 +52,9 @@
             routeRequest.configuration.completionBlock(routeResponse);
         }
     }];
+    if (routeResponseCallback) {
+        routeResponseCallback(routeResponse);
+    }
 }
 
 - (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest

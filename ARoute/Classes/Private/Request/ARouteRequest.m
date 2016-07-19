@@ -150,15 +150,6 @@
     return self;
 }
 
-- (id<ARouteRequestExecutable,ARouteRequestConfigurable>)links:(NSDictionary * _Nonnull (^)(ARouteResponse * _Nonnull))links
-{
-    if (links) {
-        
-    }
-    
-    return self;
-}
-
 #pragma mark - ARouteRequestEmbeddable
 
 - (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)embedIn:(__kindof UIViewController<AEmbeddable> * _Nonnull (^)())embeddingViewController
@@ -174,7 +165,12 @@
 
 - (void)execute
 {
-    [self.executor executeRouteRequest:self];
+    [self.executor executeRouteRequest:self routeResponse:nil];
+}
+
+- (void)execute:(void (^)(ARouteResponse * _Nonnull))routeResponse
+{
+    [self.executor executeRouteRequest:self routeResponse:routeResponse];
 }
 
 - (UIViewController *)viewController
