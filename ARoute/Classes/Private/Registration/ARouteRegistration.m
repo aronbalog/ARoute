@@ -42,6 +42,7 @@
     item.route = route;
     item.type = ARouteRegistrationItemTypeNamedRoute;
     item.separator = routeRegistration.separator;
+    item.castingSeparator = routeRegistration.castingSeparator;
     
     routeRegistration.items = @[item];
     
@@ -69,6 +70,7 @@
         item.route = route;
         item.type = ARouteRegistrationItemTypeNamedRoute;
         item.separator = routeRegistration.separator;
+        item.castingSeparator = routeRegistration.castingSeparator;
         
         [items addObject:item];
     }];
@@ -178,6 +180,15 @@
     }
     
     return _separator;
+}
+
+- (NSString *)castingSeparator
+{
+    if (!_castingSeparator) {
+        _castingSeparator = self.router.configuration.castingSeparator;
+    }
+    
+    return _castingSeparator;
 }
 
 - (ARouteRegistrationConfiguration *)registrationConfiguration

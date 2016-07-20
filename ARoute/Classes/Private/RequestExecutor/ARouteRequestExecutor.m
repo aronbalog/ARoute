@@ -55,7 +55,7 @@
         }];
     }
     
-    if (routeResponseCallback) {
+    if (routeResponse && routeResponseCallback) {
         routeResponseCallback(routeResponse);
     }
 }
