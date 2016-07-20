@@ -25,11 +25,11 @@
 {
     [super viewDidAppear:animated];
         
-    [[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
+    [[[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
         return @[[HomeViewController new], @"second"];
-    }] protect:^BOOL(ARouteResponse * _Nonnull routeResponse) {
-        // return YES if you don't want to handle the route
-        return NO;
+    }] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
+        *errorPtr = [NSError errorWithDomain:@"my.domain" code:1000 userInfo:@{@"message": @"not authorized"}];
+        return YES;
     }] constructor:^SEL _Nonnull(ARouteResponse * _Nonnull routeResponse) {
         return @selector(initCustomMethod:anotherString:);
     } objects:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
@@ -45,6 +45,8 @@
     }] animated:^BOOL{
         return YES;
     }] completion:^(ARouteResponse * _Nonnull routeResponse) {
+        
+    }] failure:^(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable error) {
         
     }] execute:^(ARouteResponse * _Nonnull routeResponse) {
         

@@ -103,6 +103,14 @@
     return self;
 }
 
+- (instancetype)embedIn:(__kindof UIViewController<AEmbeddable> *(^)(ARouteResponse * _Nonnull))embeddingViewController
+{
+    [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.embeddingType = ARouteEmbeddingTypeCustomViewController;
+    }];
+    return self;
+}
+
 - (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)separator:(NSString * _Nonnull (^)())separator
 {
     if (separator) {
@@ -139,7 +147,7 @@
     return self;
 }
 
-- (id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull))protect
+- (id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull, NSError * _Nullable __autoreleasing * _Nullable))protect
 {
     if (protect) {
         self.registrationConfiguration.protectBlock = protect;
