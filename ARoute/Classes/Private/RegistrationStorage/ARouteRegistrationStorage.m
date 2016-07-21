@@ -132,7 +132,7 @@ typedef NS_ENUM(NSInteger, ARouteCastingType) {
     BOOL matches = NO;
     
     if (routeParameterNames.count) {
-        NSString *uuid = [NSUUID UUID].UUIDString;
+        NSString *uuid = [[NSUUID UUID].UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
         for (NSString *paramName in routeParameterNames) {
             NSString *wrappedParam = [NSString stringWithFormat:@"%@%@%@", placeholderComponents.firstObject, paramName, placeholderComponents.lastObject];
             routeCandidateRegexPattern = [routeCandidateRegexPattern stringByReplacingOccurrencesOfString:wrappedParam withString:uuid];

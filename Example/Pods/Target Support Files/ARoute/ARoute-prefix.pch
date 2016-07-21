@@ -39,5 +39,6 @@
 
 //  extensions
 #import "UIViewController+VisibleViewController.h"
+#import "NSObject+Swizzling.h"
 
 #endif /* ARoutePrefixHeader_pch */
