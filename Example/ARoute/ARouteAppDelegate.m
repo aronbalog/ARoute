@@ -51,7 +51,7 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
 {
-    
+    [[[ARoute sharedRouter] URL:url] execute];
     return YES;
 }
 

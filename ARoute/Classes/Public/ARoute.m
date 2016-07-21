@@ -7,6 +7,7 @@
 //
 
 #import "ARoute.h"
+#import <objc/runtime.h>
 
 @class ARouteRequest;
 
