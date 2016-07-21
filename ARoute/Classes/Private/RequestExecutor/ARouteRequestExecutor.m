@@ -80,7 +80,7 @@
     // preparing params
     Class destinationViewControllerClass;
     void (^callbackBlock)(ARouteResponse *);
-    BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : NO;
+    BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : routeRequest.router.configuration.animate;
     response.parameters = routeRequest.configuration.parametersBlock ? routeRequest.configuration.parametersBlock() : nil;
     
     NSString *castingSeparator;
