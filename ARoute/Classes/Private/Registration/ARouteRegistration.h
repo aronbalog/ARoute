@@ -18,7 +18,7 @@
 @property (strong, nonatomic, nonnull) ARouteRegistrationConfiguration *registrationConfiguration;
 @property (strong, nonatomic, nonnull, readonly) NSArray <ARouteRegistrationItem *> *items;
 
-+ (nonnull instancetype)routeRegistrationWithRouter:(nonnull ARoute *)router routes:(nonnull NSDictionary <NSString*,Class> *)routes routeName:(nullable NSString *)routeName;
-+ (nonnull instancetype)routeRegistrationWithRouter:(nonnull ARoute *)router routes:(nonnull NSDictionary <NSString*,Class> *)routes routesGroupName:(nullable NSString *)routesGroupName;
++ (nonnull instancetype)routeRegistrationWithRouter:(nonnull ARoute *)router routes:(nonnull NSDictionary <id,Class> *)routes routeName:(nullable NSString *)routeName;
++ (nonnull instancetype)routeRegistrationWithRouter:(nonnull ARoute *)router routes:(nonnull NSDictionary <id,Class> *)routes routesGroupName:(nullable NSString *)routesGroupName;
 
 @end

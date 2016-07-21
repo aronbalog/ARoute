@@ -19,4 +19,13 @@
     return _separator;
 }
 
+- (NSString *)castingSeparator
+{
+    if (!_castingSeparator) {
+        _castingSeparator = @"|";
+    }
+    
+    return _castingSeparator;
+}
+
 @end

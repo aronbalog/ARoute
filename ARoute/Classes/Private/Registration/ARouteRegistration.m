@@ -21,14 +21,22 @@
 
 @implementation ARouteRegistration
 
-+ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(nonnull NSDictionary<NSString *,id> *)routes routeName:(nullable NSString *)routeName
++ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(nonnull NSDictionary<id,id> *)routes routeName:(nullable NSString *)routeName
 {
     ARouteRegistration *routeRegistration = [ARouteRegistration new];
     routeRegistration.router = router;
     
     ARouteRegistrationItem *item = [ARouteRegistrationItem new];
     
-    NSString *route = routes.allKeys.firstObject;
+    NSString *route;
+    id routeObject = routes.allKeys.firstObject;
+    
+    if ([routeObject isKindOfClass:[NSString class]]) {
+        route = routeObject;
+    } else if ([routeObject isKindOfClass:[NSURL class]]) {
+        route = ((NSURL *)routeObject).absoluteString;
+    }
+    
     id value = routes.allValues.firstObject;
     
     if (object_isClass(value)) {
@@ -42,13 +50,14 @@
     item.route = route;
     item.type = ARouteRegistrationItemTypeNamedRoute;
     item.separator = routeRegistration.separator;
+    item.castingSeparator = routeRegistration.castingSeparator;
     
     routeRegistration.items = @[item];
     
     return routeRegistration;
 }
 
-+ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(NSDictionary<NSString *,id> *)routes routesGroupName:(NSString *)routesGroupName
++ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(NSDictionary<id,id> *)routes routesGroupName:(NSString *)routesGroupName
 {
     ARouteRegistration *routeRegistration = [ARouteRegistration new];
     routeRegistration.router = router;
@@ -69,6 +78,7 @@
         item.route = route;
         item.type = ARouteRegistrationItemTypeNamedRoute;
         item.separator = routeRegistration.separator;
+        item.castingSeparator = routeRegistration.castingSeparator;
         
         [items addObject:item];
     }];
@@ -99,6 +109,14 @@
 {
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.embeddingType = ARouteEmbeddingTypeTabBarController;
+    }];
+    return self;
+}
+
+- (instancetype)embedIn:(__kindof UIViewController<AEmbeddable> *(^)(ARouteResponse * _Nonnull))embeddingViewController
+{
+    [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.embeddingType = ARouteEmbeddingTypeCustomViewController;
     }];
     return self;
 }
@@ -139,7 +157,7 @@
     return self;
 }
 
-- (id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull))protect
+- (id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull, NSError * _Nullable __autoreleasing * _Nullable))protect
 {
     if (protect) {
         self.registrationConfiguration.protectBlock = protect;
@@ -170,6 +188,15 @@
     }
     
     return _separator;
+}
+
+- (NSString *)castingSeparator
+{
+    if (!_castingSeparator) {
+        _castingSeparator = self.router.configuration.castingSeparator;
+    }
+    
+    return _castingSeparator;
 }
 
 - (ARouteRegistrationConfiguration *)registrationConfiguration

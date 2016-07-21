@@ -66,6 +66,20 @@ typedef NS_ENUM(NSInteger, ARouteCastingType) {
     return result;
 }
 
+- (ARouteRegistrationStorageResult *)routeRegistrationResultForURL:(NSURL *)URL router:(ARoute *)router
+{
+    NSDictionary *routeParameters;
+    
+    ARouteRegistrationItem *item = [self routeRegistrationItemForCalledRoute:URL.absoluteString routerName:router.name routeName:nil routeParameters:&routeParameters];
+    
+    ARouteRegistrationStorageResult *result = [ARouteRegistrationStorageResult new];
+    
+    result.routeRegistrationItem = item;
+    result.routeParameters = routeParameters.count ? routeParameters : nil;
+    
+    return result;
+}
+
 - (void)purgeRouteRegistrations
 {
     [self.routeRegistrationItems removeAllObjects];
@@ -86,8 +100,8 @@ typedef NS_ENUM(NSInteger, ARouteCastingType) {
         
         NSDictionary *routeParametersObject;
         BOOL routersAreEqual = [obj.router.name isEqualToString:routerName];
-        
-        BOOL proceed = [self definedRoute:definedRoute isEqualToRoute:calledRoute placeholder:obj.separator routeParameters:&routeParametersObject] && routersAreEqual;
+        BOOL routesAreEqual = [self definedRoute:definedRoute isEqualToRoute:calledRoute placeholder:obj.separator routeParameters:&routeParametersObject];
+        BOOL proceed = routesAreEqual && routersAreEqual;
         
         if (proceed) {
             routeRegistrationItem = obj;
@@ -112,16 +126,22 @@ typedef NS_ENUM(NSInteger, ARouteCastingType) {
     
     NSArray *routeParameterNames = [self paramNamesForDefinedRoute:definedRoute placeholderComponents:placeholderComponents];
     
-    NSString *routeCandidateRegexPattern = [definedRoute copy];
+    __block NSString *routeCandidateRegexPattern = definedRoute;
     NSString *allCharactersRegexPattern = @"([^/]*)";
     
     BOOL matches = NO;
     
     if (routeParameterNames.count) {
-        for (NSString *paramName in routeParameterNames) {
+        NSString *uuid = [[NSUUID UUID].UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
+        [routeParameterNames enumerateObjectsUsingBlock:^(NSString *paramName, NSUInteger idx, BOOL * _Nonnull stop) {
             NSString *wrappedParam = [NSString stringWithFormat:@"%@%@%@", placeholderComponents.firstObject, paramName, placeholderComponents.lastObject];
-            routeCandidateRegexPattern = [routeCandidateRegexPattern stringByReplacingOccurrencesOfString:wrappedParam withString:allCharactersRegexPattern];
-        }
+            routeCandidateRegexPattern = [routeCandidateRegexPattern stringByReplacingOccurrencesOfString:wrappedParam withString:uuid];
+        }];
+        routeCandidateRegexPattern = [NSRegularExpression escapedPatternForString:routeCandidateRegexPattern];
+        [routeParameterNames enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            routeCandidateRegexPattern = [routeCandidateRegexPattern stringByReplacingOccurrencesOfString:uuid withString:allCharactersRegexPattern];
+        }];
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", routeCandidateRegexPattern];
         matches = [predicate evaluateWithObject:route];

@@ -112,7 +112,7 @@
 
 #pragma mark - ARouteRequestProtectable
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)protect:(BOOL (^)(ARouteResponse *))protect
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)protect:(BOOL (^)(ARouteResponse * _Nonnull, NSError * _Nullable __autoreleasing * _Nullable))protect
 {
     if (protect) {
         self.configuration.protectBlock = protect;
@@ -136,6 +136,15 @@
 {
     if (completion) {
         self.configuration.completionBlock = completion;
+    }
+    
+    return self;
+}
+
+- (id<ARouteRequestExecutable,ARouteRequestConfigurable>)failure:(void (^)(ARouteResponse * _Nonnull, NSError * _Nullable))failure
+{
+    if (failure) {
+        self.configuration.failureBlock = failure;
     }
     
     return self;

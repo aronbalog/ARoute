@@ -47,12 +47,15 @@
     BOOL animated;
     UIViewController *presentingViewController = [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated];
     
-    [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
-        if (routeRequest.configuration.completionBlock) {
-            routeRequest.configuration.completionBlock(routeResponse);
-        }
-    }];
-    if (routeResponseCallback) {
+    if (presentingViewController) {
+        [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
+            if (routeRequest.configuration.completionBlock) {
+                routeRequest.configuration.completionBlock(routeResponse);
+            }
+        }];
+    }
+    
+    if (routeResponse && routeResponseCallback) {
         routeResponseCallback(routeResponse);
     }
 }
@@ -69,6 +72,7 @@
 
 - (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse * __autoreleasing *)routeResponsePtr animated:(BOOL*)animatedPtr
 {
+    NSError *errorPtr;
     ARouteResponse *response = [ARouteResponse new];
     __kindof UIViewController *destinationViewController;
     __kindof UIViewController *embeddingViewController;
@@ -76,15 +80,16 @@
     // preparing params
     Class destinationViewControllerClass;
     void (^callbackBlock)(ARouteResponse *);
-    BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : NO;
+    BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : routeRequest.router.configuration.animate;
     response.parameters = routeRequest.configuration.parametersBlock ? routeRequest.configuration.parametersBlock() : nil;
     
     NSString *castingSeparator;
     NSDictionary *routeParameters;
     NSDictionary *registrationParameters;
     
-    BOOL (^protectBlock)(ARouteResponse *);
-    ARouteEmbeddingType embeddingType = 0;
+    BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse, NSError * __autoreleasing _Nullable * _Nullable errorPtr);
+    ARouteEmbeddingType embeddingType = ARouteEmbeddingTypeNotDefined;
+    
     NSArray *previousViewControllers;
     
     ARoute *router = routeRequest.router;
@@ -122,7 +127,15 @@
             break;
         }
         case ARouteRequestTypeURL: {
-            
+            ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForURL:routeRequest.URL router:router];
+            destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
+            callbackBlock = result.routeRegistrationItem.destinationCallback;
+            routeParameters = result.routeParameters;
+            protectBlock = result.routeRegistrationItem.protectBlock;
+            castingSeparator = result.routeRegistrationItem.castingSeparator;
+            registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
+            embeddingType = result.routeRegistrationItem.embeddingType;
+            previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             break;
         }
         default:
@@ -145,11 +158,14 @@
     }
     
     if (protectBlock) {
-        proceed = !protectBlock(response);
+        proceed = !protectBlock(response, &errorPtr);
     }
+    
+    proceed = proceed && errorPtr == nil;
     
     if (!proceed) {
         self.classPointer = nil;
+        routeRequest.configuration.failureBlock(response, errorPtr);
         return nil;
     }
     
@@ -175,7 +191,10 @@
     if (routeRequest.configuration.embeddingViewControllerBlock) {
         embeddingViewController = routeRequest.configuration.embeddingViewControllerBlock();
     } else {
-        embeddingType = routeRequest.configuration.embeddingType;
+        if (routeRequest.configuration.embeddingType != ARouteEmbeddingTypeNotDefined) {
+            embeddingType = routeRequest.configuration.embeddingType;
+        }
+        
         if (routeRequest.configuration.previousViewControllersBlock) {
             previousViewControllers = routeRequest.configuration.previousViewControllersBlock(response);
         }

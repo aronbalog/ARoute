@@ -11,5 +11,7 @@
 @interface ARouteConfiguration : NSObject
 
 @property (strong, nonatomic, nonnull) NSString *separator;
+@property (strong, nonatomic, nonnull) NSString *castingSeparator;
+@property (assign, nonatomic) BOOL animate;
 
 @end

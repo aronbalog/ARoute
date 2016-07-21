@@ -14,6 +14,6 @@
 
 @protocol ARouteRegistrationProtectable <NSObject>
 
-- (nonnull id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))protect;
+- (nonnull id <ARouteRegistrationExecutable, ARouteRegistrationConfigurable>)protect:(BOOL(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse, NSError * __autoreleasing _Nullable * _Nullable errorPtr))protect;
 
 @end
