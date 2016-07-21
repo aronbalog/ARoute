@@ -21,14 +21,22 @@
 
 @implementation ARouteRegistration
 
-+ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(nonnull NSDictionary<NSString *,id> *)routes routeName:(nullable NSString *)routeName
++ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(nonnull NSDictionary<id,id> *)routes routeName:(nullable NSString *)routeName
 {
     ARouteRegistration *routeRegistration = [ARouteRegistration new];
     routeRegistration.router = router;
     
     ARouteRegistrationItem *item = [ARouteRegistrationItem new];
     
-    NSString *route = routes.allKeys.firstObject;
+    NSString *route;
+    id routeObject = routes.allKeys.firstObject;
+    
+    if ([routeObject isKindOfClass:[NSString class]]) {
+        route = routeObject;
+    } else if ([routeObject isKindOfClass:[NSURL class]]) {
+        route = ((NSURL *)routeObject).absoluteString;
+    }
+    
     id value = routes.allValues.firstObject;
     
     if (object_isClass(value)) {
@@ -49,7 +57,7 @@
     return routeRegistration;
 }
 
-+ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(NSDictionary<NSString *,id> *)routes routesGroupName:(NSString *)routesGroupName
++ (instancetype)routeRegistrationWithRouter:(ARoute *)router routes:(NSDictionary<id,id> *)routes routesGroupName:(NSString *)routesGroupName
 {
     ARouteRegistration *routeRegistration = [ARouteRegistration new];
     routeRegistration.router = router;

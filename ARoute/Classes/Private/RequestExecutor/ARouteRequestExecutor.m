@@ -127,7 +127,15 @@
             break;
         }
         case ARouteRequestTypeURL: {
-            
+            ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForURL:routeRequest.URL router:router];
+            destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
+            callbackBlock = result.routeRegistrationItem.destinationCallback;
+            routeParameters = result.routeParameters;
+            protectBlock = result.routeRegistrationItem.protectBlock;
+            castingSeparator = result.routeRegistrationItem.castingSeparator;
+            registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
+            embeddingType = result.routeRegistrationItem.embeddingType;
+            previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             break;
         }
         default:

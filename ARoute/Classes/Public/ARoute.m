@@ -7,7 +7,7 @@
 //
 
 #import "ARoute.h"
-
+#import <objc/runtime.h>
 @class ARouteRequest;
 
 @interface ARoute ()
@@ -33,10 +33,51 @@
 + (instancetype)createRouterWithName:(NSString *)name
 {
     ARoute *router = [self new];
+    [router swizzle];
     
     router.name = name;
     
     return router;
+}
+
+- (void)swizzle
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Class class = [[UIApplication sharedApplication].delegate class];
+        
+        SEL originalSelector = @selector(application:openURL:options:);
+        SEL swizzledSelector = @selector(aroute_application:openURL:options:);
+        
+        Method originalMethod = class_getInstanceMethod(class, originalSelector);
+        Method swizzledMethod = class_getInstanceMethod([self class], swizzledSelector);
+        
+        // When swizzling a class method, use the following:
+        // Class class = object_getClass((id)self);
+        // ...
+        // Method originalMethod = class_getClassMethod(class, originalSelector);
+        // Method swizzledMethod = class_getClassMethod(class, swizzledSelector);
+        
+        BOOL didAddMethod =
+        class_addMethod(class,
+                        originalSelector,
+                        method_getImplementation(swizzledMethod),
+                        method_getTypeEncoding(swizzledMethod));
+        
+        if (didAddMethod) {
+            class_replaceMethod(class,
+                                swizzledSelector,
+                                method_getImplementation(originalMethod),
+                                method_getTypeEncoding(originalMethod));
+        } else {
+            method_exchangeImplementations(originalMethod, swizzledMethod);
+        }
+    });
+}
+
+- (BOOL)aroute_application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+{
+    [[[ARoute sharedRouter] URL:url] execute];
 }
 
 + (instancetype)routerNamed:(NSString *)routerName
@@ -90,6 +131,11 @@
 - (id<ARouteRegistrationInitiable,ARouteRegistrationExecutable,ARouteRegistrationProtectable,ARouteRegistrationConfigurable>)registerRoutes:(NSDictionary<NSString *,id> *)routes withGroupName:(nonnull NSString *)groupName
 {
     return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:groupName];
+}
+
+- (id<ARouteRegistrationInitiable,ARouteRegistrationExecutable,ARouteRegistrationProtectable,ARouteRegistrationConfigurable>)registerURLs:(NSDictionary<NSURL *,id> *)routes
+{
+    return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:nil];
 }
 
 - (void)clearAllRouteRegistrations
