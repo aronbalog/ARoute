@@ -18,6 +18,7 @@
 - (void)storeRouteRegistration:(nonnull ARouteRegistration *)routeRegistration;
 - (nullable ARouteRegistrationStorageResult *)routeRegistrationResultForRoute:(nonnull NSString *)route router:(nonnull ARoute *)router;
 - (nullable ARouteRegistrationStorageResult *)routeRegistrationResultForRouteName:(nonnull NSString *)routeName router:(nonnull ARoute *)router;
+- (nullable ARouteRegistrationStorageResult *)routeRegistrationResultForURL:(nonnull NSURL *)URL router:(nonnull ARoute *)router;
 - (void)purgeRouteRegistrations;
 
 @end

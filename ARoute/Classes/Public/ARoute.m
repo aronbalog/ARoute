@@ -7,6 +7,7 @@
 //
 
 #import "ARoute.h"
+#import <objc/runtime.h>
 
 @class ARouteRequest;
 
@@ -90,6 +91,11 @@
 - (id<ARouteRegistrationInitiable,ARouteRegistrationExecutable,ARouteRegistrationProtectable,ARouteRegistrationConfigurable>)registerRoutes:(NSDictionary<NSString *,id> *)routes withGroupName:(nonnull NSString *)groupName
 {
     return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:groupName];
+}
+
+- (id<ARouteRegistrationInitiable,ARouteRegistrationExecutable,ARouteRegistrationProtectable,ARouteRegistrationConfigurable>)registerURLs:(NSDictionary<NSURL *,id> *)routes
+{
+    return [ARouteRegistration routeRegistrationWithRouter:self routes:routes routesGroupName:nil];
 }
 
 - (void)clearAllRouteRegistrations

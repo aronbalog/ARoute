@@ -14,11 +14,13 @@
 #import "UserViewController.h"
 #import "FirstViewController.h"
 #import "SecondViewController.h"
+#import "YellowViewController.h"
 
 @implementation ARouteAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    /*
     NSDictionary *route = @{@"second":[SecondViewController class]};
     
     [[[ARoute sharedRouter] registerRoutes:route] execute];
@@ -39,6 +41,17 @@
         return @"=";
     }] execute];
     
+     */
+    
+    NSDictionary *urls = @{@"aroute://aroute.tools/{path}":[YellowViewController class]};
+    [[[ARoute sharedRouter] registerURLs:urls] execute];
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+{
+    [[[ARoute sharedRouter] URL:url] execute];
     return YES;
 }
 
