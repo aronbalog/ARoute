@@ -7,20 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class ARoute;
+#import "ARoute.h"
+#import "AConfigurable.h"
 
 typedef NS_ENUM(NSInteger, ARouteRegistrationItemType) {
     ARouteRegistrationItemTypeRoute,
     ARouteRegistrationItemTypeNamedRoute
-};
-
-typedef NS_ENUM(NSInteger, ARouteEmbeddingType) {
-    ARouteEmbeddingTypeNotDefined,
-    ARouteEmbeddingTypeDoNotEmbed,
-    ARouteEmbeddingTypeNavigationController,
-    ARouteEmbeddingTypeTabBarController,
-    ARouteEmbeddingTypeCustomViewController
 };
 
 @interface ARouteRegistrationItem : NSObject
@@ -36,6 +28,7 @@ typedef NS_ENUM(NSInteger, ARouteEmbeddingType) {
 @property (strong, nonatomic, nonnull) NSString *castingSeparator;
 @property (assign, nonatomic) ARouteRegistrationItemType type;
 @property (assign, nonatomic) ARouteEmbeddingType embeddingType;
-@property (assign, nonatomic) NSArray * _Nonnull(^ _Nonnull previousViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
+@property (assign, nonatomic, nonnull) NSArray * _Nonnull(^previousViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
+@property (strong, nonatomic, nonnull) id <AConfigurable> configurationObject;
 
 @end

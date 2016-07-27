@@ -10,28 +10,29 @@
 
 #import <ARoute/ARoute.h>
 
-#import "HomeViewController.h"
 #import "UserViewController.h"
 #import "FirstViewController.h"
 #import "SecondViewController.h"
 #import "YellowViewController.h"
+#import "HomeViewController.h"
+#import "RouteConfiguration.h"
 
 @implementation ARouteAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSDictionary *routes =
-    @{
+    RouteConfiguration *config = [RouteConfiguration new];
+    config.callbackBlock = ^(ARouteResponse *routeResponse) {
+        
+    };
+    
+    NSDictionary *routes = @{
       @"home":[HomeViewController class],
-      @"first":[FirstViewController class],
-      @"user/{userId=number}": [UserViewController class]
+      @"user/{userId|number}":config
       };
     
-    [[[[ARoute sharedRouter]
-        registerRoutes:routes] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
-        return YES;
-    }] execute];
-
+    [[[ARoute sharedRouter] registerRoutes:routes] execute];
+    
     return YES;
 }
 

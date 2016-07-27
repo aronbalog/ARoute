@@ -41,6 +41,8 @@
     
     if (object_isClass(value)) {
         item.destinationViewControllerClass = value;
+    } else if ([value conformsToProtocol:@protocol(AConfigurable)]) {
+        item.configurationObject = value;
     } else {
         item.destinationCallback = value;
     }
@@ -70,6 +72,8 @@
         
         if (object_isClass(value)) {
             item.destinationViewControllerClass = value;
+        } else if ([value conformsToProtocol:@protocol(AConfigurable)]) {
+            item.configurationObject = value;
         } else {
             item.destinationCallback = value;
         }
@@ -93,6 +97,7 @@
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.embeddingType = ARouteEmbeddingTypeNavigationController;
     }];
+    
     return self;
 }
 
@@ -102,6 +107,7 @@
         obj.previousViewControllersBlock = previousViewControllers;
         obj.embeddingType = ARouteEmbeddingTypeNavigationController;
     }];
+    
     return self;
 }
 
@@ -110,6 +116,7 @@
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.embeddingType = ARouteEmbeddingTypeTabBarController;
     }];
+    
     return self;
 }
 
@@ -118,6 +125,7 @@
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.embeddingType = ARouteEmbeddingTypeCustomViewController;
     }];
+    
     return self;
 }
 

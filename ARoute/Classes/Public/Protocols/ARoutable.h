@@ -12,6 +12,6 @@
 
 @protocol ARoutable <NSObject>
 
-- (nonnull instancetype)initWithRouteResponse:(nonnull ARouteResponse *)routeResponse;
+- (nullable instancetype)initWithRouteResponse:(nonnull ARouteResponse *)routeResponse;
 
 @end

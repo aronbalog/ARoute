@@ -24,24 +24,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
-        // return YES if you don't want to handle the route
-        return NO;
-    }] parameters:^NSDictionary*{
-        return @{
-                 @"Key1": @"Value1",
-                 @"Key2": @"Value2"
-                 };
-    }] transitioningDelegate:^id<UIViewControllerTransitioningDelegate>{
-        // return object conforming <UIViewControllerTransitioningDelegate>
-        return nil;
-    }] animated:^BOOL{
-        return YES;
-    }] completion:^(ARouteResponse *routeResponse) {
+    [[[ARoute sharedRouter] route:@"user/12345"] execute:^(ARouteResponse * _Nonnull routeResponse) {
         
-    }] failure:^(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable error) {
-        
-    }] execute];
+    }];
 }
 
 - (void)didReceiveMemoryWarning

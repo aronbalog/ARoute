@@ -8,9 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, ARouteEmbeddingType) {
+    ARouteEmbeddingTypeNotDefined,
+    ARouteEmbeddingTypeDoNotEmbed,
+    ARouteEmbeddingTypeNavigationController,
+    ARouteEmbeddingTypeTabBarController,
+    ARouteEmbeddingTypeCustomViewController
+};
+
 #import "ARoutable.h"
 #import "AEmbeddable.h"
 #import "ACastable.h"
+#import "AConfigurable.h"
 
 #import "ARouteRequestInitiable.h"
 #import "ARouteRequestExecutable.h"
