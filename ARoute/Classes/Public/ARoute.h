@@ -43,10 +43,10 @@
 - (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)viewController:(nonnull __kindof UIViewController *)viewController;
 - (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)URL:(nonnull NSURL *)URL;
 
-- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes;
-- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoute:(nonnull NSDictionary <NSString*, id> *)route withName:(nonnull NSString *)routeName;
-- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary <NSString*, id> *)routes withGroupName:(nonnull NSString *)groupName;
-- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerURLs:(nonnull NSDictionary <NSURL*, id> *)routes;
+- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary *)routes;
+- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoute:(nonnull NSDictionary *)route withName:(nonnull NSString *)routeName;
+- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerRoutes:(nonnull NSDictionary *)routes withGroupName:(nonnull NSString *)groupName;
+- (nonnull id <ARouteRegistrationInitiable, ARouteRegistrationExecutable, ARouteRegistrationProtectable, ARouteRegistrationConfigurable>)registerURLs:(nonnull NSDictionary *)routes;
 
 - (void)clearAllRouteRegistrations;
 

@@ -7,7 +7,6 @@
 
 ## Table of contents
 
-1. [Demo](#demo)
 1. [Requirements](#requirements)
 1. [Installation](#installation)
 1. [Simple usage](#simple-usage)
@@ -21,21 +20,22 @@
 	1. [Callbacks](#callbacks)
 	1. [Custom animations](#custom-animations)
 	1. [Embedding](#embedding)
+		1. [`UINavigation controller`](#embedding-uinavigationcontroller)
+		1. [`UITabBarController`](#embedding-uitabbarcontroller)
+		1.	[Custom view controllers](#embedding-custom-view-controllers)
 	1. [Custom initiation](#custom-initiation)
 	1. [Catching completion & failure](#catching-completion-failure) 
+		1. [Completion](#catching-completion)
+		1. [Failure](#catching-failure)
 1. [ACL](#acl)
 1. [`ARouteResponse`](#ARouteResponse)
 1. [Routes separation](#routes-separation)
 
 <br><br>
 
-## <a name="demo"></a> Demo
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 ## <a name="requirements"></a> Requirements
 
-- iOS 7.0 or greater
+- iOS 8.0 or greater
 
 ## <a name="installation"></a> Installation
 
@@ -55,17 +55,19 @@ pod "ARoute"
 
 First thing to be done is registering the routes on appropriate place in app, e.g. `AppDelegate`:
 
-```
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    NSDictionary *routes = @{
-                             @"home":[HomeViewController class],
-                             @"user-profile/{userId}": [UserViewController class]
-                             };
+```swift
+func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     
-    [[[ARoute sharedRouter] registerRoutes:routes] execute];
+    let routes: [String: AnyObject] = [
+        "home": HomeViewController.self,
+        "user-profile/{userId}": UserViewController.self
+    ]
     
-    return YES;
+    ARoute.sharedRouter()
+        .registerRoutes(routes)
+        .execute()
+    
+    return true
 }
 
 ```
@@ -84,11 +86,14 @@ Executing the route is trivial.
 
 Pass the route pattern string you used in route registration, but remember to replace the wrapped value with the actual one.
 
-```
-- (void)openUserProfileViewControllerWithUserId:(NSString *)userId
-{
-	NSString *userProfileRoute = [NSString stringWithFormat:@"user-profile/%@", userId];
-	[[[ARoute sharedRouter] route:userProfileRoute] execute];
+```swift
+func openUserProfileViewController(userId: String) -> Void {
+    
+    let userProfileRoute = String(format: "user-profile/%@", userId)
+    
+    ARoute.sharedRouter()
+        .route(userProfileRoute)
+        .execute();
 }
 ```
 
@@ -96,14 +101,18 @@ Pass the route pattern string you used in route registration, but remember to re
 
 Simple and easy:
 
-```
-- (void)openUserProfileViewControllerWithUserId:(NSString *)userId
-{
-	NSString *userProfileRoute = [NSString stringWithFormat:@"user-profile/%@", userId];
-
-	[[[[ARoute sharedRouter] route:userProfileRoute] animated:^BOOL{
-        return NO;
-    }] execute];
+```swift
+func openUserProfileViewController(userId: String) -> Void {
+ 
+    let userProfileRoute = String(format: "user-profile/%@", userId)
+ 
+    ARoute.sharedRouter()
+        .route(userProfileRoute)
+        .animated({ () -> Bool in
+            // return false if you don't want animations
+            return false
+        })
+        .execute();
 }
 ```
 
@@ -115,19 +124,23 @@ Simple and easy:
 ### <a name="custom-separator"></a> Custom separator
 If you have different route parameter separator in mind, you can customise it:
 
-```
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    NSDictionary *routes =
-        @{
-                @"home":[HomeViewController class],
-                @"user-profile/:userId:": [UserViewController class]
-        };
-	[[[[ARoute sharedRouter] registerRoutes:routes] separator:^NSString *{
-        return @":";
-	}] execute];
-
-}    
+```objective-c
+func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    
+    let routes: [String: AnyObject] = [
+        "home": HomeViewController.self,
+        "user-profile/:userId:": UserViewController.self
+    ]
+    
+    ARoute.sharedRouter()
+        .registerRoutes(routes)
+        .separator({ () -> String in
+            return ":"
+        })
+        .execute()
+    
+    return true
+}
 ```
 
 That means that route parameters should be wrapped in chosen separator.
@@ -149,91 +162,111 @@ Passing parameters is possible using both registration end executing the route.
 
 Route registration:
 
-```
-[[[[ARoute sharedRouter] registerRoutes:routes] parameters:^NSDictionary<id,id> *{
-    return @{@"message":@"some default message"};
-}] execute];
+```swift
+ARoute.sharedRouter()
+	.registerRoutes(routes)
+	.parameters({ () -> [NSObject : AnyObject]? in
+	    return ["message":"some default message"]
+	})
+	.execute()
 ```
 Route execution:
 
-```
-[[[[ARoute sharedRouter] route:route] parameters:^NSDictionary<id,id> *{
-	return @{@"message2": @"Another message"};
-}] execute];
+```swift
+ARoute.sharedRouter()
+    .route(route)
+    .parameters({ () -> [NSObject : AnyObject]? in
+        return ["message2":"Another message"]
+    })
+    .execute();
 ```
 Note: If you use same parameter keys in registration and execution, priority will be on execution parameter.<br>`ARouteResponse` will receive combined values of both parameters.
 E.g. this example will return following dictionary (`routeResponse.parameters`):
 
-```
-@{
-	@"message":@"some default message"
-	@"message2": @"Another message"
-}
+```swift
+[
+	"message": "some default message",
+	"message2": "Another message"
+]
 ```
 
 ### <a name="parameter-casting"></a> Parameter casting
 
 ARoute supports parameter casting. Examples:
 
-```
-NSDictionary *routes = @{
-  @"user-profile/{userId|number}": [UserViewController class]
-};
-    
-[[[ARoute sharedRouter] registerRoutes:routes] execute];
+```swift
+let routes: [String: AnyObject] = [
+    "user-profile/{userId|number}": UserViewController.self
+]
+
+ARoute.sharedRouter()
+    .registerRoutes(routes)
+    .execute()
 ```
 
 You can also define a specific casting class:
 
-```
-NSDictionary *routes = @{
-  @"user-profile/{userId|NSDecimalNumber}": [UserViewController class]
-};
-    
-[[[ARoute sharedRouter] registerRoutes:routes] execute];
+```swift
+let routes: [String: AnyObject] = [
+    "user-profile/{userId|NSDecimalNumber}": UserViewController.self
+]
+
+ARoute.sharedRouter()
+    .registerRoutes(routes)
+    .execute()
 ```
 
 It works with your custom objects.
 
-```
-NSDictionary *routes = @{
-  @"user-profile/{userId|MyObject}": [UserViewController class]
-};
-    
-[[[ARoute sharedRouter] registerRoutes:routes] execute];
+```swift
+let routes: [String: AnyObject] = [
+    "user-profile/{userId|MyObject}": UserViewController.self
+]
+
+ARoute.sharedRouter()
+    .registerRoutes(routes)
+    .execute()
 ```
 On your object you must implement method:
-`+ (instancetype)objectWithRouteParameterValue:(NSString *)value;`
+
+```swift
+required init(routeParameterValue value: String) {
+
+}
+```
+
 from `<ACastable>` protocol.
 
 Casting pattern                 | Resolving class             | Route example
 :------------------------------ | :-------------------------- | :-----------
-| `undefined`                   | `NSString`                  | `@"user-profile/{userId}"`|
-| `string` or `NSString`        | `NSString`                  | `@"user-profile/{userId|string}"`|
-| `number` or `NSNumber`        | `NSNumber`                  | `@"user-profile/{userId|number}"`|
-| `decimal` or `NSDecimalNumber`| `NSDecimalNumber`           | `@"user-profile/{userId|decimal}"`|
-| `MyCustomClass`               | `MyCustomClass`             | `@"user-profile/{userId|MyCustomClass}"`|
+| `undefined`                   | `String`                  | `"user-profile/{userId}"`|
+| `string` or `NSString`        | `String `                  | `"user-profile/{userId|string}"`|
+| `number` or `NSNumber`        | `String `                  | `"user-profile/{userId|number}"`|
+| `decimal` or `NSDecimalNumber`| `NSDecimalNumber`           | `"user-profile/{userId|decimal}"`|
+| `MyCustomClass`               | `MyCustomClass`             | `"user-profile/{userId|MyCustomClass}"`|
 
 #####There is more!
 
 If parameters casting separator needs to be changed, you can do it this way:
 
-```
-NSDictionary *routes =
-@{
-  @"user-profile/{userId=number}": [UserViewController class]
-};
-    
-[[[[ARoute sharedRouter] registerRoutes:routes] castingSeparator:^NSString*{
-    return @"=";
-}] execute];
+```swift
+let routes: [String: AnyObject] = [
+    "user-profile/{userId=number}": UserViewController.self
+]
+
+ARoute.sharedRouter()
+    .registerRoutes(routes)
+    .castingSeparator({ () -> String in
+        return "="
+    })
+    .execute()
 ```
 
 ### <a name="callbacks"></a> Callbacks
 
 You can link a callback to a route:
 
-```
+```objective-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSDictionary *routes =
@@ -253,7 +286,7 @@ You can link a callback to a route:
 ```
 ... then call (execute) the route:
 
-```
+```objective-c
 - (void)deleteFriendWithId:(NSString *)userId
 { 
 	NSString *route = [NSString stringWithFormat:@"friends/%@/delete", userId];
@@ -265,7 +298,7 @@ You can link a callback to a route:
 
 It is possible to forward `<UIViewControllerTransitioningDelegate>` to destination view controller. Just call `transitioningDelegate` block and return an object conformed to `<UIViewControllerTransitioningDelegate>` protocol.
 
-```
+```objective-c
 - (void)openUserProfileViewControllerWithUserId:(NSString *)userId
 {
  	NSString *userProfileRoute = [NSString stringWithFormat:@"user-profile/%@", userId];
@@ -280,9 +313,53 @@ It is possible to forward `<UIViewControllerTransitioningDelegate>` to destinati
 
 ### <a name="embedding"></a> Embedding
 
+You can embed your view controllers in `UINavigationController`, `UITabBarController` and your custom view controllers. Embedding view controller instance will be part of `ARouteResponse` object. 
+
+Take a look at following examples:
+
+### <a name="embedding-uinavigationcontroller"></a> `UINavigationController`
+
+```objective-c
+[[[[ARoute sharedRouter] route:route] embedInNavigationController] execute];
+```
+
+You can prestack view controllers when embedding in navigation controller. An array of items must be return.
+
+Allowed types in array:
+
+- `NSString` - a route (if defined)
+- `UIViewController` - your view controller instance
+- `Class` - your view controller class conforming `<ARoutable>` protocol
+
+
+The code in following example will embed view controllers in `UINavigationController` in following order:
+
+1. `FriendsListViewController`
+2. `UserProfileDetailsViewController`
+3. `UserPhotosViewController` as current view controller
+
+As you can see, it will immediately place `UserPhotosViewController` as `UINavigationController`'s current view controller.
+
+```objective-c
+// e.g. registred to UserPhotosViewController 
+NSString *route = @"user/123456/photos";
+
+[[[[ARoute sharedRouter] route:route] embedInNavigationController:^NSArray *(ARouteResponse *routeResponse) {
+    return @[[FriendsListViewController new], [UserProfileDetailsViewController class];
+}] execute];
+```
+
+### <a name="embedding-uitabbarcontroller"></a> `UITabBarController`
+
+```objective-c
+[[[[ARoute sharedRouter] route:route] embedInTabBarController] execute];
+```
+
+### <a name="embedding-custom-view-controllers"></a> Custom view controllers
+
 Embedding destination view controller in custom view controller is possible by returning an object conforming `<AEmbeddable>` protocol in `embedIn:` block.
 
-```
+```objective-c
 - (void)openUserProfileViewControllerWithUserId:(NSString *)userId
 {
     EmbeddingViewController <AEmbeddable> *embeddingViewController = [EmbeddingViewController new];
@@ -299,7 +376,7 @@ Embedding destination view controller in custom view controller is possible by r
 
 Custom initiation is a cool feature and pretty easy to accomplish:
 
-```
+```objective-c
 - (void)openUserProfileViewControllerWithUserId:(NSString *)userId
 {
     NSString *title = @"User profile";
@@ -316,22 +393,19 @@ Custom initiation is a cool feature and pretty easy to accomplish:
 
 When destination view controller is presented, completion block will be executed.
 
-- Catching completion
+- <a name="catching-completion"></a>Catching completion
 
+	```objective-c
+	[[[[ARoute sharedRouter] route:route] completion:^(ARouteResponse *routeResponse) {
+        // handle route response
+    }] execute];
 	```
-	- (void)openUserProfileViewControllerWithUserId:(NSString *)userId
-	{
-	    NSString *userProfileRoute = [NSString stringWithFormat:@"user-profile/%@", userId];
-	    
-	    [[[[ARoute sharedRouter] route:userProfileRoute] completion:^(ARouteResponse *routeResonse) {
-	        NSLog(@"View controller is presented!");
-	    }] execute];
-	}
-	```
-- Catching failure
+- <a name="catching-failure"></a>Catching failure
 
-	```
-	Work in progress!
+	```objective-c
+	[[[[ARoute sharedRouter] route:route] failure:^(ARouteResponse *routeResponse, NSError *error) {
+        // handle the error
+    }] execute];
 	```
 
 --
@@ -342,26 +416,30 @@ You can protect your route.
 
 You can globally protect your route upon registration:
 
-```
-[[[[ARoute sharedRouter] registerRoutes:routes] protect:^BOOL(ARouteResponse *routeResponse) {
- 	// return YES if you don't want to handle the route       
-
-	return YES;
+```objective-c
+[[[[ARoute sharedRouter]
+    registerRoutes:routes] protect:^BOOL(ARouteResponse *routeResponse, NSError **errorPtr) {
+    *errorPtr = YOUR_CUSTOM_ERROR_OBJECT;
+   	// return YES if you don't want to handle the route       
+    return YES;
 }] execute];
 ```
 
 ... or you can  provide protection callback on route execution:
 
-```  
-[[[[ARoute sharedRouter] route:route] protect:^BOOL(ARouteResponse *routeResponse) {
-   // return YES if you don't want to handle the route       
-    
-	return YES;
+```objective-c
+[[[[ARoute sharedRouter]
+    route:route] protect:^BOOL(ARouteResponse *routeResponse, NSError **errorPtr) {
+    *errorPtr = YOUR_CUSTOM_ERROR_OBJECT;
+   	// return YES if you don't want to handle the route       
+    return YES;
 }] execute];
 ```
 
+*An error set in error pointer will be provided in [failure block](#catching-failure).*
+
 **BE AWARE!**<br>
-**Protection callback on execution will override the callback called upon registration**
+**Protection callback on execution will override the callback called upon registration!**
 
 --
 
@@ -382,26 +460,26 @@ You are now already familiar with `[ARoute sharedRouter]`. This is `ARoute` glob
 
 For example, your app has an admin and frontend parts. Ideally, you would separate routers:
 
-```
-[[[ARoute createRouterWithName:@"front"] registerRoutes:frontRoutes] execute];
-```
-
-or
-
-```
+```objective-c
 [[[ARoute createRouterWithName:@"admin"] registerRoutes:adminRoutes] execute];
 
 ```
 
+or
+
+```objective-c
+[[[ARoute createRouterWithName:@"front"] registerRoutes:frontRoutes] execute];
+```
+
 ... then you would call a route:
 
-```
+```objective-c
 [[[ARoute routerNamed:@"admin"] route:@"user-profile/12345"] execute];
 ```
 
 or
 
-```
+```objective-c
 [[[ARoute routerNamed:@"front"] route:@"user-profile/12345"] execute];
 ```
 

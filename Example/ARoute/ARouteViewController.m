@@ -24,34 +24,24 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    /*
-    [[[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
-        return @[[HomeViewController new], @"second"];
-    }] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
-        *errorPtr = [NSError errorWithDomain:@"my.domain" code:1000 userInfo:@{@"message": @"not authorized"}];
-        return YES;
-    }] constructor:^SEL _Nonnull(ARouteResponse * _Nonnull routeResponse) {
-        return @selector(initCustomMethod:anotherString:);
-    } objects:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
-        return @[@"Title", @"Name"];
-    }] parameters:^NSDictionary<id,id> * _Nullable{
+    [[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
+        // return YES if you don't want to handle the route
+        return NO;
+    }] parameters:^NSDictionary*{
         return @{
                  @"Key1": @"Value1",
                  @"Key2": @"Value2"
                  };
-    }] transitioningDelegate:^id<UIViewControllerTransitioningDelegate> _Nullable{
+    }] transitioningDelegate:^id<UIViewControllerTransitioningDelegate>{
         // return object conforming <UIViewControllerTransitioningDelegate>
         return nil;
     }] animated:^BOOL{
         return YES;
-    }] completion:^(ARouteResponse * _Nonnull routeResponse) {
+    }] completion:^(ARouteResponse *routeResponse) {
         
     }] failure:^(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable error) {
         
-    }] execute:^(ARouteResponse * _Nonnull routeResponse) {
-        
-    }];
-    */
+    }] execute];
 }
 
 - (void)didReceiveMemoryWarning

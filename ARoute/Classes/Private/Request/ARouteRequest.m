@@ -101,6 +101,13 @@
     return self;
 }
 
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInTabBarController
+{
+    self.configuration.embeddingType = ARouteEmbeddingTypeTabBarController;
+    
+    return self;
+}
+
 - (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)parameters:(NSDictionary <id, id> * _Nullable (^)())parameters
 {
     if (parameters) {

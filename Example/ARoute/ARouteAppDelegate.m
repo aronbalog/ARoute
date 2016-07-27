@@ -20,11 +20,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    /*
-    NSDictionary *route = @{@"second":[SecondViewController class]};
-    
-    [[[ARoute sharedRouter] registerRoutes:route] execute];
-    
     NSDictionary *routes =
     @{
       @"home":[HomeViewController class],
@@ -32,20 +27,11 @@
       @"user/{userId=number}": [UserViewController class]
       };
     
-    [[[[[[ARoute sharedRouter]
-        registerRoutes:routes] separator:^NSString * _Nonnull{
-        return @"{}";
-    }] parameters:^NSDictionary<id,id> * _Nullable{
-        return @{@"Key3":@"Value3"};
-    }] castingSeparator:^NSString * _Nonnull{
-        return @"=";
+    [[[[ARoute sharedRouter]
+        registerRoutes:routes] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
+        return YES;
     }] execute];
-    
-     */
-    
-    NSDictionary *urls = @{@"aroute://aroute.tools/{path}":[YellowViewController class]};
-    [[[ARoute sharedRouter] registerURLs:urls] execute];
-    
+
     return YES;
 }
 

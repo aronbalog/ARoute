@@ -88,8 +88,9 @@
     NSDictionary *registrationParameters;
     
     BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse, NSError * __autoreleasing _Nullable * _Nullable errorPtr);
-    ARouteEmbeddingType embeddingType = ARouteEmbeddingTypeNotDefined;
-    
+    ARouteEmbeddingType requestEmbeddingType = routeRequest.configuration.embeddingType;
+    ARouteEmbeddingType registrationEmbeddingType = ARouteEmbeddingTypeNotDefined;
+
     NSArray *previousViewControllers;
     
     ARoute *router = routeRequest.router;
@@ -104,7 +105,7 @@
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-            embeddingType = result.routeRegistrationItem.embeddingType;
+            registrationEmbeddingType = result.routeRegistrationItem.embeddingType;
             previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             break;
         }
@@ -116,7 +117,7 @@
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-            embeddingType = result.routeRegistrationItem.embeddingType;
+            registrationEmbeddingType = result.routeRegistrationItem.embeddingType;
             previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             
             break;
@@ -134,7 +135,7 @@
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-            embeddingType = result.routeRegistrationItem.embeddingType;
+            registrationEmbeddingType = result.routeRegistrationItem.embeddingType;
             previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
             break;
         }
@@ -188,11 +189,14 @@
     response.destinationViewController = destinationViewController;
     
     // embed if neccessary
+    ARouteEmbeddingType embeddingType;
     if (routeRequest.configuration.embeddingViewControllerBlock) {
         embeddingViewController = routeRequest.configuration.embeddingViewControllerBlock();
     } else {
-        if (routeRequest.configuration.embeddingType != ARouteEmbeddingTypeNotDefined) {
-            embeddingType = routeRequest.configuration.embeddingType;
+        if (requestEmbeddingType != ARouteEmbeddingTypeNotDefined) {
+            embeddingType = requestEmbeddingType;
+        } else {
+            embeddingType = registrationEmbeddingType;
         }
         
         if (routeRequest.configuration.previousViewControllersBlock) {

@@ -7,7 +7,6 @@
 
 ## Table of contents
 
-1. [Demo](#demo)
 1. [Requirements](#requirements)
 1. [Installation](#installation)
 1. [Simple usage](#simple-usage)
@@ -21,21 +20,22 @@
 	1. [Callbacks](#callbacks)
 	1. [Custom animations](#custom-animations)
 	1. [Embedding](#embedding)
+		1. [`UINavigation controller`](#embedding-uinavigationcontroller)
+		1. [`UITabBarController`](#embedding-uitabbarcontroller)
+		1.	[Custom view controllers](#embedding-custom-view-controllers)
 	1. [Custom initiation](#custom-initiation)
 	1. [Catching completion & failure](#catching-completion-failure) 
+		1. [Completion](#catching-completion)
+		1. [Failure](#catching-failure)
 1. [ACL](#acl)
 1. [`ARouteResponse`](#ARouteResponse)
 1. [Routes separation](#routes-separation)
 
 <br><br>
 
-## <a name="demo"></a> Demo
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 ## <a name="requirements"></a> Requirements
 
-- iOS 7.0 or greater
+- iOS 8.0 or greater
 
 ## <a name="installation"></a> Installation
 
@@ -166,7 +166,7 @@ E.g. this example will return following dictionary (`routeResponse.parameters`):
 
 ```objective-c
 @{
-	@"message":@"some default message"
+	@"message":@"some default message",
 	@"message2": @"Another message"
 }
 ```
@@ -203,7 +203,7 @@ NSDictionary *routes = @{
 [[[ARoute sharedRouter] registerRoutes:routes] execute];
 ```
 On your object you must implement method:
-`+ (instancetype)objectWithRouteParameterValue:(NSString *)value;`
+`- (instancetype)initWithRouteParameterValue:(NSString *)value;`
 from `<ACastable>` protocol.
 
 Casting pattern                 | Resolving class             | Route example
@@ -280,6 +280,50 @@ It is possible to forward `<UIViewControllerTransitioningDelegate>` to destinati
 
 ### <a name="embedding"></a> Embedding
 
+You can embed your view controllers in `UINavigationController`, `UITabBarController` and your custom view controllers. Embedding view controller instance will be part of `ARouteResponse` object. 
+
+Take a look at following examples:
+
+### <a name="embedding-uinavigationcontroller"></a> `UINavigationController`
+
+```objective-c
+[[[[ARoute sharedRouter] route:route] embedInNavigationController] execute];
+```
+
+You can prestack view controllers when embedding in navigation controller. An array of items must be return.
+
+Allowed types in array:
+
+- `NSString` - a route (if defined)
+- `UIViewController` - your view controller instance
+- `Class` - your view controller class conforming `<ARoutable>` protocol
+
+
+The code in following example will embed view controllers in `UINavigationController` in following order:
+
+1. `FriendsListViewController`
+2. `UserProfileDetailsViewController`
+3. `UserPhotosViewController` as current view controller
+
+As you can see, it will immediately place `UserPhotosViewController` as `UINavigationController`'s current view controller.
+
+```objective-c
+// e.g. registred to UserPhotosViewController 
+NSString *route = @"user/123456/photos";
+
+[[[[ARoute sharedRouter] route:route] embedInNavigationController:^NSArray *(ARouteResponse *routeResponse) {
+    return @[[FriendsListViewController new], [UserProfileDetailsViewController class];
+}] execute];
+```
+
+### <a name="embedding-uitabbarcontroller"></a> `UITabBarController`
+
+```objective-c
+[[[[ARoute sharedRouter] route:route] embedInTabBarController] execute];
+```
+
+### <a name="embedding-custom-view-controllers"></a> Custom view controllers
+
 Embedding destination view controller in custom view controller is possible by returning an object conforming `<AEmbeddable>` protocol in `embedIn:` block.
 
 ```objective-c
@@ -316,22 +360,19 @@ Custom initiation is a cool feature and pretty easy to accomplish:
 
 When destination view controller is presented, completion block will be executed.
 
-- Catching completion
+- <a name="catching-completion"></a>Catching completion
 
 	```objective-c
-	- (void)openUserProfileViewControllerWithUserId:(NSString *)userId
-	{
-	    NSString *userProfileRoute = [NSString stringWithFormat:@"user-profile/%@", userId];
-	    
-	    [[[[ARoute sharedRouter] route:userProfileRoute] completion:^(ARouteResponse *routeResonse) {
-	        NSLog(@"View controller is presented!");
-	    }] execute];
-	}
+	[[[[ARoute sharedRouter] route:route] completion:^(ARouteResponse *routeResponse) {
+        // handle route response
+    }] execute];
 	```
-- Catching failure
+- <a name="catching-failure"></a>Catching failure
 
-	```
-	Work in progress!
+	```objective-c
+	[[[[ARoute sharedRouter] route:route] failure:^(ARouteResponse *routeResponse, NSError *error) {
+        // handle the error
+    }] execute];
 	```
 
 --
@@ -343,25 +384,29 @@ You can protect your route.
 You can globally protect your route upon registration:
 
 ```objective-c
-[[[[ARoute sharedRouter] registerRoutes:routes] protect:^BOOL(ARouteResponse *routeResponse) {
- 	// return YES if you don't want to handle the route       
-
-	return YES;
+[[[[ARoute sharedRouter]
+    registerRoutes:routes] protect:^BOOL(ARouteResponse *routeResponse, NSError **errorPtr) {
+    *errorPtr = YOUR_CUSTOM_ERROR_OBJECT;
+   	// return YES if you don't want to handle the route       
+    return YES;
 }] execute];
 ```
 
 ... or you can  provide protection callback on route execution:
 
 ```objective-c
-[[[[ARoute sharedRouter] route:route] protect:^BOOL(ARouteResponse *routeResponse) {
-   // return YES if you don't want to handle the route       
-    
-	return YES;
+[[[[ARoute sharedRouter]
+    route:route] protect:^BOOL(ARouteResponse *routeResponse, NSError **errorPtr) {
+    *errorPtr = YOUR_CUSTOM_ERROR_OBJECT;
+   	// return YES if you don't want to handle the route       
+    return YES;
 }] execute];
 ```
 
+*An error set in error pointer will be provided in [failure block](#catching-failure).*
+
 **BE AWARE!**<br>
-**Protection callback on execution will override the callback called upon registration**
+**Protection callback on execution will override the callback called upon registration!**
 
 --
 
