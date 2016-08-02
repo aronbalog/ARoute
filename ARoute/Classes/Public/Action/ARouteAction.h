@@ -18,7 +18,7 @@
 @property (strong, nonatomic, nullable) NSString *castingSeparator;
 @property (assign, nonatomic) BOOL animated;
 @property (strong, nonatomic, nullable) NSDictionary *parameters;
-@property (strong, nonatomic, nullable) void (^callbackBlock)(ARouteResponse * _Nonnull routeResponse);
+@property (strong, nonatomic, nullable) id _Nullable (^callbackBlock)(ARouteResponse * _Nonnull routeResponse);
 @property (strong, nonatomic, nullable) id <UIViewControllerTransitioningDelegate> transitioningDelegate;
 @property (assign, nonatomic) ARouteEmbeddingType embeddingType;
 @property (strong, nonatomic, nullable) NSArray *previousEmbeddingItems;

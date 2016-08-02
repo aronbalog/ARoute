@@ -126,7 +126,7 @@
     
     // preparing params
     Class destinationViewControllerClass;
-    void (^callbackBlock)(ARouteResponse *);
+    id (^callbackBlock)(ARouteResponse *);
     BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : routeRequest.router.configuration.animate;
     response.parameters = routeRequest.configuration.parametersBlock ? routeRequest.configuration.parametersBlock() : nil;
     
@@ -278,10 +278,16 @@
     
     // check if callback
     if (callbackBlock) {
-        self.classPointer = nil;
         *routeResponsePtr = response;
-        callbackBlock(response);
-        return nil;
+        id destination = callbackBlock(response);
+        if (object_isClass(destination)) {
+            destinationViewControllerClass = destination;
+        } else if ([destination isKindOfClass:[UIViewController class]]) {
+            destinationViewController = destination;
+        } else {
+            self.classPointer = nil;
+            return nil;
+        }
     }
     
     if (!destinationViewController && destinationViewControllerClass) {
