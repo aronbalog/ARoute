@@ -21,17 +21,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    RouteConfiguration *config = [RouteConfiguration new];
-    config.callbackBlock = ^(ARouteResponse *routeResponse) {
-        
-    };
-    
-    NSDictionary *routes = @{
-      @"home":[HomeViewController class],
-      @"user/{userId|number}":config
-      };
-    
-    [[[ARoute sharedRouter] registerRoutes:routes] execute];
     
     return YES;
 }

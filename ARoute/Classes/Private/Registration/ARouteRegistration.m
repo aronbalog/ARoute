@@ -39,13 +39,7 @@
     
     id value = routes.allValues.firstObject;
     
-    if (object_isClass(value)) {
-        item.destinationViewControllerClass = value;
-    } else if ([value conformsToProtocol:@protocol(AConfigurable)]) {
-        item.configurationObject = value;
-    } else {
-        item.destinationCallback = value;
-    }
+    [self processDestinationValue:value forItem:item];
     
     item.router = router;
     item.routeName = routeName;
@@ -70,13 +64,7 @@
         
         ARouteRegistrationItem *item = [ARouteRegistrationItem new];
         
-        if (object_isClass(value)) {
-            item.destinationViewControllerClass = value;
-        } else if ([value conformsToProtocol:@protocol(AConfigurable)]) {
-            item.configurationObject = value;
-        } else {
-            item.destinationCallback = value;
-        }
+        [self processDestinationValue:value forItem:item];
         
         item.router = router;
         item.route = route;
@@ -180,6 +168,21 @@
 - (void)execute
 {
     [self.routeRegistrationStorage storeRouteRegistration:self];
+}
+
+#pragma mark - Private
+
++ (void)processDestinationValue:(id)value forItem:(ARouteRegistrationItem *)item
+{
+    if (object_isClass(value)) {
+        item.destinationViewControllerClass = value;
+    } else if ([value conformsToProtocol:@protocol(AConfigurable)]) {
+        item.configurationObject = value;
+    } else if ([value isKindOfClass:[UIViewController class]]) {
+        item.destinationViewController = value;
+    } else {
+        item.destinationCallback = value;
+    }
 }
 
 #pragma mark - Properties

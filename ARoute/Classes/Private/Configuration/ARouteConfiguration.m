@@ -28,4 +28,13 @@
     return _castingSeparator;
 }
 
+- (BOOL)animate
+{
+    if (!_animate) {
+        _animate = YES;
+    }
+    
+    return _animate;
+}
+
 @end

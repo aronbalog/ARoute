@@ -33,6 +33,7 @@ typedef NS_ENUM(NSInteger, ARouteEmbeddingType) {
 #import "ARouteRegistrationConfigurable.h"
 
 #import "ARouteResponse.h"
+#import "ARouteAction.h"
 
 @class ARouteConfiguration;
 

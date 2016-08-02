@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, ARouteRequestType) {
 @property (strong, nonatomic, nullable, readonly) NSString *route;
 @property (strong, nonatomic, nullable, readonly) NSString *routeName;
 @property (strong, nonatomic, nonnull, readonly) ARouteRequestConfiguration *configuration;
-@property (strong, nonatomic, nullable, readonly) __kindof UIViewController *viewController;
+@property (strong, nonatomic, nullable, readonly) __kindof UIViewController *viewControllerObject;
 @property (strong, nonatomic, nullable, readonly) NSURL *URL;
 
 + (nonnull instancetype)routeRequestWithRouter:(nonnull ARoute *)router route:(nonnull NSString *)route;

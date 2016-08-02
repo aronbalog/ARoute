@@ -1,9 +1,16 @@
+//
+//  ARouteAction.h
+//  ARoute
+//
+//  Created by Aron Balog on 01/08/16.
+//
+//
+
 #import <Foundation/Foundation.h>
-#import "ARoute.h"
 
-@protocol AConfigurable <NSObject>
+#import "AConfigurable.h"
 
-@optional
+@interface ARouteAction : NSObject <AConfigurable>
 
 @property (strong, nonatomic, nullable) Class destinationViewControllerClass;
 @property (strong, nonatomic, nullable) __kindof UIViewController *destinationViewController;

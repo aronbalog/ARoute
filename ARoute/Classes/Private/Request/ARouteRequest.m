@@ -17,7 +17,7 @@
 @property (strong, nonatomic, nonnull, readwrite) NSString *route;
 @property (strong, nonatomic, nonnull, readwrite) NSString *routeName;
 @property (strong, nonatomic, nonnull, readwrite) ARouteRequestConfiguration *configuration;
-@property (strong, nonatomic, nullable, readwrite) __kindof UIViewController *viewController;
+@property (strong, nonatomic, nullable, readwrite) __kindof UIViewController *viewControllerObject;
 
 @property (strong, nonatomic, nullable, readwrite) NSURL *URL;
 
@@ -55,7 +55,7 @@
     
     routeRequest.type = ARouteRequestTypeViewController;
     routeRequest.router = router;
-    routeRequest.viewController = viewController;
+    routeRequest.viewControllerObject = viewController;
     
     return routeRequest;
 }
@@ -181,7 +181,7 @@
 
 - (void)execute
 {
-    [self.executor executeRouteRequest:self routeResponse:nil];
+    [self execute:nil];
 }
 
 - (void)execute:(void (^)(ARouteResponse * _Nonnull))routeResponse
@@ -189,9 +189,24 @@
     [self.executor executeRouteRequest:self routeResponse:routeResponse];
 }
 
+- (void)push
+{
+    [self push:nil];
+}
+
+- (void)push:(void (^)(ARouteResponse * _Nonnull))routeResponse
+{
+    [self.executor pushRouteRequest:self routeResponse:routeResponse];
+}
+
 - (UIViewController *)viewController
 {
     return [self.executor viewControllerForRouteRequest:self];
+}
+
+- (UIViewController *)embeddingViewController
+{
+    return [self.executor embeddingViewControllerForRouteRequest:self];
 }
 
 #pragma mark - Private
