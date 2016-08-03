@@ -47,7 +47,7 @@
     ARouteResponse *routeResponse;
     BOOL animated;
     UIViewController *presentingViewController;
-    UIViewController *destinationViewController = [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated presentingViewController:&presentingViewController];
+    [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated presentingViewController:&presentingViewController];
     
     if (presentingViewController) {
         [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
@@ -74,7 +74,7 @@
         UINavigationController *navigationController;
         
         if ([currentViewController isKindOfClass:[UINavigationController class]]) {
-            navigationController = currentViewController;
+            navigationController = (UINavigationController *)currentViewController;
         } else if ([currentViewController isKindOfClass:[UITabBarController class]]) {
             if ([((UITabBarController *)currentViewController).selectedViewController isKindOfClass:[UINavigationController class]]) {
                 navigationController = ((UITabBarController *)currentViewController).selectedViewController;
