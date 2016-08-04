@@ -39,11 +39,7 @@
     
     id value = routes.allValues.firstObject;
     
-    if (object_isClass(value)) {
-        item.destinationViewControllerClass = value;
-    } else {
-        item.destinationCallback = value;
-    }
+    [self processDestinationValue:value forItem:item];
     
     item.router = router;
     item.routeName = routeName;
@@ -68,11 +64,7 @@
         
         ARouteRegistrationItem *item = [ARouteRegistrationItem new];
         
-        if (object_isClass(value)) {
-            item.destinationViewControllerClass = value;
-        } else {
-            item.destinationCallback = value;
-        }
+        [self processDestinationValue:value forItem:item];
         
         item.router = router;
         item.route = route;
@@ -93,6 +85,7 @@
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.embeddingType = ARouteEmbeddingTypeNavigationController;
     }];
+    
     return self;
 }
 
@@ -102,6 +95,7 @@
         obj.previousViewControllersBlock = previousViewControllers;
         obj.embeddingType = ARouteEmbeddingTypeNavigationController;
     }];
+    
     return self;
 }
 
@@ -110,6 +104,7 @@
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.embeddingType = ARouteEmbeddingTypeTabBarController;
     }];
+    
     return self;
 }
 
@@ -118,6 +113,7 @@
     [self.items enumerateObjectsUsingBlock:^(ARouteRegistrationItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.embeddingType = ARouteEmbeddingTypeCustomViewController;
     }];
+    
     return self;
 }
 
@@ -172,6 +168,21 @@
 - (void)execute
 {
     [self.routeRegistrationStorage storeRouteRegistration:self];
+}
+
+#pragma mark - Private
+
++ (void)processDestinationValue:(id)value forItem:(ARouteRegistrationItem *)item
+{
+    if (object_isClass(value)) {
+        item.destinationViewControllerClass = value;
+    } else if ([value conformsToProtocol:@protocol(AConfigurable)]) {
+        item.configurationObject = value;
+    } else if ([value isKindOfClass:[UIViewController class]]) {
+        item.destinationViewController = value;
+    } else {
+        item.destinationCallback = value;
+    }
 }
 
 #pragma mark - Properties

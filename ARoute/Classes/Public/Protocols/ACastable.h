@@ -10,6 +10,6 @@
 
 @protocol ACastable <NSObject>
 
-+ (nonnull instancetype)objectWithRouteParameterValue:(nonnull NSString *)value;
+- (nonnull instancetype)initWithRouteParameterValue:(nonnull NSString *)value;
 
 @end

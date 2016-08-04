@@ -11,7 +11,10 @@
 @protocol ARouteRequestExecutable <NSObject>
 
 - (void)execute;
-- (void)execute:(void(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))routeResponse;
+- (void)execute:(void(^ _Nullable)(ARouteResponse * _Nonnull routeResponse))routeResponse;
+- (void)push;
+- (void)push:(void(^ _Nullable)(ARouteResponse * _Nonnull routeResponse))routeResponse;
 - (nullable __kindof UIViewController *)viewController;
+- (nullable __kindof UIViewController *)embeddingViewController;
 
 @end

@@ -60,8 +60,8 @@
 
 - (id)castedValue:(NSString *)value toClass:(Class)aClass
 {
-    if ([aClass respondsToSelector:@selector(objectWithRouteParameterValue:)]) {
-        return [aClass objectWithRouteParameterValue:value];
+    if ([aClass instancesRespondToSelector:@selector(initWithRouteParameterValue:)]) {
+        return [[aClass alloc] initWithRouteParameterValue:value];
     }
     
     if (aClass == [NSNumber class]) {

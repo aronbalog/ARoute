@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "ARoute"
-  s.version      = "0.0.7"
+  s.version      = "0.0.8"
   s.summary      = "ARoute"
 
   s.description  = <<-DESC
@@ -12,9 +12,9 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   s.author       = { "Aron Balog" => "aronbalog@gmail.com" }
   s.platform     = :ios
-  s.platform     = :ios, "7.0"
+  s.platform     = :ios, "8.0"
 
-  s.source       = { :git => "https://github.com/aronbalog/ARoute.git", :tag => "0.0.7" }
+  s.source       = { :git => "https://github.com/aronbalog/ARoute.git", :tag => "0.0.8" }
   s.source_files  = "ARoute", "ARoute/**/*.{h,m}"
   s.public_header_files = "ARoute/Classes/Public/**/*.h"
   s.requires_arc = true

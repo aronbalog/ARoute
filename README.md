@@ -42,52 +42,7 @@ pod "ARoute"
 
 ### <a name="swift-example"></a> Swift example
 
-Full route registration example:
-
-```swift
-ARoute.sharedRouter()
-	.registerRoutes(["user/{userId=number}" : UserViewController.self as AnyObject])
-	.separator({ () -> String in
-	    return "{}"
-	})
-	.parameters({ () -> [NSObject : AnyObject]? in
-	    return ["Key3":"Value3"]
-	})
-	.castingSeparator({ () -> String in
-	    return "="
-	})
-	.execute()
-```
-
-Full route execution example:
-
-```swift
-ARoute.sharedRouter()
-	.route("user/12345")
-	.protect({ (routeResponse:ARouteResponse) -> Bool in
-		 // return true if you don't want to handle the route
-	    return false
-	})
-	.parameters({ () -> [NSObject : AnyObject]? in
-	    return [
-	        "Key1": "Value1",
-	        "Key2": "Value2"
-	    ]
-	})
-	.transitioningDelegate({ () -> UIViewControllerTransitioningDelegate? in
-		 // return object conforming <UIViewControllerTransitioningDelegate>
-	    return nil
-	})
-	.animated({ () -> Bool in
-	    return true
-	})
-	.completion({ (routeResponse:ARouteResponse) in
-	    
-	})
-	.execute()
-```
-
-### <a name="swift-docs"></a> [Swift documentation](SWIFT.md)
+Work in progress.
 
 ## <a name="objective-c"></a> Objective-C
 
@@ -113,10 +68,11 @@ NSDictionary *routes = @{
 Full route execution example:
 
 ```objective-c
-[[[[[[[[ARoute sharedRouter] route:@"user/12345"] protect:^BOOL(ARouteResponse *routeResponse) {
+
+[[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
     // return YES if you don't want to handle the route
     return NO;
-}] parameters:^NSDictionary{
+}] parameters:^NSDictionary*{
     return @{
              @"Key1": @"Value1",
              @"Key2": @"Value2"
@@ -127,9 +83,10 @@ Full route execution example:
 }] animated:^BOOL{
     return YES;
 }] completion:^(ARouteResponse *routeResponse) {
-    
+    // handle the completion
+}] failure:^(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable error) {
+	// handle the error
 }] execute];
-
 ```
 
 ### <a name="objective-c-docs"></a> [Objective-C documentation](OBJECTIVE-C.md)

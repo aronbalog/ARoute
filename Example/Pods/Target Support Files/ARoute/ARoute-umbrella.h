@@ -1,7 +1,9 @@
 #import <UIKit/UIKit.h>
 
+#import "ARouteAction.h"
 #import "ARoute.h"
 #import "ACastable.h"
+#import "AConfigurable.h"
 #import "AEmbeddable.h"
 #import "ARoutable.h"
 #import "ARouteRegistrationConfigurable.h"

@@ -12,6 +12,8 @@
 #import "HomeViewController.h"
 @interface ARouteViewController ()
 
+@property (strong, nonatomic, nonnull) UserViewController *userViewController;
+
 @end
 
 @implementation ARouteViewController
@@ -24,40 +26,24 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    /*
-    [[[[[[[[[[[ARoute sharedRouter] route:@"user/12345"] embedInNavigationController:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
-        return @[[HomeViewController new], @"second"];
-    }] protect:^BOOL(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
-        *errorPtr = [NSError errorWithDomain:@"my.domain" code:1000 userInfo:@{@"message": @"not authorized"}];
-        return YES;
-    }] constructor:^SEL _Nonnull(ARouteResponse * _Nonnull routeResponse) {
-        return @selector(initCustomMethod:anotherString:);
-    } objects:^NSArray * _Nullable(ARouteResponse * _Nonnull routeResponse) {
-        return @[@"Title", @"Name"];
-    }] parameters:^NSDictionary<id,id> * _Nullable{
-        return @{
-                 @"Key1": @"Value1",
-                 @"Key2": @"Value2"
-                 };
-    }] transitioningDelegate:^id<UIViewControllerTransitioningDelegate> _Nullable{
-        // return object conforming <UIViewControllerTransitioningDelegate>
-        return nil;
-    }] animated:^BOOL{
-        return YES;
-    }] completion:^(ARouteResponse * _Nonnull routeResponse) {
-        
-    }] failure:^(ARouteResponse * _Nonnull routeResponse, NSError * _Nullable error) {
-        
-    }] execute:^(ARouteResponse * _Nonnull routeResponse) {
+    [[[ARoute sharedRouter] viewController:self.userViewController] execute:^(ARouteResponse * _Nonnull routeResponse) {
         
     }];
-    */
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (UserViewController *)userViewController
+{
+    if (!_userViewController) {
+        _userViewController = [UserViewController new];
+    }
+    
+    return _userViewController;
 }
 
 @end

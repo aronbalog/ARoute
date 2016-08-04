@@ -15,6 +15,8 @@
 + (nonnull instancetype)sharedInstance;
 
 - (void)executeRouteRequest:(nonnull ARouteRequest *)routeRequest routeResponse:(void (^ _Nullable)(ARouteResponse * _Nonnull))routeResponseCallback;
+- (void)pushRouteRequest:(nonnull ARouteRequest *)routeRequest routeResponse:(void (^ _Nullable)(ARouteResponse * _Nonnull))routeResponseCallback;
 - (nullable UIViewController *)viewControllerForRouteRequest:(nonnull ARouteRequest *)routeRequest;
+- (nullable UIViewController *)embeddingViewControllerForRouteRequest:(nonnull ARouteRequest *)routeRequest;
 
 @end

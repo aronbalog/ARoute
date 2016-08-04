@@ -16,13 +16,13 @@
 
 @implementation MyObject
 
-+ (instancetype)objectWithRouteParameterValue:(NSString *)value
+- (instancetype)initWithRouteParameterValue:(NSString *)value
 {
-    MyObject *object = [MyObject new];
+    self = [self init];
     
-    object.myValue = value;
+    self.myValue = value;
     
-    return object;
+    return self;
 }
 
 @end

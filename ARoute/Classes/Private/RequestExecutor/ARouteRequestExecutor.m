@@ -8,6 +8,7 @@
 
 #import "ARouteRequestExecutor.h"
 #import <objc/runtime.h>
+#import "UIViewController+TransitioningDelegate.h"
 
 @class ARouteRegistrationStorage;
 @protocol ARoutable;
@@ -45,7 +46,8 @@
 {
     ARouteResponse *routeResponse;
     BOOL animated;
-    UIViewController *presentingViewController = [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated];
+    UIViewController *presentingViewController;
+    [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated presentingViewController:&presentingViewController];
     
     if (presentingViewController) {
         [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
@@ -60,17 +62,62 @@
     }
 }
 
+- (void)pushRouteRequest:(ARouteRequest *)routeRequest routeResponse:(void (^)(ARouteResponse * _Nonnull))routeResponseCallback
+{
+ 
+    ARouteResponse *routeResponse;
+    BOOL animated;
+    UIViewController *destinationViewController = [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated presentingViewController:nil];
+    
+    if (destinationViewController) {
+        UIViewController *currentViewController = [UIViewController visibleViewController:nil];
+        UINavigationController *navigationController;
+        
+        if ([currentViewController isKindOfClass:[UINavigationController class]]) {
+            navigationController = (UINavigationController *)currentViewController;
+        } else if ([currentViewController isKindOfClass:[UITabBarController class]]) {
+            if ([((UITabBarController *)currentViewController).selectedViewController isKindOfClass:[UINavigationController class]]) {
+                navigationController = ((UITabBarController *)currentViewController).selectedViewController;
+            }
+        }
+        
+        if (navigationController) {
+            [navigationController pushViewController:destinationViewController animated:animated];
+            if (routeRequest.configuration.completionBlock) {
+                routeRequest.configuration.completionBlock(routeResponse);
+            }
+        }
+    }
+    
+    if (routeResponse && routeResponseCallback) {
+        routeResponseCallback(routeResponse);
+    }
+}
+
 - (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest
 {
     ARouteResponse *routeResponse;
+    
     BOOL animated;
     
-    return [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated];
+    return [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated presentingViewController:nil];
+}
+
+- (UIViewController *)embeddingViewControllerForRouteRequest:(ARouteRequest *)routeRequest
+{
+    ARouteResponse *routeResponse;
+    UIViewController *presentingViewController;
+
+    BOOL animated;
+    
+    [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated presentingViewController:&presentingViewController];
+    
+    return presentingViewController;
 }
 
 #pragma mark - Private
 
-- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse * __autoreleasing *)routeResponsePtr animated:(BOOL*)animatedPtr
+- (UIViewController *)viewControllerForRouteRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse * __autoreleasing *)routeResponsePtr animated:(BOOL*)animatedPtr presentingViewController:(UIViewController * __autoreleasing *)presentingViewControllerPtr
 {
     NSError *errorPtr;
     ARouteResponse *response = [ARouteResponse new];
@@ -79,7 +126,7 @@
     
     // preparing params
     Class destinationViewControllerClass;
-    void (^callbackBlock)(ARouteResponse *);
+    id (^callbackBlock)(ARouteResponse *);
     BOOL animated = routeRequest.configuration.animatedBlock ? routeRequest.configuration.animatedBlock() : routeRequest.router.configuration.animate;
     response.parameters = routeRequest.configuration.parametersBlock ? routeRequest.configuration.parametersBlock() : nil;
     
@@ -88,59 +135,119 @@
     NSDictionary *registrationParameters;
     
     BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse, NSError * __autoreleasing _Nullable * _Nullable errorPtr);
-    ARouteEmbeddingType embeddingType = ARouteEmbeddingTypeNotDefined;
-    
+    ARouteEmbeddingType requestEmbeddingType = routeRequest.configuration.embeddingType;
+    ARouteEmbeddingType registrationEmbeddingType = ARouteEmbeddingTypeNotDefined;
+
     NSArray *previousViewControllers;
     
     ARoute *router = routeRequest.router;
+    id <AConfigurable> overridenConfiguration;
     
     // find route registration
+    
     switch (routeRequest.type) {
         case ARouteRequestTypeRoute: {
             ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForRoute:routeRequest.route router:router];
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
+            destinationViewController = result.routeRegistrationItem.destinationViewController;
             callbackBlock = result.routeRegistrationItem.destinationCallback;
             routeParameters = result.routeParameters;
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-            embeddingType = result.routeRegistrationItem.embeddingType;
+            registrationEmbeddingType = result.routeRegistrationItem.embeddingType;
             previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
+            overridenConfiguration = result.routeRegistrationItem.configurationObject;
+            
             break;
         }
         case  ARouteRequestTypeRouteName: {
             ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForRouteName:routeRequest.routeName router:router];
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
+            destinationViewController = result.routeRegistrationItem.destinationViewController;
             callbackBlock = result.routeRegistrationItem.destinationCallback;
             routeParameters = result.routeParameters;
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-            embeddingType = result.routeRegistrationItem.embeddingType;
+            registrationEmbeddingType = result.routeRegistrationItem.embeddingType;
             previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
+            overridenConfiguration = result.routeRegistrationItem.configurationObject;
             
             break;
         }
         case ARouteRequestTypeViewController: {
-            destinationViewController = routeRequest.viewController;
+            destinationViewController = routeRequest.viewControllerObject;
             
             break;
         }
         case ARouteRequestTypeURL: {
             ARouteRegistrationStorageResult *result = [self.routeRegistrationStorage routeRegistrationResultForURL:routeRequest.URL router:router];
             destinationViewControllerClass = result.routeRegistrationItem.destinationViewControllerClass;
+            destinationViewController = result.routeRegistrationItem.destinationViewController;
             callbackBlock = result.routeRegistrationItem.destinationCallback;
             routeParameters = result.routeParameters;
             protectBlock = result.routeRegistrationItem.protectBlock;
             castingSeparator = result.routeRegistrationItem.castingSeparator;
             registrationParameters = result.routeRegistrationItem.parametersBlock ? result.routeRegistrationItem.parametersBlock() : nil;
-            embeddingType = result.routeRegistrationItem.embeddingType;
+            registrationEmbeddingType = result.routeRegistrationItem.embeddingType;
             previousViewControllers = result.routeRegistrationItem.previousViewControllersBlock ? result.routeRegistrationItem.previousViewControllersBlock(response) : nil;
+            overridenConfiguration = result.routeRegistrationItem.configurationObject;
+
             break;
         }
         default:
             return nil;
-            break;
+    }
+    
+    if (overridenConfiguration) {
+        if ([overridenConfiguration respondsToSelector:@selector(destinationViewControllerClass)]) {
+            destinationViewControllerClass = [overridenConfiguration destinationViewControllerClass];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(destinationViewController)]) {
+            destinationViewController = [overridenConfiguration destinationViewController];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(castingSeparator)]) {
+            castingSeparator = [overridenConfiguration castingSeparator];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(animated)]) {
+            animated = [overridenConfiguration animated];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(parameters)]) {
+            registrationParameters = [overridenConfiguration parameters];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(callbackBlock)]) {
+            callbackBlock = [overridenConfiguration callbackBlock];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(transitioningDelegate)]) {
+            routeRequest.configuration.transitioningDelegateBlock = ^id <UIViewControllerTransitioningDelegate>{
+                return [overridenConfiguration transitioningDelegate];
+            };
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(embeddingType)]) {
+            registrationEmbeddingType = [overridenConfiguration embeddingType];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(previousEmbeddingItems)]) {
+            previousViewControllers = [overridenConfiguration previousEmbeddingItems];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(customEmbeddingViewController)]) {
+            embeddingViewController = [overridenConfiguration customEmbeddingViewController];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(constructorSelector)]) {
+            routeRequest.configuration.constructorBlock = ^SEL(ARouteResponse *routeResponse) {
+                return [overridenConfiguration constructorSelector];
+            };
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(completionBlock)]) {
+            routeRequest.configuration.completionBlock = [overridenConfiguration completionBlock];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(failureBlock)]) {
+            routeRequest.configuration.failureBlock = [overridenConfiguration failureBlock];
+        }
+        if ([overridenConfiguration respondsToSelector:@selector(protectBlock)]) {
+            protectBlock = [overridenConfiguration protectBlock];
+        }
+    
     }
     
     // combine parameters
@@ -171,9 +278,16 @@
     
     // check if callback
     if (callbackBlock) {
-        self.classPointer = nil;
-        callbackBlock(response);
-        return nil;
+        *routeResponsePtr = response;
+        id destination = callbackBlock(response);
+        if (object_isClass(destination)) {
+            destinationViewControllerClass = destination;
+        } else if ([destination isKindOfClass:[UIViewController class]]) {
+            destinationViewController = destination;
+        } else {
+            self.classPointer = nil;
+            return nil;
+        }
     }
     
     if (!destinationViewController && destinationViewControllerClass) {
@@ -188,11 +302,14 @@
     response.destinationViewController = destinationViewController;
     
     // embed if neccessary
+    ARouteEmbeddingType embeddingType = ARouteEmbeddingTypeNotDefined;
     if (routeRequest.configuration.embeddingViewControllerBlock) {
         embeddingViewController = routeRequest.configuration.embeddingViewControllerBlock();
     } else {
-        if (routeRequest.configuration.embeddingType != ARouteEmbeddingTypeNotDefined) {
-            embeddingType = routeRequest.configuration.embeddingType;
+        if (requestEmbeddingType != ARouteEmbeddingTypeNotDefined) {
+            embeddingType = requestEmbeddingType;
+        } else {
+            embeddingType = registrationEmbeddingType;
         }
         
         if (routeRequest.configuration.previousViewControllersBlock) {
@@ -204,57 +321,23 @@
     
     // present view controller
     
-    UIViewController *presentingViewController;
-    if (embeddingViewController) {
-        if ([embeddingViewController respondsToSelector:@selector(embedDestinationViewController:withRouteResponse:)]) {
-            [embeddingViewController performSelector:@selector(embedDestinationViewController:withRouteResponse:) withObject:destinationViewController withObject:response];
-        }
-        presentingViewController = embeddingViewController;
-    } else {
-        if (embeddingType == ARouteEmbeddingTypeNavigationController) {
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinationViewController];
-            
-            if (previousViewControllers.count) {
-                __block NSMutableArray *viewControllers = [NSMutableArray new];
-                
-                [previousViewControllers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if (object_isClass(obj)) {
-                        id classPointer = [obj alloc];
-                        if ([classPointer respondsToSelector:@selector(initWithRouteResponse:)]) {
-                            [viewControllers addObject:[classPointer initWithRouteResponse:response]];
-                        }
-                    } else if ([obj isKindOfClass:[NSString class]]) {
-                        UIViewController *viewController = [[router route:obj] viewController];
-                        [viewControllers addObject:viewController];
-                    } else if ([obj isKindOfClass:[UIViewController class]]) {
-                        [viewControllers addObject:obj];
-                    }
-                }];
-                [viewControllers addObject:destinationViewController];
-                
-                [navigationController setViewControllers:viewControllers animated:NO];
-            }
-            
-            presentingViewController = navigationController;
-            embeddingViewController = navigationController;
-        } else if (embeddingType == ARouteEmbeddingTypeTabBarController) {
-            UITabBarController *tabBarController = [UITabBarController new];
-            [tabBarController setViewControllers:@[destinationViewController] animated:NO];
-            presentingViewController = tabBarController;
-            embeddingViewController = tabBarController;
-        } else {
-            presentingViewController = destinationViewController;
-        }
-    }
+    UIViewController *presentingViewController = [self presentingViewControllerWithEmbeddingViewController:&embeddingViewController destinationViewController:destinationViewController embeddingType:embeddingType previousRouteItems:previousViewControllers routeResponse:response router:router];
     
     response.embeddingViewController = embeddingViewController;
     
-    destinationViewController.transitioningDelegate = routeRequest.configuration.transitioningDelegateBlock ? routeRequest.configuration.transitioningDelegateBlock() : nil;
+    if (routeRequest.configuration.transitioningDelegateBlock) {
+        id delegate = routeRequest.configuration.transitioningDelegateBlock();
+        presentingViewController.aroute_transitioningDelegate = delegate;
+        presentingViewController.transitioningDelegate = presentingViewController.aroute_transitioningDelegate;
+    }
     
     *routeResponsePtr = response;
     *animatedPtr = animated;
+    if (presentingViewControllerPtr) {
+        *presentingViewControllerPtr = presentingViewController;
+    }
     
-    return presentingViewController;
+    return destinationViewController;
 }
 
 - (__kindof UIViewController *)viewControllerWithClass:(Class)aClass routeRequest:(ARouteRequest *)routeRequest routeResponse:(ARouteResponse *)routeResponse
@@ -311,6 +394,55 @@
     }];
     
     return combined;
+}
+
+- (UIViewController *)presentingViewControllerWithEmbeddingViewController:(__kindof UIViewController * __autoreleasing *)embeddingViewController destinationViewController:(__kindof UIViewController *)destinationViewController embeddingType:(ARouteEmbeddingType)embeddingType previousRouteItems:(NSArray *)previousRouteItems routeResponse:(ARouteResponse *)routeResponse router:(ARoute *)router
+{
+    UIViewController *presentingViewController;
+
+    if (*embeddingViewController) {
+        if ([*embeddingViewController respondsToSelector:@selector(embedDestinationViewController:withRouteResponse:)]) {
+            [*embeddingViewController performSelector:@selector(embedDestinationViewController:withRouteResponse:) withObject:destinationViewController withObject:routeResponse];
+        }
+        presentingViewController = *embeddingViewController;
+    } else {
+        if (embeddingType == ARouteEmbeddingTypeNavigationController) {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinationViewController];
+            
+            if (previousRouteItems.count) {
+                __block NSMutableArray *viewControllers = [NSMutableArray new];
+                
+                [previousRouteItems enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (object_isClass(obj)) {
+                        id classPointer = [obj alloc];
+                        if ([classPointer respondsToSelector:@selector(initWithRouteResponse:)]) {
+                            [viewControllers addObject:[classPointer initWithRouteResponse:routeResponse]];
+                        }
+                    } else if ([obj isKindOfClass:[NSString class]]) {
+                        UIViewController *viewController = [[router route:obj] viewController];
+                        [viewControllers addObject:viewController];
+                    } else if ([obj isKindOfClass:[UIViewController class]]) {
+                        [viewControllers addObject:obj];
+                    }
+                }];
+                [viewControllers addObject:destinationViewController];
+                
+                [navigationController setViewControllers:viewControllers animated:NO];
+            }
+            
+            presentingViewController = navigationController;
+            *embeddingViewController = navigationController;
+        } else if (embeddingType == ARouteEmbeddingTypeTabBarController) {
+            UITabBarController *tabBarController = [UITabBarController new];
+            [tabBarController setViewControllers:@[destinationViewController] animated:NO];
+            presentingViewController = tabBarController;
+            *embeddingViewController = tabBarController;
+        } else {
+            presentingViewController = destinationViewController;
+        }
+    }
+    
+    return presentingViewController;
 }
 
 #pragma mark - Properties
