@@ -21,7 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
+    [[[ARoute sharedRouter] registerRoutes:@{@"home":[HomeViewController class]}] execute];
     return YES;
 }
 

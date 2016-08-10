@@ -79,6 +79,8 @@
             if ([((UITabBarController *)currentViewController).selectedViewController isKindOfClass:[UINavigationController class]]) {
                 navigationController = ((UITabBarController *)currentViewController).selectedViewController;
             }
+        } else {
+            navigationController = currentViewController.navigationController;
         }
         
         if (navigationController) {
@@ -303,8 +305,12 @@
     
     // embed if neccessary
     ARouteEmbeddingType embeddingType = ARouteEmbeddingTypeNotDefined;
+    id embeddingPointer;
+    
     if (routeRequest.configuration.embeddingViewControllerBlock) {
         embeddingViewController = routeRequest.configuration.embeddingViewControllerBlock();
+    } else if (routeRequest.configuration.navigationControllerClassBlock) {
+        embeddingPointer = routeRequest.configuration.navigationControllerClassBlock(response);
     } else {
         if (requestEmbeddingType != ARouteEmbeddingTypeNotDefined) {
             embeddingType = requestEmbeddingType;
@@ -317,13 +323,17 @@
         }
     }
     
+    if (embeddingViewController) {
+        embeddingPointer = embeddingViewController;
+    }
+    
     // populate data on created view controller
     
     // present view controller
     
-    UIViewController *presentingViewController = [self presentingViewControllerWithEmbeddingViewController:&embeddingViewController destinationViewController:destinationViewController embeddingType:embeddingType previousRouteItems:previousViewControllers routeResponse:response router:router];
+    UIViewController *presentingViewController = [self presentingViewControllerWithEmbeddingViewController:&embeddingPointer destinationViewController:destinationViewController embeddingType:embeddingType previousRouteItems:previousViewControllers routeResponse:response router:router];
     
-    response.embeddingViewController = embeddingViewController;
+    response.embeddingViewController = embeddingPointer;
     
     if (routeRequest.configuration.transitioningDelegateBlock) {
         id delegate = routeRequest.configuration.transitioningDelegateBlock();
@@ -396,15 +406,21 @@
     return combined;
 }
 
-- (UIViewController *)presentingViewControllerWithEmbeddingViewController:(__kindof UIViewController * __autoreleasing *)embeddingViewController destinationViewController:(__kindof UIViewController *)destinationViewController embeddingType:(ARouteEmbeddingType)embeddingType previousRouteItems:(NSArray *)previousRouteItems routeResponse:(ARouteResponse *)routeResponse router:(ARoute *)router
+- (UIViewController *)presentingViewControllerWithEmbeddingViewController:(id*)embeddingViewController destinationViewController:(__kindof UIViewController *)destinationViewController embeddingType:(ARouteEmbeddingType)embeddingType previousRouteItems:(NSArray *)previousRouteItems routeResponse:(ARouteResponse *)routeResponse router:(ARoute *)router
 {
     UIViewController *presentingViewController;
 
     if (*embeddingViewController) {
-        if ([*embeddingViewController respondsToSelector:@selector(embedDestinationViewController:withRouteResponse:)]) {
-            [*embeddingViewController performSelector:@selector(embedDestinationViewController:withRouteResponse:) withObject:destinationViewController withObject:routeResponse];
+        if (object_isClass(*embeddingViewController)) {
+            if ([[*embeddingViewController alloc] respondsToSelector:@selector(initWithRootViewController:)]) {
+                presentingViewController = [[*embeddingViewController alloc] initWithRootViewController:destinationViewController];
+            }
+        } else {
+            if ([*embeddingViewController respondsToSelector:@selector(embedDestinationViewController:withRouteResponse:)]) {
+                [*embeddingViewController performSelector:@selector(embedDestinationViewController:withRouteResponse:) withObject:destinationViewController withObject:routeResponse];
+            }
+            presentingViewController = *embeddingViewController;
         }
-        presentingViewController = *embeddingViewController;
     } else {
         if (embeddingType == ARouteEmbeddingTypeNavigationController) {
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinationViewController];

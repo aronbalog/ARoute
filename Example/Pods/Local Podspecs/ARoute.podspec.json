@@ -1,6 +1,6 @@
 {
   "name": "ARoute",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "summary": "ARoute",
   "description": "ARoute for every dev!",
   "homepage": "https://github.com/aronbalog",
@@ -9,11 +9,11 @@
     "Aron Balog": "aronbalog@gmail.com"
   },
   "platforms": {
-    "ios": "7.0"
+    "ios": "8.0"
   },
   "source": {
     "git": "https://github.com/aronbalog/ARoute.git",
-    "tag": "0.0.7"
+    "tag": "0.0.8"
   },
   "source_files": [
     "ARoute",

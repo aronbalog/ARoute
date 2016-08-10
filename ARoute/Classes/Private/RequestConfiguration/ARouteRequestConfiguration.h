@@ -22,4 +22,5 @@
 @property (strong, nonatomic, nullable) id <UIViewControllerTransitioningDelegate> _Nullable(^transitioningDelegateBlock)();
 @property (assign, nonatomic) ARouteEmbeddingType embeddingType;
 @property (strong, nonatomic, nonnull) NSArray *_Nullable(^ previousViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
+@property (strong, nonatomic, nullable) Class _Nullable(^ navigationControllerClassBlock)(ARouteResponse * _Nonnull routeResponse);
 @end
