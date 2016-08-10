@@ -91,6 +91,13 @@
     return self;
 }
 
+- (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationControllerClass:(Class _Nonnull (^)(ARouteResponse * _Nonnull))navigationControllerClass
+{
+    self.configuration.embeddingType = ARouteEmbeddingTypeNavigationController;
+    self.configuration.navigationControllerClassBlock = navigationControllerClass;
+    return self;
+}
+
 - (id<ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)embedInNavigationController:(NSArray * _Nullable (^)(ARouteResponse * _Nonnull))previousViewControllers
 {
     self.configuration.embeddingType = ARouteEmbeddingTypeNavigationController;

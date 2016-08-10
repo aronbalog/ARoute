@@ -26,7 +26,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[[ARoute sharedRouter] viewController:self.userViewController] execute:^(ARouteResponse * _Nonnull routeResponse) {
+    [[[[ARoute sharedRouter] route:@"home"] embedInNavigationController] execute:^(ARouteResponse * _Nonnull routeResponse) {
         
     }];
 }

@@ -19,6 +19,7 @@
 
 - (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)constructor:(SEL _Nonnull(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))constructor objects:(NSArray * _Nullable(^ _Nullable)(ARouteResponse * _Nonnull routeResponse))objects;
 - (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)embedInNavigationController;
+- (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)embedInNavigationControllerClass:(Class _Nonnull(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))navigationControllerClass;
 - (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)embedInNavigationController:(NSArray * _Nullable(^ _Nonnull)(ARouteResponse * _Nonnull routeResponse))previousViewControllers;
 - (nonnull id <ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestEmbeddable, ARouteRequestConfigurable>)embedInTabBarController;
 
