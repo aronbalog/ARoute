@@ -50,11 +50,13 @@
     [self viewControllerForRouteRequest:routeRequest routeResponse:&routeResponse animated:&animated presentingViewController:&presentingViewController];
     
     if (presentingViewController) {
-        [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
-            if (routeRequest.configuration.completionBlock) {
-                routeRequest.configuration.completionBlock(routeResponse);
-            }
-        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
+                if (routeRequest.configuration.completionBlock) {
+                    routeRequest.configuration.completionBlock(routeResponse);
+                }
+            }];
+        });
     }
     
     if (routeResponse && routeResponseCallback) {
