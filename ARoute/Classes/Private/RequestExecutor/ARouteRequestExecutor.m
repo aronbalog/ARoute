@@ -86,6 +86,9 @@
         }
         
         if (navigationController) {
+            navigationController.delegate = destinationViewController.aroute_transitioningDelegate;
+            destinationViewController.transitioningDelegate = nil;
+            
             [navigationController pushViewController:destinationViewController animated:animated];
             if (routeRequest.configuration.completionBlock) {
                 routeRequest.configuration.completionBlock(routeResponse);
