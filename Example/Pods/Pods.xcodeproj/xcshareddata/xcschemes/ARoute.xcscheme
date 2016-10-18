@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5892C7779C60265543D9AEDB37849D7E"
+               BlueprintIdentifier = "F21CDF4CAA0EC3F8B5AD41A100B768EB"
                BuildableName = "ARoute.framework"
                BlueprintName = "ARoute"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5892C7779C60265543D9AEDB37849D7E"
+            BlueprintIdentifier = "F21CDF4CAA0EC3F8B5AD41A100B768EB"
             BuildableName = "ARoute.framework"
             BlueprintName = "ARoute"
             ReferencedContainer = "container:Pods.xcodeproj">
