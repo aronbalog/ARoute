@@ -203,6 +203,15 @@
 
 - (void)push:(void (^)(ARouteResponse * _Nonnull))routeResponse
 {
+    [self push:nil routeResponse:routeResponse];
+}
+
+- (void)push:(id<UINavigationControllerDelegate>  _Nullable (^)())navigationControllerDelegate routeResponse:(void (^)(ARouteResponse * _Nonnull))routeResponse
+{
+    if (navigationControllerDelegate) {
+        self.configuration.navigationViewControllerDelegateBlock = navigationControllerDelegate;
+    }
+    
     [self.executor pushRouteRequest:self routeResponse:routeResponse];
 }
 
@@ -214,6 +223,27 @@
 - (UIViewController *)embeddingViewController
 {
     return [self.executor embeddingViewControllerForRouteRequest:self];
+}
+
+- (void)pop:(BOOL)animated
+{
+    [self pop:animated navigationControllerDelegate:nil];
+}
+
+- (void)pop:(BOOL)animated navigationControllerDelegate:(id<UINavigationControllerDelegate>  _Nullable (^ _Nullable)())navigationControllerDelegate
+{
+    UIViewController *currentViewController = [UIViewController visibleViewController:nil];
+    UINavigationController *navigationController = currentViewController.navigationController;
+    if (!navigationController) {
+        navigationController = [currentViewController isKindOfClass:[UINavigationController class]] ? (UINavigationController *)currentViewController : nil;
+    }
+    
+    if ([navigationController isKindOfClass:[UINavigationController class]]) {
+        if (navigationControllerDelegate) {
+            navigationController.delegate = navigationControllerDelegate();
+        }
+        [navigationController popViewControllerAnimated:animated];
+    }
 }
 
 #pragma mark - Private

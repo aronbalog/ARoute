@@ -20,6 +20,7 @@
 @property (strong, nonatomic, nullable) BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse, NSError * __autoreleasing _Nullable * _Nullable errorPtr);
 @property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)();
 @property (strong, nonatomic, nullable) id <UIViewControllerTransitioningDelegate> _Nullable(^transitioningDelegateBlock)();
+@property (strong, nonatomic, nullable) id <UINavigationControllerDelegate> _Nullable(^navigationViewControllerDelegateBlock)();
 @property (assign, nonatomic) ARouteEmbeddingType embeddingType;
 @property (strong, nonatomic, nonnull) NSArray *_Nullable(^ previousViewControllersBlock)(ARouteResponse * _Nonnull routeResponse);
 @property (strong, nonatomic, nullable) Class _Nullable(^ navigationControllerClassBlock)(ARouteResponse * _Nonnull routeResponse);

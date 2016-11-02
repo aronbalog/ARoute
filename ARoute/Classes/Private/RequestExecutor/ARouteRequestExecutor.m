@@ -86,6 +86,16 @@
         }
         
         if (navigationController) {
+            id <UINavigationControllerDelegate> delegate;
+            if (routeRequest.configuration.navigationViewControllerDelegateBlock) {
+                delegate = routeRequest.configuration.navigationViewControllerDelegateBlock();
+            }
+            
+            if (delegate) {
+                navigationController.aroute_navigationControllerDelegate = delegate;
+                navigationController.delegate = navigationController.aroute_navigationControllerDelegate;
+            }
+            
             [navigationController pushViewController:destinationViewController animated:animated];
             if (routeRequest.configuration.completionBlock) {
                 routeRequest.configuration.completionBlock(routeResponse);

@@ -11,5 +11,6 @@
 @interface UIViewController (TransitioningDelegate)
 
 @property (strong, nonatomic, nullable) id <UIViewControllerTransitioningDelegate> aroute_transitioningDelegate;
+@property (strong, nonatomic, nullable) id <UINavigationControllerDelegate> aroute_navigationControllerDelegate;
 
 @end
