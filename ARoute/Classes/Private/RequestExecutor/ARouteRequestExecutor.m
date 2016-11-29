@@ -51,7 +51,15 @@
     
     if (presentingViewController) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIViewController visibleViewController:nil] presentViewController:presentingViewController animated:animated completion:^{
+            UIViewController *currentViewController;
+            
+            if ([presentingViewController isKindOfClass:[UIAlertController class]]) {
+                currentViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+            } else {
+                currentViewController = [UIViewController visibleViewController:nil];
+            }
+            
+            [currentViewController presentViewController:presentingViewController animated:animated completion:^{
                 if (routeRequest.configuration.completionBlock) {
                     routeRequest.configuration.completionBlock(routeResponse);
                 }
@@ -91,9 +99,10 @@
                 delegate = routeRequest.configuration.navigationViewControllerDelegateBlock();
             }
             
-            if (delegate) {
-                navigationController.aroute_navigationControllerDelegate = delegate;
-                navigationController.delegate = navigationController.aroute_navigationControllerDelegate;
+            if (!navigationController.delegate) {
+                navigationController.delegate = delegate;
+//                navigationController.aroute_navigationControllerDelegate = delegate;
+//                navigationController.delegate = navigationController.aroute_navigationControllerDelegate;
             }
             
             [navigationController pushViewController:destinationViewController animated:animated];
@@ -282,11 +291,12 @@
         proceed = !protectBlock(response, &errorPtr);
     }
     
-    proceed = proceed && errorPtr == nil;
-    
     if (!proceed) {
         self.classPointer = nil;
-        routeRequest.configuration.failureBlock(response, errorPtr);
+        if (routeRequest.configuration.failureBlock) {
+            routeRequest.configuration.failureBlock(response, errorPtr);
+        }
+
         return nil;
     }
     
@@ -357,6 +367,12 @@
     *animatedPtr = animated;
     if (presentingViewControllerPtr) {
         *presentingViewControllerPtr = presentingViewController;
+    }
+    
+    if (errorPtr != nil) {
+        if (routeRequest.configuration.failureBlock) {
+            routeRequest.configuration.failureBlock(response, errorPtr);
+        }
     }
     
     return destinationViewController;
