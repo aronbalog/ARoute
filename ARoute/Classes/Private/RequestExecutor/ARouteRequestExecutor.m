@@ -53,11 +53,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             UIViewController *currentViewController;
             
-            if ([presentingViewController isKindOfClass:[UIAlertController class]]) {
-                currentViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-            } else {
-                currentViewController = [UIViewController visibleViewController:nil];
-            }
+            currentViewController = [UIViewController visibleViewController:nil];
             
             [currentViewController presentViewController:presentingViewController animated:animated completion:^{
                 if (routeRequest.configuration.completionBlock) {
