@@ -11,6 +11,6 @@
 @interface ARouteRegistrationConfiguration : NSObject
 
 @property (strong, nonatomic, nullable) BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse, NSError * __autoreleasing _Nullable * _Nullable errorPtr);
-@property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)();
+@property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)(void);
 
 @end

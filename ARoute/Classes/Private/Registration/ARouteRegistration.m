@@ -117,7 +117,7 @@
     return self;
 }
 
-- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)separator:(NSString * _Nonnull (^)())separator
+- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)separator:(NSString * _Nonnull (^)(void))separator
 {
     if (separator) {
         self.separator = separator();
@@ -129,7 +129,7 @@
     return self;
 }
 
-- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)castingSeparator:(NSString * _Nonnull (^)())castingSeparator
+- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)castingSeparator:(NSString * _Nonnull (^)(void))castingSeparator
 {
     if (castingSeparator) {
         self.castingSeparator = castingSeparator();
@@ -141,7 +141,7 @@
     return self;
 }
 
-- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)parameters:(NSDictionary<id,id> * _Nullable (^)())parameters
+- (id<ARouteRegistrationExecutable,ARouteRegistrationConfigurable,ARouteRegistrationProtectable>)parameters:(NSDictionary<id,id> * _Nullable (^)(void))parameters
 {
     if (parameters) {
         self.registrationConfiguration.parametersBlock = parameters;
