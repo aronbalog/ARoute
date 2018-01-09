@@ -115,7 +115,7 @@
     return self;
 }
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)parameters:(NSDictionary <id, id> * _Nullable (^)())parameters
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestEmbeddable,ARouteRequestConfigurable>)parameters:(NSDictionary <id, id> * _Nullable (^)(void))parameters
 {
     if (parameters) {
         self.configuration.parametersBlock = parameters;
@@ -137,7 +137,7 @@
 
 #pragma mark - ARouteRequestConfigurable
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)animated:(BOOL (^)())animated
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)animated:(BOOL (^)(void))animated
 {
     if (animated) {
         self.configuration.animatedBlock = animated;
@@ -164,7 +164,7 @@
     return self;
 }
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)transitioningDelegate:(id<UIViewControllerTransitioningDelegate>  _Nullable (^)())transitioningDelegate
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)transitioningDelegate:(id<UIViewControllerTransitioningDelegate>  _Nullable (^)(void))transitioningDelegate
 {
     if (transitioningDelegate) {
         self.configuration.transitioningDelegateBlock = transitioningDelegate;
@@ -175,7 +175,7 @@
 
 #pragma mark - ARouteRequestEmbeddable
 
-- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)embedIn:(__kindof UIViewController<AEmbeddable> * _Nonnull (^)())embeddingViewController
+- (id<ARouteRequestInitiable,ARouteRequestExecutable,ARouteRequestProtectable,ARouteRequestConfigurable>)embedIn:(__kindof UIViewController<AEmbeddable> * _Nonnull (^)(void))embeddingViewController
 {
     if (embeddingViewController) {
         self.configuration.embeddingViewControllerBlock = embeddingViewController;
@@ -206,7 +206,7 @@
     [self push:nil routeResponse:routeResponse];
 }
 
-- (void)push:(id<UINavigationControllerDelegate>  _Nullable (^)())navigationControllerDelegate routeResponse:(void (^)(ARouteResponse * _Nonnull))routeResponse
+- (void)push:(id<UINavigationControllerDelegate>  _Nullable (^)(void))navigationControllerDelegate routeResponse:(void (^)(ARouteResponse * _Nonnull))routeResponse
 {
     if (navigationControllerDelegate) {
         self.configuration.navigationViewControllerDelegateBlock = navigationControllerDelegate;
@@ -230,7 +230,7 @@
     [self pop:animated navigationControllerDelegate:nil];
 }
 
-- (void)pop:(BOOL)animated navigationControllerDelegate:(id<UINavigationControllerDelegate>  _Nullable (^ _Nullable)())navigationControllerDelegate
+- (void)pop:(BOOL)animated navigationControllerDelegate:(id<UINavigationControllerDelegate>  _Nullable (^ _Nullable)(void))navigationControllerDelegate
 {
     UIViewController *currentViewController = [UIViewController visibleViewController:nil];
     UINavigationController *navigationController = currentViewController.navigationController;

@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, ARouteRegistrationItemType) {
 @property (strong, nonatomic, nullable) __kindof UIViewController *destinationViewController;
 @property (strong, nonatomic, nonnull) id _Nullable(^destinationCallback)(ARouteResponse * _Nonnull routeResponse);
 @property (strong, nonatomic, nonnull) BOOL (^protectBlock)(ARouteResponse * _Nonnull routeResponse, NSError * __autoreleasing _Nullable * _Nullable errorPtr);
-@property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)();
+@property (strong, nonatomic, nullable) NSDictionary <id, id> * _Nullable(^parametersBlock)(void);
 @property (strong, nonatomic, nonnull) NSString *separator;
 @property (strong, nonatomic, nonnull) NSString *castingSeparator;
 @property (assign, nonatomic) ARouteRegistrationItemType type;

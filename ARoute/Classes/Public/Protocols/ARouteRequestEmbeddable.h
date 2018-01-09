@@ -17,6 +17,6 @@
 
 @protocol ARouteRequestEmbeddable <NSObject>
 
-- (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestConfigurable>)embedIn:(__kindof UIViewController <AEmbeddable> * _Nonnull(^ _Nonnull)())embeddingViewController;
+- (nonnull id <ARouteRequestInitiable, ARouteRequestExecutable, ARouteRequestProtectable, ARouteRequestConfigurable>)embedIn:(__kindof UIViewController <AEmbeddable> * _Nonnull(^ _Nonnull)(void))embeddingViewController;
 
 @end
